@@ -9,13 +9,6 @@ const modules = Object.keys({
   ...pak.peerDependencies,
 });
 
-const localLivekitClient = '../../client-sdk-js';
-const extraNodeModules =  modules.reduce((acc, name) => {
-  acc[name] = path.join(__dirname, 'node_modules', name);
-  return acc;
-}, {})
-extraNodeModules['livekit-client'] = localLivekitClient
-
 module.exports = {
   projectRoot: __dirname,
   watchFolders: [root],
@@ -30,9 +23,10 @@ module.exports = {
       )
     ),
 
-
-    watchFolders: [localLivekitClient],
-    extraNodeModules: extraNodeModules,
+    extraNodeModules:  modules.reduce((acc, name) => {
+      acc[name] = path.join(__dirname, 'node_modules', name);
+      return acc;
+    }, {}),
   },
 
   transformer: {
