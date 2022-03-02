@@ -6,22 +6,26 @@ import { connect, Room, RoomEvent, VideoPresets } from 'livekit-client'
 import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { LogLevel } from 'livekit-client/dist/logger';
+import { RoomControls } from './RoomControls';
 
 
 
 export const RoomPage = ({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
 
   const [isConnected, setIsConnected] = useState(false)
-  const {url, token} = route.params
+  const [room, setRoom] = useState<Room>()
+  const { url, token } = route.params
   useEffect(() => {
 
-    console.log('going to connect to ', url, " ",token)
-    connect(url, token, {logLevel: LogLevel.debug}).then((room) => {
+    console.log('going to connect to ', url, " ", token)
+    
+    connect(url, token, { logLevel: LogLevel.debug }).then((room) => {
       if (!room) {
         return;
       }
-      console.log('connected to ', url, " ",token)
+      console.log('connected to ', url, " ", token)
       setIsConnected(true)
+      setRoom(room)
       return () => {
         room.disconnect();
         setIsConnected(false)
@@ -32,10 +36,27 @@ export const RoomPage = ({ navigation, route }: NativeStackScreenProps<RootStack
     <View style={styles.container}>
       <Text>URL is {route.params.url} </Text>
       <Text>Token is {route.params.token} </Text>
-      <Text>Connected state = {isConnected ? "true" : "false"}</Text> 
+      <Text>Connected state = {isConnected ? "true" : "false"}</Text>
       <Button
         title='Disconnect'
-        onPress={() => {navigation.pop()}}
+        onPress={() => { navigation.pop() }}
+      />
+      <RoomControls
+        micEnabled={false}
+        setMicEnabled={function (enabled: boolean): void {
+          throw new Error('Function not implemented.');
+        }}
+        cameraEnabled={false}
+        setCameraEnabled={function (enabled: boolean): void {
+          throw new Error('Function not implemented.');
+        }}
+        screenCastEnabled={false}
+        setScreenCastEnabled={function (enabled: boolean): void {
+          throw new Error('Function not implemented.');
+        }}
+        onDisconnectClick={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
     </View>
   );
