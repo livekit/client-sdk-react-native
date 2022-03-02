@@ -3090,7 +3090,7 @@ leven@^3.1.0:
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"
   integrity sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==
 
-"livekit-client@>=0.16.6, <1.0.0":
+"livekit-client@>=0.16.6, <1.0.0", livekit-client@^0.16.6:
   version "0.16.6"
   resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-0.16.6.tgz#2208d84fa6e62fe3a0ad6fe82dc5cd7dfdb193f4"
   integrity sha512-3X995R9AbOJQCeuHrNRwXjYlp7zdcgsg6uc64HYHOEnn8lwiSUXNlMyJ7Ui83rko7lAZsFoJ1C1k2e+uJpTIVA==
@@ -3100,15 +3100,6 @@ leven@^3.1.0:
     protobufjs "^6.11.2"
     ts-debounce "^3.0.0"
     typed-emitter "^2.1.0"
-    webrtc-adapter "^8.1.1"
-
-"livekit-client@file:.yalc/livekit-client":
-  version "0.16.2"
-  dependencies:
-    events "^3.3.0"
-    loglevel "^1.8.0"
-    protobufjs "^6.11.2"
-    ts-debounce "^3.0.0"
     webrtc-adapter "^8.1.1"
 
 livekit-react@^0.6.4:
