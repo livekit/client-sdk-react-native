@@ -7,22 +7,17 @@ import { RoomPage } from './RoomPage';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          name="PreJoinPage"
-          component={PreJoinPage}
-        />
+        <Stack.Screen name="PreJoinPage" component={PreJoinPage} />
         <Stack.Screen name="RoomPage" component={RoomPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-
 export type RootStackParamList = {
   PreJoinPage: undefined;
-  RoomPage: { url: string, token: string };
+  RoomPage: { url: string; token: string };
 };

@@ -4,5 +4,5 @@ import { name as appName } from './app.json';
 import 'react-native-url-polyfill/auto';
 import { registerGlobals } from 'react-native-webrtc';
 
-registerGlobals()
+registerGlobals();
 AppRegistry.registerComponent(appName, () => App);
