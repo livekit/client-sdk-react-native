@@ -2,61 +2,58 @@ import * as React from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
-import { connect, Room } from 'livekit-client';
 import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { LogLevel } from 'livekit-client/dist/logger';
 import { RoomControls } from './RoomControls';
+import { useRoom } from './useRoom';
+import { ParticipantView } from './ParticipantView';
 
 export const RoomPage = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [room, setRoom] = useState<Room>();
+  const roomState = useRoom();
+
+  const { participants, room } = roomState;
   const { url, token } = route.params;
   useEffect(() => {
     console.log('going to connect to ', url, ' ', token);
 
-    connect(url, token, { logLevel: LogLevel.debug }).then((room) => {
+    roomState.connect(url, token, { logLevel: LogLevel.info }).then((room) => {
       if (!room) {
         return;
       }
       console.log('connected to ', url, ' ', token);
       setIsConnected(true);
-      setRoom(room);
       return () => {
         room.disconnect();
         setIsConnected(false);
       };
     });
-  }, []);
+  }, [url, token]);
   return (
     <View style={styles.container}>
       <Text>URL is {route.params.url} </Text>
       <Text>Token is {route.params.token} </Text>
       <Text>Connected state = {isConnected ? 'true' : 'false'}</Text>
-      <Button
-        title="Disconnect"
-        onPress={() => {
-          navigation.pop();
-        }}
-      />
+      {
+        participants.length > 0 && (<ParticipantView participant={participants[0]}/>)
+      }
       <RoomControls
-        micEnabled={false}
-        setMicEnabled={function (enabled: boolean): void {
-          throw new Error('Function not implemented.');
+        micEnabled={room?.localParticipant.isMicrophoneEnabled}
+        setMicEnabled={(enabled: boolean) => {
+          room?.localParticipant.setMicrophoneEnabled(enabled);
         }}
-        cameraEnabled={false}
-        setCameraEnabled={function (enabled: boolean): void {
-          throw new Error('Function not implemented.');
+        cameraEnabled={room?.localParticipant.isCameraEnabled}
+        setCameraEnabled={(enabled: boolean) => {
+          room?.localParticipant.setCameraEnabled(enabled);
         }}
         screenCastEnabled={false}
-        setScreenCastEnabled={function (enabled: boolean): void {
-          throw new Error('Function not implemented.');
-        }}
-        onDisconnectClick={function (): void {
-          throw new Error('Function not implemented.');
+        setScreenCastEnabled={() => { }}
+        onDisconnectClick={() => {
+          navigation.pop();
         }}
       />
     </View>

@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 
 export type Props = {
-  micEnabled: boolean;
+  micEnabled?: boolean;
   setMicEnabled: (enabled: boolean) => void;
-  cameraEnabled: boolean;
+  cameraEnabled?: boolean;
   setCameraEnabled: (enabled: boolean) => void;
   screenCastEnabled: boolean;
   setScreenCastEnabled: (enabled: boolean) => void;
@@ -20,9 +20,9 @@ export type Props = {
   style?: StyleProp<ViewStyle>;
 };
 export const RoomControls = ({
-  micEnabled,
+  micEnabled = false,
   setMicEnabled,
-  cameraEnabled,
+  cameraEnabled = false,
   setCameraEnabled,
   onDisconnectClick,
   style,
