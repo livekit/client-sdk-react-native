@@ -34,7 +34,11 @@ export const ParticipantView = ({
   console.log(`displaying track: ${cameraPublication?.videoTrack}`)
   console.log(`displaying publication: ${cameraPublication}`)
   return (
-    <RTCView style={styles.container} streamURL={cameraPublication?.videoTrack?.mediaStream?.toURL()} />
+    <RTCView 
+      style={styles.container} 
+      streamURL={cameraPublication?.videoTrack?.mediaStream?.toURL()}
+      objectFit="cover" 
+    />
   );
 };
 

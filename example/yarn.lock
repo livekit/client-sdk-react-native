@@ -2319,11 +2319,6 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-event-target-shim@6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-6.0.2.tgz#ea5348c3618ee8b62ff1d344f01908ee2b8a2b71"
-  integrity sha512-8q3LsZjRezbFZ2PN+uP+Q7pnHUMmAOziU2vA2OwoFaKIXxlxl38IylhSSgUorWu/rf4er67w0ikBqjBFk/pomA==
-
 event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
@@ -3105,7 +3100,7 @@ leven@^3.1.0:
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"
   integrity sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==
 
-"livekit-client@>=0.16.6, <1.0.0", livekit-client@^0.16.6:
+"livekit-client@>=0.16.6, <1.0.0":
   version "0.16.6"
   resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-0.16.6.tgz#2208d84fa6e62fe3a0ad6fe82dc5cd7dfdb193f4"
   integrity sha512-3X995R9AbOJQCeuHrNRwXjYlp7zdcgsg6uc64HYHOEnn8lwiSUXNlMyJ7Ui83rko7lAZsFoJ1C1k2e+uJpTIVA==
@@ -3117,10 +3112,17 @@ leven@^3.1.0:
     typed-emitter "^2.1.0"
     webrtc-adapter "^8.1.1"
 
-livekit-react@^0.6.4:
+"livekit-client@file:.yalc/livekit-client":
+  version "0.16.2"
+  dependencies:
+    events "^3.3.0"
+    loglevel "^1.8.0"
+    protobufjs "^6.11.2"
+    ts-debounce "^3.0.0"
+    webrtc-adapter "^8.1.1"
+
+"livekit-react@file:.yalc/livekit-react":
   version "0.6.4"
-  resolved "https://registry.yarnpkg.com/livekit-react/-/livekit-react-0.6.4.tgz#23b4200a36f769fb6c7bf944741aeed0a737a120"
-  integrity sha512-1mo5XicO7tpneA45MrYgp8PNYRldHizRHl2jivneRdjLRoxrIsolgOAtbolMHrr4FQw7wnKf+KfX3xS399f6bQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.35"
     "@fortawesome/free-solid-svg-icons" "^5.15.4"
@@ -4148,13 +4150,11 @@ react-native-url-polyfill@^1.3.0:
   dependencies:
     whatwg-url-without-unicode "8.0.0-3"
 
-react-native-webrtc@^1.94.2:
-  version "1.94.2"
-  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-1.94.2.tgz#91ec5975d2fb923e620f4d339b55e892cf56e5e4"
-  integrity sha512-8wf7CDLYmrxxvta3XxZbmtNrxUblE70fDpoxjYKWfEa48Y4FnFw7MF61g8qYo+V0adoOUNc3j4fIgVnAMghJ9Q==
+"react-native-webrtc@file:.yalc/react-native-webrtc":
+  version "1.94.1"
   dependencies:
     base64-js "1.5.1"
-    event-target-shim "6.0.2"
+    event-target-shim "^5.0.0"
     tar "6.1.11"
 
 react-native@0.67.3:

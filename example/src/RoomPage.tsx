@@ -21,7 +21,10 @@ export const RoomPage = ({
   useEffect(() => {
     console.log('going to connect to ', url, ' ', token);
 
-    roomState.connect(url, token, { logLevel: LogLevel.info }).then((room) => {
+    roomState.connect(url, token, { 
+      publishDefaults: {simulcast: false},
+      logLevel: LogLevel.info 
+    }).then((room) => {
       if (!room) {
         return;
       }
