@@ -19,15 +19,17 @@ import { useParticipant } from './useParticipant';
 import { RTCView } from 'react-native-webrtc';
 export type Props = {
   participant: Participant;
+  style? : ViewStyle;
 };
 export const ParticipantView = ({
+  style = {},
   participant
 }: Props) => {
 
   const cameraPublication = participant.getTrack(Track.Source.Camera);
   if (cameraPublication == undefined) {
     console.log("no tracks!")
-    return null
+    return <View style={{...style, ...styles.container}} />
   }
   console.log(`displaying url: ${cameraPublication?.videoTrack?.mediaStream?.toURL()}`)
   console.log(`displaying mediaTrack: ${cameraPublication?.videoTrack?.mediaStream}`)
@@ -35,7 +37,7 @@ export const ParticipantView = ({
   console.log(`displaying publication: ${cameraPublication}`)
   return (
     <RTCView 
-      style={styles.container} 
+      style={{...style, ...styles.container}} 
       streamURL={cameraPublication?.videoTrack?.mediaStream?.toURL()}
       objectFit="cover" 
     />
@@ -44,8 +46,6 @@ export const ParticipantView = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    width: '100%',
     backgroundColor: '#888'
   },
 });

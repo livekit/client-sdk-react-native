@@ -1,13 +1,14 @@
 import * as React from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, FlatList, ListRenderItem } from 'react-native';
 import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { LogLevel } from 'livekit-client/dist/logger';
 import { RoomControls } from './RoomControls';
 import { useRoom } from './useRoom';
 import { ParticipantView } from './ParticipantView';
+import type { Participant } from 'livekit-client';
 
 export const RoomPage = ({
   navigation,
@@ -21,9 +22,9 @@ export const RoomPage = ({
   useEffect(() => {
     console.log('going to connect to ', url, ' ', token);
 
-    roomState.connect(url, token, { 
-      publishDefaults: {simulcast: false},
-      logLevel: LogLevel.info 
+    roomState.connect(url, token, {
+      publishDefaults: { simulcast: false },
+      logLevel: LogLevel.info
     }).then((room) => {
       if (!room) {
         return;
@@ -36,14 +37,28 @@ export const RoomPage = ({
       };
     });
   }, [url, token]);
+
+  const stageView = participants.length > 0 &&
+    (<ParticipantView participant={participants[0]} style={styles.stage}/>)
+
+  const renderParticipant: ListRenderItem<Participant> = ({ index, item }) => {
+    console.log(`rendering ${index}, ${item.identity}`);
+    return <ParticipantView participant={item} style={styles.otherParticipantView} />
+    //return <Text style={styles.otherParticipantView}>{item.identity}</Text>
+  }
+
+  const otherParticipantsView = participants.length > 0 &&
+    <FlatList
+      data={participants}
+      renderItem={renderParticipant}
+      keyExtractor={item => item.sid}
+      horizontal={true}
+      style={styles.otherParticipantsList}
+    />
   return (
     <View style={styles.container}>
-      <Text>URL is {route.params.url} </Text>
-      <Text>Token is {route.params.token} </Text>
-      <Text>Connected state = {isConnected ? 'true' : 'false'}</Text>
-      {
-        participants.length > 0 && (<ParticipantView participant={participants[0]}/>)
-      }
+      {stageView}
+      {otherParticipantsView}
       <RoomControls
         micEnabled={room?.localParticipant.isMicrophoneEnabled}
         setMicEnabled={(enabled: boolean) => {
@@ -69,9 +84,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  stage: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#0F0'
+  }, 
+  otherParticipantsList: {
+    width: '100%',
+    height: 150,
+    flexGrow: 0,
+    backgroundColor: '#F00'
+  },
+  otherParticipantView: {
+    width: 150,
+    height: 150,
+    backgroundColor: '#0F0'
   },
 });
