@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { StyleSheet, View, Text, Button, FlatList, ListRenderItem } from 'react-native';
+import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
 import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { LogLevel } from 'livekit-client/dist/logger';
@@ -14,7 +14,7 @@ export const RoomPage = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [, setIsConnected] = useState(false);
   const roomState = useRoom();
 
   const { participants, room } = roomState;
@@ -22,39 +22,42 @@ export const RoomPage = ({
   useEffect(() => {
     console.log('going to connect to ', url, ' ', token);
 
-    roomState.connect(url, token, {
-      publishDefaults: { simulcast: false },
-      logLevel: LogLevel.info
-    }).then((room) => {
-      if (!room) {
-        return;
-      }
-      console.log('connected to ', url, ' ', token);
-      setIsConnected(true);
-      return () => {
-        room.disconnect();
-        setIsConnected(false);
-      };
-    });
+    roomState
+      .connect(url, token, {
+        publishDefaults: { simulcast: false },
+        logLevel: LogLevel.info,
+      })
+      .then((room) => {
+        if (!room) {
+          return;
+        }
+        console.log('connected to ', url, ' ', token);
+        setIsConnected(true);
+        return () => {
+          room.disconnect();
+        };
+      });
   }, [url, token]);
 
-  const stageView = participants.length > 0 &&
-    (<ParticipantView participant={participants[0]} style={styles.stage}/>)
+  const stageView = participants.length > 0 && (
+    <ParticipantView participant={participants[0]} style={styles.stage} />
+  );
 
-  const renderParticipant: ListRenderItem<Participant> = ({ index, item }) => {
-    console.log(`rendering ${index}, ${item.identity}`);
-    return <ParticipantView participant={item} style={styles.otherParticipantView} />
-    //return <Text style={styles.otherParticipantView}>{item.identity}</Text>
-  }
+  const renderParticipant: ListRenderItem<Participant> = ({ item }) => {
+    return (
+      <ParticipantView participant={item} style={styles.otherParticipantView} />
+    );
+  };
 
-  const otherParticipantsView = participants.length > 0 &&
+  const otherParticipantsView = participants.length > 0 && (
     <FlatList
       data={participants}
       renderItem={renderParticipant}
-      keyExtractor={item => item.sid}
+      keyExtractor={(item) => item.sid}
       horizontal={true}
       style={styles.otherParticipantsList}
     />
+  );
   return (
     <View style={styles.container}>
       {stageView}
@@ -69,7 +72,7 @@ export const RoomPage = ({
           room?.localParticipant.setCameraEnabled(enabled);
         }}
         screenCastEnabled={false}
-        setScreenCastEnabled={() => { }}
+        setScreenCastEnabled={() => {}}
         onDisconnectClick={() => {
           navigation.pop();
         }}
@@ -87,17 +90,17 @@ const styles = StyleSheet.create({
   stage: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#0F0'
-  }, 
+    backgroundColor: '#0F0',
+  },
   otherParticipantsList: {
     width: '100%',
     height: 150,
     flexGrow: 0,
-    backgroundColor: '#F00'
+    backgroundColor: '#F00',
   },
   otherParticipantView: {
     width: 150,
     height: 150,
-    backgroundColor: '#0F0'
+    backgroundColor: '#0F0',
   },
 });

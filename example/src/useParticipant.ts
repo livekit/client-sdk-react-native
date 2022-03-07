@@ -5,8 +5,8 @@ import {
   ParticipantEvent,
   Track,
   TrackPublication,
-} from "livekit-client";
-import { useEffect, useState } from "react";
+} from 'livekit-client';
+import { useEffect, useState } from 'react';
 
 export interface ParticipantState {
   isSpeaking: boolean;
@@ -33,16 +33,16 @@ export function useParticipant(participant: Participant): ParticipantState {
     []
   );
 
-  const onPublicationsChanged = () => {
-    setPublications(Array.from(participant.tracks.values()));
-    setSubscribedTracks(
-      Array.from(participant.tracks.values()).filter((pub) => {
-        return pub.isSubscribed && pub.track !== undefined;
-      })
-    );
-  };
 
   useEffect(() => {
+    const onPublicationsChanged = () => {
+      setPublications(Array.from(participant.tracks.values()));
+      setSubscribedTracks(
+        Array.from(participant.tracks.values()).filter((pub) => {
+          return pub.isSubscribed && pub.track !== undefined;
+        })
+      );
+    };
     const onMuted = (pub: TrackPublication) => {
       if (pub.kind === Track.Kind.Audio) {
         setAudioMuted(true);

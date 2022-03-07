@@ -8,8 +8,8 @@ import {
   Room,
   RoomEvent,
   Track,
-} from "livekit-client";
-import { useCallback, useState } from "react";
+} from 'livekit-client';
+import { useCallback, useState } from 'react';
 
 export interface RoomState {
   connect: (
@@ -102,7 +102,7 @@ export function useRoom(options?: RoomOptions): RoomState {
         if (error instanceof Error) {
           setError(error);
         } else {
-          setError(new Error("an error has occured"));
+          setError(new Error('an error has occured'));
         }
 
         return undefined;
