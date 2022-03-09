@@ -33,7 +33,6 @@ export function useParticipant(participant: Participant): ParticipantState {
     []
   );
 
-
   useEffect(() => {
     const onPublicationsChanged = () => {
       setPublications(Array.from(participant.tracks.values()));

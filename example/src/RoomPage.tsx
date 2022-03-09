@@ -6,38 +6,34 @@ import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { LogLevel } from 'livekit-client/dist/logger';
 import { RoomControls } from './RoomControls';
-import { useRoom } from './useRoom';
 import { ParticipantView } from './ParticipantView';
-import type { Participant } from 'livekit-client';
+import { Participant, Room } from 'livekit-client';
+import { useRoom } from 'livekit-react-native';
 
 export const RoomPage = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const [, setIsConnected] = useState(false);
-  const roomState = useRoom();
+  const [room, ] = useState(() => new Room({publishDefaults: { simulcast: false }}));
+  const {participants } = useRoom(room);
 
-  const { participants, room } = roomState;
   const { url, token } = route.params;
   useEffect(() => {
-    console.log('going to connect to ', url, ' ', token);
-
-    roomState
-      .connect(url, token, {
-        publishDefaults: { simulcast: false },
-        logLevel: LogLevel.info,
-      })
+    room
+      .connect(url, token, {})
       .then((room) => {
         if (!room) {
+          console.log('failed to connect to ', url, ' ', token);
           return;
         }
         console.log('connected to ', url, ' ', token);
         setIsConnected(true);
-        return () => {
-          room.disconnect();
-        };
       });
-  }, [url, token]);
+    return () => {
+      room.disconnect()
+    }
+  }, [url, token, room]);
 
   const stageView = participants.length > 0 && (
     <ParticipantView participant={participants[0]} style={styles.stage} />
