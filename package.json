@@ -150,7 +150,6 @@
     ]
   },
   "dependencies": {
-    "livekit-client": "https://github.com/livekit/client-sdk-js.git#dl/react-native",
-    "livekit-react": "^0.6.4"
+    "livekit-client": "https://github.com/livekit/client-sdk-js.git#dl/react-native"
   }
 }

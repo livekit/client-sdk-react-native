@@ -9,5 +9,5 @@ export type Props = {
 };
 export const ParticipantView = ({ style = {}, participant }: Props) => {
   const cameraPublication = participant.getTrack(Track.Source.Camera);
-  return <VideoView style={style} videoTrack={cameraPublication?.videoTrack} />
+  return <VideoView style={style} videoTrack={cameraPublication?.videoTrack} />;
 };

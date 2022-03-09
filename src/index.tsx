@@ -1,5 +1,5 @@
 //import { NativeModules, Platform } from 'react-native';
-import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc'
+import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
 
 // const LINKING_ERROR =
 //   `The package 'livekit-react-native' doesn't seem to be linked. Make sure: \n\n` +
@@ -19,7 +19,9 @@ import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc'
 //     );
 
 export function registerGlobals() {
-  webrtcRegisterGlobals()
+  webrtcRegisterGlobals();
 }
 
-export * from './components/VideoView'
+export * from './components/VideoView';
+export * from './useParticipant';
+export * from './useRoom';

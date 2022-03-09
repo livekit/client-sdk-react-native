@@ -6,13 +6,17 @@ import { RTCView } from 'react-native-webrtc';
 export type Props = {
   videoTrack?: VideoTrack | undefined;
   style?: ViewStyle;
-  objectFit?: "cover" | "contain" | undefined
+  objectFit?: 'cover' | 'contain' | undefined;
 };
-export const VideoView = ({ style = {}, videoTrack, objectFit = "cover" }: Props) => {
+export const VideoView = ({
+  style = {},
+  videoTrack,
+  objectFit = 'cover',
+}: Props) => {
   return (
     <RTCView
       style={{ ...style, ...styles.container }}
-      streamURL={videoTrack?.mediaStream?.toURL() ?? ""}
+      streamURL={videoTrack?.mediaStream?.toURL() ?? ''}
       objectFit={objectFit}
     />
   );

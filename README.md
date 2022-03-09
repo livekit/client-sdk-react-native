@@ -5,18 +5,35 @@ LiveKit for React Native
 ## Installation
 
 ```sh
+npm install react-native-webrtc
 npm install livekit-react-native
+```
+
+### Pre-release version
+
+```sh
+npm install https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver
+npm install https://github.com/livekit/client-sdk-react-native
+yarn --cwd node_modules/livekit-client/
+yarn --cwd node_modules/livekit-client/ build
+npm install
 ```
 
 ## Usage
 
+In your `index.js` file:
+
 ```js
-import { multiply } from "livekit-react-native";
+import { registerGlobals } from "livekit-react-native";
 
 // ...
 
-const result = await multiply(3, 7);
+registerGlobals()
 ```
+
+This sets up the required WebRTC libraries for use in Javascript, and is needed for LiveKit to work.
+
+
 
 ## Contributing
 
