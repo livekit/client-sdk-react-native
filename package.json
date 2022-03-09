@@ -48,14 +48,15 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@babel/runtime": "^7.12.5",
     "@babel/preset-env": "^7.1.6",
+    "@babel/runtime": "^7.12.5",
     "@commitlint/config-conventional": "^16.2.1",
     "@react-native-community/eslint-config": "^3.0.1",
     "@release-it/conventional-changelog": "^4.2.0",
     "@types/jest": "^26.0.0",
     "@types/react": "^17.0.0",
     "@types/react-native": "0.66.16",
+    "@types/react-native-webrtc": "^1.75.5",
     "commitlint": "^16.2.1",
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^7.0.0",
@@ -72,7 +73,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-webrtc": "https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver"
   },
   "jest": {
     "preset": "react-native",
@@ -146,5 +148,9 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "livekit-client": "https://github.com/livekit/client-sdk-js.git#dl/react-native",
+    "livekit-react": "^0.6.4"
   }
 }
