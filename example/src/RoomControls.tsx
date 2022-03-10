@@ -14,8 +14,8 @@ export type Props = {
   setMicEnabled: (enabled: boolean) => void;
   cameraEnabled?: boolean;
   setCameraEnabled: (enabled: boolean) => void;
-  screenCastEnabled: boolean;
-  setScreenCastEnabled: (enabled: boolean) => void;
+  screenShareEnabled: boolean;
+  setScreenShareEnabled: (enabled: boolean) => void;
   onDisconnectClick: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -24,6 +24,8 @@ export const RoomControls = ({
   setMicEnabled,
   cameraEnabled = false,
   setCameraEnabled,
+  screenShareEnabled = false,
+  setScreenShareEnabled,
   onDisconnectClick,
   style,
 }: Props) => {
@@ -33,7 +35,9 @@ export const RoomControls = ({
   var cameraImage = cameraEnabled
     ? require('./icons/baseline_videocam_white_24dp.png')
     : require('./icons/baseline_videocam_off_white_24dp.png');
-
+  var screenShareImage = screenShareEnabled
+    ? require('./icons/baseline_cast_connected_white_24dp.png')
+    : require('./icons/baseline_cast_white_24dp.png')
   return (
     <View style={[style, styles.container]}>
       <Pressable
@@ -41,21 +45,29 @@ export const RoomControls = ({
           setMicEnabled(!micEnabled);
         }}
       >
-        <Image source={micImage} />
+        <Image style={styles.icon} source={micImage} />
       </Pressable>
       <Pressable
         onPress={() => {
           setCameraEnabled(!cameraEnabled);
         }}
       >
-        <Image source={cameraImage} />
+        <Image style={styles.icon} source={cameraImage} />
       </Pressable>
+      <Pressable
+        onPress={() => {
+          setScreenShareEnabled(!screenShareEnabled);
+        }}
+      >
+        <Image style={styles.icon} source={screenShareImage} />
+      </Pressable>
+      
       <Pressable
         onPress={() => {
           onDisconnectClick();
         }}
       >
-        <Image source={require('./icons/baseline_cancel_white_24dp.png')} />
+        <Image style={styles.icon} source={require('./icons/baseline_cancel_white_24dp.png')} />
       </Pressable>
     </View>
   );
@@ -67,5 +79,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+    marginVertical: 8,
   },
+  icon: {
+    width: 32,
+    height: 32,
+  }
 });

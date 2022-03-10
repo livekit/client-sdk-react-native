@@ -4,17 +4,20 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { StyleSheet, View, TextInput, Text, Button } from 'react-native';
 import type { RootStackParamList } from './App';
+import { useTheme } from '@react-navigation/native';
 
 export const PreJoinPage = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'PreJoinPage'>) => {
+
+  const { colors } = useTheme();
   return (
     <View style={styles.container}>
-      <Text>URL</Text>
-      <TextInput onChangeText={setUrl} value={url} />
+      <Text style={{ color: colors.text }}>URL</Text>
+      <TextInput underlineColorAndroid={colors.border} style={{ color: colors.text }} onChangeText={setUrl} value={url} />
 
-      <Text>Token</Text>
-      <TextInput onChangeText={setToken} value={token} />
+      <Text style={{ color: colors.text }}>Token</Text>
+      <TextInput underlineColorAndroid={colors.border} style={{ color: colors.text }} onChangeText={setToken} value={token} />
 
       <Button
         title="Connect"

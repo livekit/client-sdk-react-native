@@ -7,5 +7,5 @@ import { setLogLevel } from 'livekit-client';
 import { LogLevel } from 'livekit-client/dist/logger';
 
 registerGlobals();
-setLogLevel(LogLevel.info);
+setLogLevel(LogLevel.debug);
 AppRegistry.registerComponent(appName, () => App);

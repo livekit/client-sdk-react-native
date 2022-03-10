@@ -15,8 +15,8 @@ export const RoomPage = ({
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const [, setIsConnected] = useState(false);
-  const [room, ] = useState(() => new Room({publishDefaults: { simulcast: false }}));
-  const {participants } = useRoom(room);
+  const [room,] = useState(() => new Room({ publishDefaults: { simulcast: false } }));
+  const { participants } = useRoom(room);
 
   const { url, token } = route.params;
   useEffect(() => {
@@ -67,8 +67,10 @@ export const RoomPage = ({
         setCameraEnabled={(enabled: boolean) => {
           room?.localParticipant.setCameraEnabled(enabled);
         }}
-        screenCastEnabled={false}
-        setScreenCastEnabled={() => {}}
+        screenShareEnabled={room?.localParticipant.isScreenShareEnabled}
+        setScreenShareEnabled={(enabled: boolean) => { 
+          room?.localParticipant.setScreenShareEnabled(enabled);
+        }}
         onDisconnectClick={() => {
           navigation.pop();
         }}
@@ -86,17 +88,14 @@ const styles = StyleSheet.create({
   stage: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#0F0',
   },
   otherParticipantsList: {
     width: '100%',
     height: 150,
     flexGrow: 0,
-    backgroundColor: '#F00',
   },
   otherParticipantView: {
     width: 150,
     height: 150,
-    backgroundColor: '#0F0',
   },
 });

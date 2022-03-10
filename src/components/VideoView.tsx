@@ -24,6 +24,5 @@ export const VideoView = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
   },
 });

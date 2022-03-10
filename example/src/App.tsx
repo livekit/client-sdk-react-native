@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PreJoinPage } from './PreJoinPage';
 import { RoomPage } from './RoomPage';
@@ -8,7 +8,7 @@ import { RoomPage } from './RoomPage';
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator>
         <Stack.Screen name="PreJoinPage" component={PreJoinPage} />
         <Stack.Screen name="RoomPage" component={RoomPage} />
