@@ -1,7 +1,5 @@
 import {
   AudioTrack,
-  connect,
-  ConnectOptions,
   LocalParticipant,
   Participant,
   RemoteTrack,
@@ -9,7 +7,7 @@ import {
   RoomEvent,
   Track,
 } from 'livekit-client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface RoomState {
   room?: Room;
@@ -25,7 +23,7 @@ export interface RoomOptions {
 }
 
 export function useRoom(room: Room, options?: RoomOptions): RoomState {
-  const [error, setError] = useState<Error>();
+  const [error] = useState<Error>();
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [audioTracks, setAudioTracks] = useState<AudioTrack[]>([]);
 
