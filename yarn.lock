@@ -6223,14 +6223,16 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-"livekit-client@https://github.com/livekit/client-sdk-js.git#dl/react-native":
-  version "0.16.2"
-  resolved "https://github.com/livekit/client-sdk-js.git#787e474235a17e7c908c17a75a104bb28318e2b2"
+livekit-client@^0.17.3:
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-0.17.3.tgz#c650c6d52154dba93a38e17dc195fe819fbb25cf"
+  integrity sha512-hkos58QMljW03ePa+VsOFigjblaXCNwHzkXf/TQQ76RZ/cx8UGg3ElHuEshGQGbdlTtel1ZtbjP9cSgg4gh8zQ==
   dependencies:
     events "^3.3.0"
     loglevel "^1.8.0"
     protobufjs "^6.11.2"
     ts-debounce "^3.0.0"
+    typed-emitter "^2.1.0"
     webrtc-adapter "^8.1.1"
 
 load-json-file@^4.0.0:
@@ -8134,6 +8136,13 @@ rxjs@^7.2.0:
   dependencies:
     tslib "^2.1.0"
 
+rxjs@^7.5.2:
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.5.tgz#2ebad89af0f560f460ad5cc4213219e1f7dd4e9f"
+  integrity sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==
+  dependencies:
+    tslib "^2.1.0"
+
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
@@ -8987,6 +8996,13 @@ type-fest@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
+
+typed-emitter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/typed-emitter/-/typed-emitter-2.1.0.tgz#ca78e3d8ef1476f228f548d62e04e3d4d3fd77fb"
+  integrity sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==
+  optionalDependencies:
+    rxjs "^7.5.2"
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
