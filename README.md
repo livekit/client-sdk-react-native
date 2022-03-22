@@ -13,15 +13,7 @@ npm install livekit-react-native
 
 ```sh
 npm install https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver
-# This will have some errors, this is expected.
 npm install https://github.com/livekit/client-sdk-react-native
-
-# Fix errors
-yarn --cwd node_modules/livekit-client/
-yarn --cwd node_modules/livekit-client/ build
-
-# Should complete successfully now.
-npm install
 ```
 
 ## Usage
@@ -40,7 +32,7 @@ This sets up the required WebRTC libraries for use in Javascript, and is needed 
 
 ```js
 
-import { Participant, Room } from 'livekit-client';
+import { Participant, Room, Track } from 'livekit-client';
 import { useRoom, VideoView } from 'livekit-react-native';
 
 /*...*/
