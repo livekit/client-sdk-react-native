@@ -48,7 +48,7 @@ useEffect(() => {
 }, [url, token, room]);
 
 const videoView = participants.length > 0 && (
-  <VideoView videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack} />
+  <VideoView style={{flex:1, width:"100%"}} videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack} />
 );
 ```
 ## Contributing
