@@ -1,6 +1,6 @@
 //import { NativeModules, Platform } from 'react-native';
 import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
-
+import { setupURLPolyfill } from 'react-native-url-polyfill';
 // const LINKING_ERROR =
 //   `The package 'livekit-react-native' doesn't seem to be linked. Make sure: \n\n` +
 //   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
@@ -20,6 +20,7 @@ import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
 
 export function registerGlobals() {
   webrtcRegisterGlobals();
+  setupURLPolyfill();
 }
 
 export * from './components/VideoView';
