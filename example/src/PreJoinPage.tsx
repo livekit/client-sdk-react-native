@@ -9,6 +9,10 @@ import { useTheme } from '@react-navigation/native';
 export const PreJoinPage = ({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'PreJoinPage'>) => {
+  const [url, setUrl] = useState('');
+  const [token, setToken] = useState<string>(
+    ''
+  );
 
   const { colors } = useTheme();
   return (
