@@ -1,7 +1,7 @@
 {
   "name": "livekit-react-native-example",
   "description": "Example app for livekit-react-native",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
