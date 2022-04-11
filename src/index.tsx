@@ -21,6 +21,18 @@ import { setupURLPolyfill } from 'react-native-url-polyfill';
 export function registerGlobals() {
   webrtcRegisterGlobals();
   setupURLPolyfill();
+  fixWebrtcAdapter();
+}
+
+function fixWebrtcAdapter() {
+  // @ts-ignore
+  if (window?.navigator !== undefined) {
+    // @ts-ignore
+    const { navigator } = window;
+    if (navigator.userAgent === undefined) {
+      navigator.userAgent = navigator.product ?? 'Unknown';
+    }
+  }
 }
 
 export * from './components/VideoView';
