@@ -21,30 +21,24 @@
     "!**/__fixtures__",
     "!**/__mocks__"
   ],
-  "scripts": {
-    "test": "jest",
-    "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
-    "release": "release-it",
-    "example": "yarn --cwd example",
-    "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
-  },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
   "repository": "https://github.com/livekit/client-sdk-react-native",
   "author": "LiveKit <dl@livekit.io> (https://livekit.io/)",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/livekit/client-sdk-react-native/issues"
   },
   "homepage": "https://github.com/livekit/client-sdk-react-native#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android"
+  ],
+  "dependencies": {
+    "livekit-client": "^0.17.5",
+    "react-native-url-polyfill": "^1.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -75,6 +69,16 @@
     "react": "*",
     "react-native": "*",
     "react-native-webrtc": "https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver"
+  },
+  "scripts": {
+    "test": "jest",
+    "typescript": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "bob build",
+    "release": "release-it",
+    "example": "yarn --cwd example",
+    "pods": "cd example && pod-install --quiet",
+    "bootstrap": "yarn example && yarn && yarn pods"
   },
   "jest": {
     "preset": "react-native",
@@ -148,9 +152,5 @@
         }
       ]
     ]
-  },
-  "dependencies": {
-    "livekit-client": "^0.17.3",
-    "react-native-url-polyfill": "^1.3.0"
   }
 }

@@ -1,20 +1,20 @@
 # livekit-react-native
 
-LiveKit for React Native.
+LiveKit Client SDK for React Native. (beta)
 
 ## Installation
 
-```sh
-npm install react-native-webrtc
-npm install livekit-react-native
-```
-
-### Pre-release version
+This library depends on react-native-webrtc's unreleased Transceiver support.
+Currently present in our fork.
 
 ```sh
-npm install https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver
-npm install https://github.com/livekit/client-sdk-react-native
+yarn add https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver
+yarn add https://github.com/livekit/client-sdk-react-native
 ```
+
+## Example app
+
+We've included an [example app](example/) that you can try out.
 
 ## Usage
 
@@ -51,10 +51,15 @@ const videoView = participants.length > 0 && (
   <VideoView style={{flex:1, width:"100%"}} videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack} />
 );
 ```
+
+### Note
+
+Currently it does not run on iOS Simulator on M1 Macs.
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 ## License
 
-MIT
+Apache License 2.0
