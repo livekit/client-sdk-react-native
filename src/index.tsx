@@ -28,9 +28,9 @@ function fixWebrtcAdapter() {
   // @ts-ignore
   if (window?.navigator !== undefined) {
     // @ts-ignore
-    const {navigator} = window
-    if(navigator.userAgent === undefined) {
-      navigator.userAgent = navigator.product ?? "Unknown"
+    const { navigator } = window;
+    if (navigator.userAgent === undefined) {
+      navigator.userAgent = navigator.product ?? 'Unknown';
     }
   }
 }
