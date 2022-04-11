@@ -2,10 +2,10 @@
 
 ## Running
 
+In `client-sdk-react-native` directory, run:
+
 ```sh
-yarn install
-cd example
-yarn install
+yarn bootstrap
 ```
 
 ### iOS
