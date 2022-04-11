@@ -4,7 +4,6 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
 import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
-import { LogLevel } from 'livekit-client/dist/logger';
 import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import { Participant, Room } from 'livekit-client';
@@ -15,24 +14,24 @@ export const RoomPage = ({
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const [, setIsConnected] = useState(false);
-  const [room,] = useState(() => new Room({ publishDefaults: { simulcast: false } }));
+  const [room] = useState(
+    () => new Room({ publishDefaults: { simulcast: false } })
+  );
   const { participants } = useRoom(room);
 
   const { url, token } = route.params;
   useEffect(() => {
-    room
-      .connect(url, token, {})
-      .then((room) => {
-        if (!room) {
-          console.log('failed to connect to ', url, ' ', token);
-          return;
-        }
-        console.log('connected to ', url, ' ', token);
-        setIsConnected(true);
-      });
+    room.connect(url, token, {}).then((r) => {
+      if (!r) {
+        console.log('failed to connect to ', url, ' ', token);
+        return;
+      }
+      console.log('connected to ', url, ' ', token);
+      setIsConnected(true);
+    });
     return () => {
-      room.disconnect()
-    }
+      room.disconnect();
+    };
   }, [url, token, room]);
 
   const stageView = participants.length > 0 && (
@@ -68,7 +67,7 @@ export const RoomPage = ({
           room?.localParticipant.setCameraEnabled(enabled);
         }}
         screenShareEnabled={room?.localParticipant.isScreenShareEnabled}
-        setScreenShareEnabled={(enabled: boolean) => { 
+        setScreenShareEnabled={(enabled: boolean) => {
           room?.localParticipant.setScreenShareEnabled(enabled);
         }}
         onDisconnectClick={() => {

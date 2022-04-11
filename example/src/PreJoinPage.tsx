@@ -18,10 +18,26 @@ export const PreJoinPage = ({
   return (
     <View style={styles.container}>
       <Text style={{ color: colors.text }}>URL</Text>
-      <TextInput style={{ color: colors.text, borderColor: colors.border, ...styles.input }} onChangeText={setUrl} value={url} />
+      <TextInput
+        style={{
+          color: colors.text,
+          borderColor: colors.border,
+          ...styles.input,
+        }}
+        onChangeText={setUrl}
+        value={url}
+      />
 
       <Text style={{ color: colors.text }}>Token</Text>
-      <TextInput style={{ color: colors.text, borderColor: colors.border, ...styles.input }} onChangeText={setToken} value={token} />
+      <TextInput
+        style={{
+          color: colors.text,
+          borderColor: colors.border,
+          ...styles.input,
+        }}
+        onChangeText={setToken}
+        value={token}
+      />
 
       <Button
         title="Connect"
@@ -45,7 +61,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   input: {
-    width: "100%",
+    width: '100%',
     height: 40,
     margin: 12,
     borderWidth: 1,
