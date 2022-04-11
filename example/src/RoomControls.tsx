@@ -37,7 +37,7 @@ export const RoomControls = ({
     : require('./icons/baseline_videocam_off_white_24dp.png');
   var screenShareImage = screenShareEnabled
     ? require('./icons/baseline_cast_connected_white_24dp.png')
-    : require('./icons/baseline_cast_white_24dp.png')
+    : require('./icons/baseline_cast_white_24dp.png');
   return (
     <View style={[style, styles.container]}>
       <Pressable
@@ -61,13 +61,16 @@ export const RoomControls = ({
       >
         <Image style={styles.icon} source={screenShareImage} />
       </Pressable>
-      
+
       <Pressable
         onPress={() => {
           onDisconnectClick();
         }}
       >
-        <Image style={styles.icon} source={require('./icons/baseline_cancel_white_24dp.png')} />
+        <Image
+          style={styles.icon}
+          source={require('./icons/baseline_cancel_white_24dp.png')}
+        />
       </Pressable>
     </View>
   );
@@ -84,5 +87,5 @@ const styles = StyleSheet.create({
   icon: {
     width: 32,
     height: 32,
-  }
+  },
 });

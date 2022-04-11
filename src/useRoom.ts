@@ -32,10 +32,10 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
   useEffect(() => {
     const onParticipantsChanged = () => {
       const remotes = Array.from(room.participants.values());
-      const participants: Participant[] = [room.localParticipant];
-      participants.push(...remotes);
-      sortFunc(participants, room.localParticipant);
-      setParticipants(participants);
+      const newParticipants: Participant[] = [room.localParticipant];
+      newParticipants.push(...remotes);
+      sortFunc(newParticipants, room.localParticipant);
+      setParticipants(newParticipants);
     };
     const onSubscribedTrackChanged = (track?: RemoteTrack) => {
       // ordering may have changed, re-sort
@@ -79,11 +79,9 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
     onSubscribedTrackChanged();
 
     return () => {
-      room.disconnect()
+      room.disconnect();
     };
-  },
-    [sortFunc]
-  );
+  }, [room, sortFunc]);
 
   return {
     error,
