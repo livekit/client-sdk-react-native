@@ -15,7 +15,11 @@ export const RoomPage = ({
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const [, setIsConnected] = useState(false);
   const [room] = useState(
-    () => new Room({ publishDefaults: { simulcast: false } })
+    () =>
+      new Room({
+        publishDefaults: { simulcast: false },
+        adaptiveStream: true,
+      })
   );
   const { participants } = useRoom(room);
 
@@ -58,17 +62,17 @@ export const RoomPage = ({
       {stageView}
       {otherParticipantsView}
       <RoomControls
-        micEnabled={room?.localParticipant.isMicrophoneEnabled}
+        micEnabled={room.localParticipant.isMicrophoneEnabled}
         setMicEnabled={(enabled: boolean) => {
-          room?.localParticipant.setMicrophoneEnabled(enabled);
+          room.localParticipant.setMicrophoneEnabled(enabled);
         }}
-        cameraEnabled={room?.localParticipant.isCameraEnabled}
+        cameraEnabled={room.localParticipant.isCameraEnabled}
         setCameraEnabled={(enabled: boolean) => {
-          room?.localParticipant.setCameraEnabled(enabled);
+          room.localParticipant.setCameraEnabled(enabled);
         }}
-        screenShareEnabled={room?.localParticipant.isScreenShareEnabled}
+        screenShareEnabled={room.localParticipant.isScreenShareEnabled}
         setScreenShareEnabled={(enabled: boolean) => {
-          room?.localParticipant.setScreenShareEnabled(enabled);
+          room.localParticipant.setScreenShareEnabled(enabled);
         }}
         onDisconnectClick={() => {
           navigation.pop();
