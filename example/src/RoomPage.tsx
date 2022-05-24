@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import { Participant, Room } from 'livekit-client';
-import { useRoom } from 'livekit-react-native';
-import { useParticipant } from 'livekit-react-native';
+import { useRoom, useParticipant } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
+import VIForegroundService from '@voximplant/react-native-foreground-service';
 
 export const RoomPage = ({
   navigation,
@@ -38,6 +38,42 @@ export const RoomPage = ({
     });
     return () => {
       room.disconnect();
+    };
+  }, [url, token, room]);
+
+  useEffect(() => {
+    let startService = async () => {
+      const channelConfig = {
+        id: 'channelId',
+        name: 'Channel name',
+        description: 'Channel description',
+        enableVibration: false,
+      };
+      VIForegroundService.getInstance().createNotificationChannel(
+        channelConfig
+      );
+      const notificationConfig = {
+        channelId: 'channelId',
+        id: 3456,
+        title: 'Title',
+        text: 'Some text',
+        icon: 'ic_icon',
+        button: 'Some text',
+      };
+      try {
+        await VIForegroundService.getInstance().startService(
+          notificationConfig
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    let stopService = async () => {
+      VIForegroundService.getInstance().stopService();
+    };
+    startService();
+    return () => {
+      stopService();
     };
   }, [url, token, room]);
 
