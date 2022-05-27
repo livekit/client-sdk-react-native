@@ -11,6 +11,7 @@ import { useRoom, useParticipant } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
 import VIForegroundService from '@voximplant/react-native-foreground-service';
 import { Platform } from 'react-native';
+import RNCallKeep from 'react-native-callkeep';
 
 export const RoomPage = ({
   navigation,
@@ -42,7 +43,7 @@ export const RoomPage = ({
     };
   }, [url, token, room]);
 
-  // Start a foreground notification.
+  // Start a foreground notification on Android.
   // A foreground notification is required for screenshare on Android.
   useEffect(() => {
     let startService = async () => {
@@ -86,6 +87,19 @@ export const RoomPage = ({
     };
   }, [url, token, room]);
 
+  // Start a CallKit call on iOS.
+  // This keeps the app alive in the background. 
+  useEffect(() => {
+    let uuid = '1932b99c-4fe1-4bf4-897f-763bc4dc21c2';
+    let handle = '1234567';
+    let contactIdentifier = 'Caller Contact';
+    RNCallKeep.startCall(uuid, handle, contactIdentifier, 'number', true);
+
+    return () => {
+      RNCallKeep.endCall(uuid);
+    };
+  }, [url, token, room]);
+  
   // Setup views.
   const stageView = participants.length > 0 && (
     <ParticipantView participant={participants[0]} style={styles.stage} />

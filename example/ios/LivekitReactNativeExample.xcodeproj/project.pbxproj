@@ -13,6 +13,14 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4C39C56BAD484C67AA576FFA /* libPods-LivekitReactNativeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3E69C5B9553B26FBA2DF04 /* libPods-LivekitReactNativeExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		D767E4EE283D20BC0077477C /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D767E4ED283D20BC0077477C /* ReplayKit.framework */; };
+		D767E4F1283D20BC0077477C /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4F0283D20BC0077477C /* SampleHandler.swift */; };
+		D767E4F5283D20BC0077477C /* BroadcastExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D767E4EC283D20BC0077477C /* BroadcastExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D767E501283D293A0077477C /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FB283D293A0077477C /* SampleHandler.swift */; };
+		D767E502283D293A0077477C /* SocketConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FC283D293A0077477C /* SocketConnection.swift */; };
+		D767E503283D293A0077477C /* SampleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FD283D293A0077477C /* SampleUploader.swift */; };
+		D767E504283D293A0077477C /* DarwinNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FE283D293A0077477C /* DarwinNotificationCenter.swift */; };
+		D767E505283D293A0077477C /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FF283D293A0077477C /* Atomic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,7 +31,28 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = LivekitReactNativeExample;
 		};
+		D767E4F3283D20BC0077477C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D767E4EB283D20BC0077477C;
+			remoteInfo = BroadcastExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D767E4F9283D20BC0077477C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D767E4F5283D20BC0077477C /* BroadcastExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -39,6 +68,18 @@
 		47F7ED3B7971BE374F7B8635 /* Pods-LivekitReactNativeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivekitReactNativeExample.debug.xcconfig"; path = "Target Support Files/Pods-LivekitReactNativeExample/Pods-LivekitReactNativeExample.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LivekitReactNativeExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CA3E69C5B9553B26FBA2DF04 /* libPods-LivekitReactNativeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LivekitReactNativeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D767E4EC283D20BC0077477C /* BroadcastExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D767E4ED283D20BC0077477C /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		D767E4F0283D20BC0077477C /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
+		D767E4F2283D20BC0077477C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D767E4FA283D293A0077477C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D767E4FB283D293A0077477C /* SampleHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
+		D767E4FC283D293A0077477C /* SocketConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketConnection.swift; sourceTree = "<group>"; };
+		D767E4FD283D293A0077477C /* SampleUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleUploader.swift; sourceTree = "<group>"; };
+		D767E4FE283D293A0077477C /* DarwinNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarwinNotificationCenter.swift; sourceTree = "<group>"; };
+		D767E4FF283D293A0077477C /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
+		D767E506283D2BAE0077477C /* LivekitReactNativeExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LivekitReactNativeExample.entitlements; path = LivekitReactNativeExample/LivekitReactNativeExample.entitlements; sourceTree = "<group>"; };
+		D767E507283D2BF00077477C /* BroadcastExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExtension.entitlements; sourceTree = "<group>"; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-LivekitReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivekitReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-LivekitReactNativeExample/Pods-LivekitReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -57,6 +98,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C39C56BAD484C67AA576FFA /* libPods-LivekitReactNativeExample.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D767E4E9283D20BC0077477C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D767E4EE283D20BC0077477C /* ReplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +132,7 @@
 		13B07FAE1A68108700A75B9A /* LivekitReactNativeExample */ = {
 			isa = PBXGroup;
 			children = (
+				D767E506283D2BAE0077477C /* LivekitReactNativeExample.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -100,6 +150,7 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				CA3E69C5B9553B26FBA2DF04 /* libPods-LivekitReactNativeExample.a */,
+				D767E4ED283D20BC0077477C /* ReplayKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -126,6 +177,7 @@
 				13B07FAE1A68108700A75B9A /* LivekitReactNativeExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* LivekitReactNativeExampleTests */,
+				D767E4EF283D20BC0077477C /* BroadcastExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				6B9684456A2045ADE5A6E47E /* Pods */,
@@ -140,8 +192,25 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* LivekitReactNativeExample.app */,
 				00E356EE1AD99517003FC87E /* LivekitReactNativeExampleTests.xctest */,
+				D767E4EC283D20BC0077477C /* BroadcastExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D767E4EF283D20BC0077477C /* BroadcastExtension */ = {
+			isa = PBXGroup;
+			children = (
+				D767E507283D2BF00077477C /* BroadcastExtension.entitlements */,
+				D767E4FF283D293A0077477C /* Atomic.swift */,
+				D767E4FE283D293A0077477C /* DarwinNotificationCenter.swift */,
+				D767E4FA283D293A0077477C /* Info.plist */,
+				D767E4FB283D293A0077477C /* SampleHandler.swift */,
+				D767E4FD283D293A0077477C /* SampleUploader.swift */,
+				D767E4FC283D293A0077477C /* SocketConnection.swift */,
+				D767E4F0283D20BC0077477C /* SampleHandler.swift */,
+				D767E4F2283D20BC0077477C /* Info.plist */,
+			);
+			path = BroadcastExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,15 +246,34 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				C1D60D28B925C94BD88E79D7 /* [CP] Copy Pods Resources */,
 				48F26BC44CA742D190712467 /* [CP] Embed Pods Frameworks */,
+				D767E4F9283D20BC0077477C /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D767E4F4283D20BC0077477C /* PBXTargetDependency */,
 			);
 			name = LivekitReactNativeExample;
 			productName = LivekitReactNativeExample;
 			productReference = 13B07F961A680F5B00A75B9A /* LivekitReactNativeExample.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D767E4EB283D20BC0077477C /* BroadcastExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D767E4F6283D20BC0077477C /* Build configuration list for PBXNativeTarget "BroadcastExtension" */;
+			buildPhases = (
+				D767E4E8283D20BC0077477C /* Sources */,
+				D767E4E9283D20BC0077477C /* Frameworks */,
+				D767E4EA283D20BC0077477C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BroadcastExtension;
+			productName = BroadcastExtension;
+			productReference = D767E4EC283D20BC0077477C /* BroadcastExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -193,6 +281,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -201,8 +290,13 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 76TVFCUKK7;
+						DevelopmentTeam = SZVVCTLR79;
 						LastSwiftMigration = 1120;
+					};
+					D767E4EB283D20BC0077477C = {
+						CreatedOnToolsVersion = 13.4;
+						DevelopmentTeam = SZVVCTLR79;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -221,6 +315,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* LivekitReactNativeExample */,
 				00E356ED1AD99517003FC87E /* LivekitReactNativeExampleTests */,
+				D767E4EB283D20BC0077477C /* BroadcastExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -239,6 +334,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D767E4EA283D20BC0077477C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +462,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D767E4E8283D20BC0077477C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D767E504283D293A0077477C /* DarwinNotificationCenter.swift in Sources */,
+				D767E501283D293A0077477C /* SampleHandler.swift in Sources */,
+				D767E503283D293A0077477C /* SampleUploader.swift in Sources */,
+				D767E502283D293A0077477C /* SocketConnection.swift in Sources */,
+				D767E505283D293A0077477C /* Atomic.swift in Sources */,
+				D767E4F1283D20BC0077477C /* SampleHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -367,6 +482,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* LivekitReactNativeExample */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		D767E4F4283D20BC0077477C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D767E4EB283D20BC0077477C /* BroadcastExtension */;
+			targetProxy = D767E4F3283D20BC0077477C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -420,12 +540,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 47F7ED3B7971BE374F7B8635 /* Pods-LivekitReactNativeExample.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = LivekitReactNativeExample/LivekitReactNativeExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SZVVCTLR79;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LivekitReactNativeExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -444,11 +567,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E00ACF0FDA8BF921659E2F9A /* Pods-LivekitReactNativeExample.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = LivekitReactNativeExample/LivekitReactNativeExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SZVVCTLR79;
 				INFOPLIST_FILE = LivekitReactNativeExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -577,6 +703,77 @@
 			};
 			name = Release;
 		};
+		D767E4F7283D20BC0077477C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BroadcastExtension/BroadcastExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = SZVVCTLR79;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BroadcastExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative.BroadcastExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D767E4F8283D20BC0077477C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BroadcastExtension/BroadcastExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = SZVVCTLR79;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BroadcastExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative.BroadcastExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -603,6 +800,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D767E4F6283D20BC0077477C /* Build configuration list for PBXNativeTarget "BroadcastExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D767E4F7283D20BC0077477C /* Debug */,
+				D767E4F8283D20BC0077477C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
