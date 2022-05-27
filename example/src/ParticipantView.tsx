@@ -17,7 +17,7 @@ export const ParticipantView = ({ style = {}, participant }: Props) => {
 
   const { colors } = useTheme();
   var videoView;
-  if (cameraPublication?.isSubscribed) {
+  if (cameraPublication?.isSubscribed && !cameraPublication.isMuted) {
     videoView = (
       <VideoView
         style={styles.videoView}
