@@ -17,7 +17,11 @@ export const RoomPage = ({
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const [, setIsConnected] = useState(false);
   const [room] = useState(
-    () => new Room({ publishDefaults: { simulcast: false } })
+    () =>
+      new Room({
+        publishDefaults: { simulcast: false },
+        adaptiveStream: true,
+      })
   );
   const { participants } = useRoom(room);
   const { url, token } = route.params;
