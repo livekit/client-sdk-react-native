@@ -8,6 +8,8 @@ import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import { Participant, Room } from 'livekit-client';
 import { useRoom } from 'livekit-react-native';
+import { useParticipant } from 'livekit-react-native';
+import type { TrackPublication } from 'livekit-client';
 
 export const RoomPage = ({
   navigation,
@@ -22,8 +24,9 @@ export const RoomPage = ({
       })
   );
   const { participants } = useRoom(room);
-
   const { url, token } = route.params;
+
+  // Connect to room.
   useEffect(() => {
     room.connect(url, token, {}).then((r) => {
       if (!r) {
@@ -38,6 +41,7 @@ export const RoomPage = ({
     };
   }, [url, token, room]);
 
+  // Setup views.
   const stageView = participants.length > 0 && (
     <ParticipantView participant={participants[0]} style={styles.stage} />
   );
@@ -57,20 +61,24 @@ export const RoomPage = ({
       style={styles.otherParticipantsList}
     />
   );
+
+  const { cameraPublication, microphonePublication, screenSharePublication } =
+    useParticipant(room.localParticipant);
+
   return (
     <View style={styles.container}>
       {stageView}
       {otherParticipantsView}
       <RoomControls
-        micEnabled={room.localParticipant.isMicrophoneEnabled}
+        micEnabled={isTrackEnabled(microphonePublication)}
         setMicEnabled={(enabled: boolean) => {
           room.localParticipant.setMicrophoneEnabled(enabled);
         }}
-        cameraEnabled={room.localParticipant.isCameraEnabled}
+        cameraEnabled={isTrackEnabled(cameraPublication)}
         setCameraEnabled={(enabled: boolean) => {
           room.localParticipant.setCameraEnabled(enabled);
         }}
-        screenShareEnabled={room.localParticipant.isScreenShareEnabled}
+        screenShareEnabled={isTrackEnabled(screenSharePublication)}
         setScreenShareEnabled={(enabled: boolean) => {
           room.localParticipant.setScreenShareEnabled(enabled);
         }}
@@ -81,6 +89,10 @@ export const RoomPage = ({
     </View>
   );
 };
+
+function isTrackEnabled(pub?: TrackPublication): boolean {
+  return !(pub?.isMuted ?? true);
+}
 
 const styles = StyleSheet.create({
   container: {
