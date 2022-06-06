@@ -52,6 +52,24 @@ const videoView = participants.length > 0 && (
 );
 ```
 
+## Screenshare
+
+Enabling screenshare requires extra installation steps:
+
+### Android
+
+Android screenshare requires a foreground service with type `mediaProjection` to be present.
+
+The example app uses [@voximplant/react-native-foreground-service](https://github.com/voximplant/react-native-foreground-service) for this.
+Ensure that the service is labelled a `mediaProjection` service like so:
+
+```
+<service android:name="com.voximplant.foregroundservice.VIForegroundService" 
+  android:foregroundServiceType="mediaProjection" />
+```
+
+Once setup, start the foreground service prior to using screenshare.
+
 ### Note
 
 Currently it does not run on iOS Simulator on M1 Macs.

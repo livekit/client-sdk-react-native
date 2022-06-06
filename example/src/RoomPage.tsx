@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react';
 import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import { Participant, Room } from 'livekit-client';
-import { useRoom } from 'livekit-react-native';
-import { useParticipant } from 'livekit-react-native';
+import { useRoom, useParticipant } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
+import VIForegroundService from '@voximplant/react-native-foreground-service';
+import { Platform } from 'react-native';
 
 export const RoomPage = ({
   navigation,
@@ -38,6 +39,50 @@ export const RoomPage = ({
     });
     return () => {
       room.disconnect();
+    };
+  }, [url, token, room]);
+
+  // Start a foreground notification.
+  // A foreground notification is required for screenshare on Android.
+  useEffect(() => {
+    let startService = async () => {
+      if (Platform.OS !== 'android') {
+        return;
+      }
+
+      const channelConfig = {
+        id: 'channelId',
+        name: 'Call',
+        description: '',
+        enableVibration: false,
+      };
+      await VIForegroundService.getInstance().createNotificationChannel(
+        channelConfig
+      );
+      const notificationConfig = {
+        channelId: 'channelId',
+        id: 3456,
+        title: 'LiveKit React Example',
+        text: 'Call in progress',
+        icon: 'ic_launcher',
+      };
+      try {
+        await VIForegroundService.getInstance().startService(
+          notificationConfig
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    let stopService = async () => {
+      if (Platform.OS !== 'android') {
+        return;
+      }
+      await VIForegroundService.getInstance().stopService();
+    };
+    startService();
+    return () => {
+      stopService();
     };
   }, [url, token, room]);
 
