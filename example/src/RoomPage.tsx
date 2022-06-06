@@ -1,7 +1,14 @@
 import * as React from 'react';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { StyleSheet, View, FlatList, ListRenderItem } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ListRenderItem,
+  findNodeHandle,
+  NativeModules,
+} from 'react-native';
 import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { RoomControls } from './RoomControls';
@@ -9,8 +16,10 @@ import { ParticipantView } from './ParticipantView';
 import { Participant, Room } from 'livekit-client';
 import { useRoom, useParticipant } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
-import VIForegroundService from '@voximplant/react-native-foreground-service';
 import { Platform } from 'react-native';
+// @ts-ignore
+import { ScreenCapturePickerView } from 'react-native-webrtc';
+import { startCallService, stopCallService } from './callservice/CallService';
 
 export const RoomPage = ({
   navigation,
@@ -42,47 +51,11 @@ export const RoomPage = ({
     };
   }, [url, token, room]);
 
-  // Start a foreground notification.
-  // A foreground notification is required for screenshare on Android.
+  // Perform platform specific call setup.
   useEffect(() => {
-    let startService = async () => {
-      if (Platform.OS !== 'android') {
-        return;
-      }
-
-      const channelConfig = {
-        id: 'channelId',
-        name: 'Call',
-        description: '',
-        enableVibration: false,
-      };
-      await VIForegroundService.getInstance().createNotificationChannel(
-        channelConfig
-      );
-      const notificationConfig = {
-        channelId: 'channelId',
-        id: 3456,
-        title: 'LiveKit React Example',
-        text: 'Call in progress',
-        icon: 'ic_launcher',
-      };
-      try {
-        await VIForegroundService.getInstance().startService(
-          notificationConfig
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    let stopService = async () => {
-      if (Platform.OS !== 'android') {
-        return;
-      }
-      await VIForegroundService.getInstance().stopService();
-    };
-    startService();
+    startCallService();
     return () => {
-      stopService();
+      stopCallService();
     };
   }, [url, token, room]);
 
@@ -110,6 +83,21 @@ export const RoomPage = ({
   const { cameraPublication, microphonePublication, screenSharePublication } =
     useParticipant(room.localParticipant);
 
+  // Prepare for iOS screenshare.
+  const screenCaptureRef = React.useRef(null);
+  const screenCapturePickerView = Platform.OS === 'ios' && (
+    <ScreenCapturePickerView ref={screenCaptureRef} />
+  );
+  const startBroadcast = async () => {
+    if (Platform.OS === 'ios') {
+      const reactTag = findNodeHandle(screenCaptureRef.current);
+      await NativeModules.ScreenCapturePickerViewManager.show(reactTag);
+      room.localParticipant.setScreenShareEnabled(true);
+    } else {
+      room.localParticipant.setScreenShareEnabled(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {stageView}
@@ -125,12 +113,17 @@ export const RoomPage = ({
         }}
         screenShareEnabled={isTrackEnabled(screenSharePublication)}
         setScreenShareEnabled={(enabled: boolean) => {
-          room.localParticipant.setScreenShareEnabled(enabled);
+          if (enabled) {
+            startBroadcast();
+          } else {
+            room.localParticipant.setScreenShareEnabled(enabled);
+          }
         }}
         onDisconnectClick={() => {
           navigation.pop();
         }}
       />
+      {screenCapturePickerView}
     </View>
   );
 };
