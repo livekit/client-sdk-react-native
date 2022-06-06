@@ -70,6 +70,47 @@ Ensure that the service is labelled a `mediaProjection` service like so:
 
 Once setup, start the foreground service prior to using screenshare.
 
+### iOS
+
+iOS screenshare requires adding a Broadcast Extension to your iOS project. Follow the integration instructions here:
+
+https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ios-sdk/#screen-sharing-integration
+
+It involves copying the files found in this [sample project](https://github.com/jitsi/jitsi-meet-sdk-samples/tree/18c35f7625b38233579ff34f761f4c126ba7e03a/ios/swift-screensharing/JitsiSDKScreenSharingTest/Broadcast%20Extension) 
+to your iOS project, and registering a Broadcast Extension in Xcode.
+
+It's also recommended to use [CallKeep](https://github.com/react-native-webrtc/react-native-callkeep), 
+to register a call with CallKit (as well as turning on the `voip` background mode).
+Due to background app processing limitations, screen recording may be interrupted if the app is restricted
+in the background. Registering with CallKit allows the app to continue processing for the duration of the call.
+
+Once setup, iOS screenshare can be initiated like so:
+
+```js
+const screenCaptureRef = React.useRef(null);
+const screenCapturePickerView = Platform.OS === "ios" && (
+  <ScreenCapturePickerView ref={screenCaptureRef} />
+);
+const startBroadcast = async () => {
+  if(Platform.OS === "ios") {
+    const reactTag = findNodeHandle(screenCaptureRef.current);
+    await NativeModules.ScreenCapturePickerViewManager.show(reactTag);
+    room.localParticipant.setScreenShareEnabled(true);
+  }
+  else {
+    room.localParticipant.setScreenShareEnabled(true);
+  }
+};
+
+return (
+  <View style={styles.container}>
+    /*...*/
+    // Make sure the ScreenCapturePickerView exists in the view tree.
+    {screenCapturePickerView}
+  </View>
+);
+```
+
 ### Note
 
 Currently it does not run on iOS Simulator on M1 Macs.

@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PreJoinPage } from './PreJoinPage';
 import { RoomPage } from './RoomPage';
 import RNCallKeep from 'react-native-callkeep';
+import { Platform } from 'react-native';
 
 const options = {
   ios: {
@@ -27,7 +28,11 @@ const options = {
   },
 };
 
-RNCallKeep.setup(options).then(() => {});
+// Only need CallKeep for iOS
+if (Platform.OS === 'ios') {
+  RNCallKeep.setup(options).then(() => {});
+}
+
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
