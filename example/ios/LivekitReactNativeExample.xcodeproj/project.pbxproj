@@ -286,16 +286,16 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = SZVVCTLR79;
+						DevelopmentTeam = 76TVFCUKK7;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = SZVVCTLR79;
+						DevelopmentTeam = 76TVFCUKK7;
 						LastSwiftMigration = 1120;
 					};
 					D767E4EB283D20BC0077477C = {
 						CreatedOnToolsVersion = 13.4;
-						DevelopmentTeam = SZVVCTLR79;
+						DevelopmentTeam = 76TVFCUKK7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -496,7 +496,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				DEVELOPMENT_TEAM = SZVVCTLR79;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -509,7 +509,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.reactnative;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LivekitReactNativeExample.app/LivekitReactNativeExample";
 			};
@@ -521,7 +521,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = SZVVCTLR79;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				INFOPLIST_FILE = LivekitReactNativeExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -530,7 +530,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.reactnative;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LivekitReactNativeExample.app/LivekitReactNativeExample";
 			};
@@ -545,7 +545,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LivekitReactNativeExample/LivekitReactNativeExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SZVVCTLR79;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LivekitReactNativeExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -555,7 +555,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.reactnative;
 				PRODUCT_NAME = LivekitReactNativeExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -572,7 +572,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LivekitReactNativeExample/LivekitReactNativeExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SZVVCTLR79;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				INFOPLIST_FILE = LivekitReactNativeExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -581,7 +581,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.reactnative;
 				PRODUCT_NAME = LivekitReactNativeExample;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -717,18 +717,18 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = SZVVCTLR79;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = "Broadcast Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative.BroadcastExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.reactnative.BroadcastExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -754,17 +754,17 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = SZVVCTLR79;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastExtension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExtension;
+				INFOPLIST_KEY_CFBundleDisplayName = "Broadcast Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.livekitreactnative.BroadcastExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.reactnative.BroadcastExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;

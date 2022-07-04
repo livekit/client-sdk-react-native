@@ -6,10 +6,13 @@
 //
 
 import ReplayKit
+import os.log
 
+let logger = OSLog(subsystem: "io.livekit.example.reactnative",
+                   category: "Broadcaster")
 private enum Constants {
     // the App Group ID value that the app and the broadcast extension targets are setup with. It differs for each app.
-    static let appGroupIdentifier = "group.com.example.livekitreactnative"
+    static let appGroupIdentifier = "group.io.livekit.example.reactnative"
 }
 
 class SampleHandler: RPBroadcastSampleHandler {
@@ -26,6 +29,8 @@ class SampleHandler: RPBroadcastSampleHandler {
     
     override init() {
       super.init()
+      
+      os_log("Sample handler init", log: logger, type: .debug)
         if let connection = SocketConnection(filePath: socketFilePath) {
           clientConnection = connection
           setupConnection()
@@ -57,6 +62,10 @@ class SampleHandler: RPBroadcastSampleHandler {
     }
     
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
+        
+        os_log("processSampleBuffer", log: logger, type: .debug)
+        print("broadcast samplebuffer")
+      
         switch sampleBufferType {
         case RPSampleBufferType.video:
             // very simple mechanism for adjusting frame rate by using every third frame

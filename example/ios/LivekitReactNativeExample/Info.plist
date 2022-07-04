@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>RTCScreenSharingExtension</key>
-	<string>com.example.livekitreactnative.BroadcastExtension</string>
-	<key>RTCAppGroupIdentifier</key>
-	<string>group.com.example.livekitreactnative</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -47,6 +43,10 @@
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone permission description</string>
+	<key>RTCAppGroupIdentifier</key>
+	<string>group.io.livekit.example.reactnative</string>
+	<key>RTCScreenSharingExtension</key>
+	<string>io.livekit.example.reactnative.BroadcastExtension</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
