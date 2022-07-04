@@ -2787,6 +2787,11 @@ astral-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-2.0.0.tgz#483143c567aeed4785759c0865786dc77d7d2e31"
   integrity sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==
 
+async-await-queue@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/async-await-queue/-/async-await-queue-1.2.1.tgz#baf459f5fbac902b060a88fee4da853fd86f2128"
+  integrity sha512-v2j+/EMzAnuJZ8I4570KJMFhi6G9g3WZyFh6cPnmQSJh3nLao77XpRt01kyFegQazPSKvue1yaIYDp/NfV/b0g==
+
 async-limiter@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.1.tgz#dd379e94f0db8310b08291f9d64c3209766617fd"
@@ -6506,11 +6511,12 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-livekit-client@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-1.0.1.tgz#f7b604e38526650df8c4549a29dccbf92313bce4"
-  integrity sha512-Dtj9Xg4ZNeXF71Fo9SxntipFlRv4Fgyy01zSuT38H7OnHivftiljaCZ4OI6rGo73KBWXh7s4NrIyAN6U1Nv4cw==
+livekit-client@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-1.1.9.tgz#e2d1ceefafd4d0c3348832a0dc7eaac2b2cd93b2"
+  integrity sha512-cyfgfBtsKfknQc8mcwMVOrCEpvqphsGI67QKHE+A6KqT8C/qbXnQzEV7IKC6R2Q77q4Z3g3V+u56+75ueIxH+g==
   dependencies:
+    async-await-queue "^1.2.1"
     events "^3.3.0"
     loglevel "^1.8.0"
     protobufjs "^6.11.2"
