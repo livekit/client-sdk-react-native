@@ -38,11 +38,7 @@ export const RoomPage = ({
 
   // Connect to room.
   useEffect(() => {
-    room.connect(url, token, {}).then((r) => {
-      if (!r) {
-        console.log('failed to connect to ', url, ' ', token);
-        return;
-      }
+    room.connect(url, token, {}).then(() => {
       console.log('connected to ', url, ' ', token);
       setIsConnected(true);
     });
