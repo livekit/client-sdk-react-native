@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { Image, StyleSheet, ViewStyle } from 'react-native';
-import { Participant, Track } from 'livekit-client';
-import { VideoView } from 'livekit-react-native';
+import type { Participant } from 'livekit-client';
+import { useParticipant, VideoView } from 'livekit-react-native';
 import { View } from 'react-native';
 import { Text } from 'react-native';
 import { useTheme } from '@react-navigation/native';
@@ -11,17 +11,21 @@ export type Props = {
   style?: ViewStyle;
 };
 export const ParticipantView = ({ style = {}, participant }: Props) => {
-  const cameraPublication =
-    participant.getTrack(Track.Source.ScreenShare) ??
-    participant.getTrack(Track.Source.Camera);
+  const { cameraPublication, screenSharePublication } =
+    useParticipant(participant);
+  let videoPublication = cameraPublication ?? screenSharePublication;
 
   const { colors } = useTheme();
-  var videoView;
-  if (cameraPublication?.isSubscribed && !cameraPublication.isMuted) {
+  let videoView;
+  if (
+    videoPublication &&
+    videoPublication.isSubscribed &&
+    !videoPublication.isMuted
+  ) {
     videoView = (
       <VideoView
         style={styles.videoView}
-        videoTrack={cameraPublication?.videoTrack}
+        videoTrack={videoPublication?.videoTrack}
       />
     );
   } else {
