@@ -1,5 +1,6 @@
 import {
   AudioTrack,
+  ConnectionState,
   LocalParticipant,
   Participant,
   RemoteTrack,
@@ -54,6 +55,12 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
       setAudioTracks(tracks);
     };
 
+    const onConnectionStateChanged = (state: ConnectionState) => {
+      if (state === ConnectionState.Connected) {
+        onParticipantsChanged();
+      }
+    };
+
     room.once(RoomEvent.Disconnected, () => {
       room
         .off(RoomEvent.ParticipantConnected, onParticipantsChanged)
@@ -63,9 +70,12 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
         .off(RoomEvent.TrackUnsubscribed, onSubscribedTrackChanged)
         .off(RoomEvent.LocalTrackPublished, onParticipantsChanged)
         .off(RoomEvent.LocalTrackUnpublished, onParticipantsChanged)
-        .off(RoomEvent.AudioPlaybackStatusChanged, onParticipantsChanged);
+        .off(RoomEvent.AudioPlaybackStatusChanged, onParticipantsChanged)
+        .off(RoomEvent.ConnectionStateChanged, onConnectionStateChanged);
     });
     room
+      .on(RoomEvent.ConnectionStateChanged, onConnectionStateChanged)
+      .on(RoomEvent.Reconnected, onParticipantsChanged)
       .on(RoomEvent.ParticipantConnected, onParticipantsChanged)
       .on(RoomEvent.ParticipantDisconnected, onParticipantsChanged)
       .on(RoomEvent.ActiveSpeakersChanged, onParticipantsChanged)
