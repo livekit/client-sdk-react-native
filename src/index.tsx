@@ -22,6 +22,7 @@ export function registerGlobals() {
   webrtcRegisterGlobals();
   setupURLPolyfill();
   fixWebrtcAdapter();
+  shimPromiseAllSettled();
 }
 
 function fixWebrtcAdapter() {
@@ -33,6 +34,11 @@ function fixWebrtcAdapter() {
       navigator.userAgent = navigator.product ?? 'Unknown';
     }
   }
+}
+
+function shimPromiseAllSettled() {
+  var allSettled = require('promise.allsettled');
+  allSettled.shim();
 }
 
 export * from './components/VideoView';
