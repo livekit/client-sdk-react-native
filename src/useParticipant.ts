@@ -33,9 +33,21 @@ export function useParticipant(participant: Participant): ParticipantState {
     []
   );
 
+  const [cameraPublication, setCameraPublication] = useState(
+    participant.getTrack(Track.Source.Camera)
+  );
+  const [microphonePublication, setMicrophonePublication] = useState(
+    participant.getTrack(Track.Source.Microphone)
+  );
+  const [screenSharePublication, setScreenSharePublication] = useState(
+    participant.getTrack(Track.Source.ScreenShare)
+  );
   useEffect(() => {
     const onPublicationsChanged = () => {
       setPublications(Array.from(participant.tracks.values()));
+      setCameraPublication(participant.getTrack(Track.Source.Camera));
+      setMicrophonePublication(participant.getTrack(Track.Source.Microphone));
+      setScreenSharePublication(participant.getTrack(Track.Source.ScreenShare));
       setSubscribedTracks(
         Array.from(participant.tracks.values()).filter((pub) => {
           return pub.isSubscribed && pub.track !== undefined;
@@ -124,9 +136,9 @@ export function useParticipant(participant: Participant): ParticipantState {
     connectionQuality,
     publications,
     subscribedTracks,
-    cameraPublication: participant.getTrack(Track.Source.Camera),
-    microphonePublication: participant.getTrack(Track.Source.Microphone),
-    screenSharePublication: participant.getTrack(Track.Source.ScreenShare),
+    cameraPublication,
+    microphonePublication,
+    screenSharePublication,
     metadata,
   };
 }
