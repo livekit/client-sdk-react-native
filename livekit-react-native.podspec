@@ -13,7 +13,10 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/livekit/client-sdk-react-native.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm,swift}"
+  s.source_files = "ios/**/*.{h,m,mm}"
+
+  s.framework    = 'AVFAudio'
 
   s.dependency "React-Core"
+  s.dependency "react-native-webrtc"
 end
