@@ -1,4 +1,3 @@
-import { AudioSession } from 'livekit-react-native';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -9,7 +8,6 @@ import {
   Image,
   ViewStyle,
   StyleProp,
-  Platform,
   Modal,
 } from 'react-native';
 import { AudioOutputList } from './AudioOutputList';
@@ -56,12 +54,14 @@ export const RoomControls = ({
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <AudioOutputList onSelect={() => {
-              return setModalVisible(false);
-            }} />
+            <AudioOutputList
+              onSelect={() => {
+                return setModalVisible(false);
+              }}
+            />
           </View>
         </View>
-      </Modal>  
+      </Modal>
       <Pressable
         onPress={() => {
           setMicEnabled(!micEnabled);
@@ -97,7 +97,7 @@ export const RoomControls = ({
 
       <Pressable
         onPress={() => {
-          setModalVisible(true)
+          setModalVisible(true);
         }}
       >
         <Image style={styles.icon} source={require('./icons/speaker.png')} />
@@ -120,23 +120,23 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "black",
+    backgroundColor: 'black',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
 });
