@@ -1,5 +1,6 @@
 package com.livekit.reactnative
 
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
@@ -16,12 +17,12 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod
-    fun startAudioSession(promise: Promise) {
+    fun startAudioSession() {
         audioManager.start()
     }
 
     @ReactMethod
-    fun stopAudioSession(promise: Promise) {
+    fun stopAudioSession() {
         audioManager.stop()
     }
 
@@ -29,8 +30,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     fun getAudioOutputs(promise: Promise) {
         val deviceIds = audioManager.availableAudioDevices()
             .mapNotNull { device -> AudioDeviceKind.fromAudioDevice(device)?.typeName }
-        
-        promise.resolve(deviceIds)
+        promise.resolve(Arguments.makeNativeArray(deviceIds))
     }
 
     @ReactMethod
