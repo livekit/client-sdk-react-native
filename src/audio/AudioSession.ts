@@ -51,7 +51,7 @@ export default class AudioSession {
   /**
    * Applies the provided audio configuration to the underlying AudioSession.
    *
-   * Must be called prior to connecting to a {@link Room}.
+   * Must be called prior to connecting to a {@link Room} for the configuration to apply correctly.
    */
   static configureAudio = async (config: AudioConfiguration) => {
     await LivekitReactNative.configureAudio(config);

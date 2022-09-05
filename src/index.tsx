@@ -1,6 +1,12 @@
 import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import AudioSession from './audio/AudioSession';
+
+/**
+ * Registers the required globals needed for LiveKit to work.
+ *
+ * Must be called before using LiveKit.
+ */
 export function registerGlobals() {
   webrtcRegisterGlobals();
   setupURLPolyfill();
