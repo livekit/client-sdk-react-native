@@ -14,12 +14,11 @@ import { useEffect, useState } from 'react';
 import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import { Participant, Room } from 'livekit-client';
-import { useRoom, useParticipant } from 'livekit-react-native';
+import { useRoom, useParticipant, AudioSession } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
 import { ScreenCapturePickerView } from 'react-native-webrtc';
-import { startCallService, stopCallService } from './callservice/CallService';
 
 export const RoomPage = ({
   navigation,
@@ -38,20 +37,14 @@ export const RoomPage = ({
 
   // Connect to room.
   useEffect(() => {
+    AudioSession.startAudioSession();
     room.connect(url, token, {}).then(() => {
       console.log('connected to ', url, ' ', token);
       setIsConnected(true);
     });
     return () => {
       room.disconnect();
-    };
-  }, [url, token, room]);
-
-  // Perform platform specific call setup.
-  useEffect(() => {
-    startCallService();
-    return () => {
-      stopCallService();
+      AudioSession.stopAudioSession();
     };
   }, [url, token, room]);
 

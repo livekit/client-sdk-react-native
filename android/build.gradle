@@ -127,4 +127,6 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation 'com.twilio:audioswitch:1.1.5'
+  implementation "androidx.annotation:annotation:1.4.0"
 }

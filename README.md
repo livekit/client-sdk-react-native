@@ -33,7 +33,7 @@ This sets up the required WebRTC libraries for use in Javascript, and is needed 
 ```js
 
 import { Participant, Room, Track } from 'livekit-client';
-import { useRoom, VideoView } from 'livekit-react-native';
+import { useRoom, AudioSession, VideoView } from 'livekit-react-native';
 
 /*...*/
 
@@ -41,9 +41,11 @@ const [room,] = useState(() => new Room());
 const { participants } = useRoom(room);
 
 useEffect(() => {
-  room.connect(url, token, {})
+  AudioSession.startAudioSession();
+  room.connect(url, token, {});
   return () => {
     room.disconnect()
+    AudioSession.stopAudioSession();
   }
 }, [url, token, room]);
 
