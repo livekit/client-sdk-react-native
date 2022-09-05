@@ -10,7 +10,17 @@ RCT_EXPORT_MODULE();
 
 -(instancetype)init {
     if(self = [super init]) {
-        [self configureAudio];
+        
+        RTCAudioSessionConfiguration* config = [[RTCAudioSessionConfiguration alloc] init];
+        [config setCategory:AVAudioSessionCategoryPlayAndRecord];
+        [config setCategoryOptions:
+             AVAudioSessionCategoryOptionAllowAirPlay|
+             AVAudioSessionCategoryOptionAllowBluetooth|
+             AVAudioSessionCategoryOptionAllowBluetoothA2DP|
+             AVAudioSessionCategoryOptionDefaultToSpeaker
+        ];
+        [config setMode:AVAudioSessionModeVideoChat];
+        [RTCAudioSessionConfiguration setWebRTCConfiguration: config];
         return self;
     } else {
         return nil;
@@ -22,34 +32,38 @@ RCT_EXPORT_MODULE();
 }
 
 /// Configure default audio config for WebRTC
-RCT_EXPORT_METHOD(configureAudio){
-    RTCAudioSessionConfiguration* config = [[RTCAudioSessionConfiguration alloc] init];
-    [config setCategory:AVAudioSessionCategoryPlayAndRecord];
-    [config setCategoryOptions:
+RCT_EXPORT_METHOD(configureAudio:(NSDictionary *) config){
+    NSDictionary *iOSConfig = [config objectForKey:@"ios"];
+    if(iOSConfig == nil) {
+        return;
+    }
+    
+    NSString * defaultOutput = [iOSConfig objectForKey:@"defaultOutput"];
+    if (defaultOutput == nil) {
+        defaultOutput = @"speaker";
+    }
+    
+    RTCAudioSessionConfiguration* rtcConfig = [[RTCAudioSessionConfiguration alloc] init];
+    [rtcConfig setCategory:AVAudioSessionCategoryPlayAndRecord];
+    
+    if([defaultOutput isEqualToString:@"earpiece"]){
+        [rtcConfig setCategoryOptions:
+         AVAudioSessionCategoryOptionAllowAirPlay|
+         AVAudioSessionCategoryOptionAllowBluetooth|
+         AVAudioSessionCategoryOptionAllowBluetoothA2DP];
+        [rtcConfig setMode:AVAudioSessionModeVoiceChat];
+    } else {
+        [rtcConfig setCategoryOptions:
          AVAudioSessionCategoryOptionAllowAirPlay|
          AVAudioSessionCategoryOptionAllowBluetooth|
          AVAudioSessionCategoryOptionAllowBluetoothA2DP|
-         AVAudioSessionCategoryOptionDefaultToSpeaker
-    ];
-    [config setMode:AVAudioSessionModeVideoChat];
-    [RTCAudioSessionConfiguration setWebRTCConfiguration: config];
-    NSLog(@"configureAudio finish");
+         AVAudioSessionCategoryOptionDefaultToSpeaker];
+        [rtcConfig setMode:AVAudioSessionModeVideoChat];
+    }
+    [RTCAudioSessionConfiguration setWebRTCConfiguration: rtcConfig];
 }
 
 RCT_EXPORT_METHOD(startAudioSession){
-}
-
-RCT_EXPORT_METHOD(verifyAudioSession){
-    NSLog(@"verifyAudioSession");
-    AVAudioSession* session = [AVAudioSession sharedInstance];
-    NSLog(@"category: %@", [session category]);
-    NSLog(@"options: %lu", (unsigned long)[session categoryOptions]);
-    NSLog(@"mode: %@", [session mode]);
-    NSLog(@"verifyAudioSession finish");
-    
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord
-             withOptions:AVAudioSessionCategoryOptionAllowAirPlay|AVAudioSessionCategoryOptionAllowBluetooth|AVAudioSessionCategoryOptionAllowBluetoothA2DP
-                   error:nil];
 }
 
 RCT_EXPORT_METHOD(stopAudioSession){

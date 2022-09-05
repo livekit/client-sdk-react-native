@@ -1,12 +1,8 @@
 package com.livekit.reactnative
 
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.Promise
-import com.livekit.reactnative.*
-import com.livekit.reactnative.audio.*
+import com.facebook.react.bridge.*
+import com.livekit.reactnative.audio.AudioDeviceKind
+import com.livekit.reactnative.audio.AudioSwitchManager
 
 
 class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -14,6 +10,19 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     val audioManager = AudioSwitchManager(reactContext.applicationContext)
     override fun getName(): String {
         return "LivekitReactNative"
+    }
+
+    @ReactMethod
+    fun configureAudio(config: ReadableMap) {
+        val androidConfig = config.getMap("android") ?: return
+
+        androidConfig.getArray("preferredOutputList")?.let { preferredOutputList ->
+            val preferredDeviceList = preferredOutputList.toArrayList().mapNotNull { output ->
+                val outputStr = output as? String
+                AudioDeviceKind.fromTypeName(outputStr)?.audioDeviceClass
+            }
+            audioManager.preferredDeviceList = preferredDeviceList
+        }
     }
 
     @ReactMethod

@@ -1,5 +1,4 @@
 import { NativeModules, Platform } from 'react-native';
-
 const LINKING_ERROR =
   `The package 'livekit-react-native' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
@@ -17,7 +16,47 @@ const LivekitReactNative = NativeModules.LivekitReactNative
       }
     );
 
+/**
+ * Configuration for the underlying AudioSession.
+ *
+ * ----
+ * Android specific options:
+ *
+ * * preferredOutputList - The preferred order in which to automatically select an audio output.
+ *   This is ignored when an output is manually selected with {@link selectAudioOutput}.
+ *
+ *   By default, the order is set to:
+ *   1. `"speaker"`
+ *   2. `"earpiece"`
+ *   3. `"headset"`
+ *   4. `"bluetooth"`
+ *
+ * ----
+ * iOS
+ *
+ * * defaultOutput - The default preferred output to use when a wired headset or bluetooth output is unavailable.
+ *
+ *   By default, this is set to `"speaker"`
+ */
+type AudioConfiguration = {
+  android: {
+    preferredOutputList: ('speaker' | 'earpiece' | 'headset' | 'bluetooth')[];
+  };
+  ios: {
+    defaultOutput: 'speaker' | 'earpiece';
+  };
+};
+
 export default class AudioSession {
+  /**
+   * Applies the provided audio configuration to the underlying AudioSession.
+   *
+   * Must be called prior to connecting to a {@link Room}.
+   */
+  static configureAudio = async (config: AudioConfiguration) => {
+    await LivekitReactNative.configureAudio(config);
+  };
+
   static startAudioSession = async () => {
     await LivekitReactNative.startAudioSession();
   };
