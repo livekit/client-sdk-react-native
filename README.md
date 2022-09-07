@@ -12,13 +12,19 @@ yarn add https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver
 yarn add https://github.com/livekit/client-sdk-react-native
 ```
 
+The `react-native-webrtc` library has additional installation instructions found here:
+
+* [iOS Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
+* [Android Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
+
 ## Example app
 
 We've included an [example app](example/) that you can try out.
 
 ## Usage
 
-In your `index.js` file:
+In your `index.js` file, setup the LiveKit SDK by calling `registerGlobals()`. 
+This sets up the required WebRTC libraries for use in Javascript, and is needed for LiveKit to work.
 
 ```js
 import { registerGlobals } from "livekit-react-native";
@@ -28,7 +34,7 @@ import { registerGlobals } from "livekit-react-native";
 registerGlobals()
 ```
 
-This sets up the required WebRTC libraries for use in Javascript, and is needed for LiveKit to work.
+A Room object can then be created and connected to.
 
 ```js
 
@@ -37,7 +43,10 @@ import { useRoom, AudioSession, VideoView } from 'livekit-react-native';
 
 /*...*/
 
+// Create a room state
 const [room,] = useState(() => new Room());
+
+// Get the participants from the room
 const { participants } = useRoom(room);
 
 useEffect(() => {
@@ -53,6 +62,8 @@ const videoView = participants.length > 0 && (
   <VideoView style={{flex:1, width:"100%"}} videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack} />
 );
 ```
+
+Additional documentation for the LiveKit SDK can be found at https://docs.livekit.io/references/client-sdks/
 
 ## Screenshare
 
