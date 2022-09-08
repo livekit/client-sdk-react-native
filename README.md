@@ -63,6 +63,8 @@ const videoView = participants.length > 0 && (
 );
 ```
 
+[API documentation is located here.](https://htmlpreview.github.io/?https://raw.githubusercontent.com/livekit/client-sdk-react-native/main/docs/modules.html)
+
 Additional documentation for the LiveKit SDK can be found at https://docs.livekit.io/references/client-sdks/
 
 ## Screenshare
