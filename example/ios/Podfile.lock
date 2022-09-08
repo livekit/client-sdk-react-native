@@ -73,7 +73,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - livekit-react-native (0.2.0):
+  - livekit-react-native (0.2.1):
     - React-Core
     - react-native-webrtc
   - OpenSSL-Universal (1.1.180)
@@ -535,7 +535,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  livekit-react-native: d016773d5b166307426c0c5ff47e7fc74971466e
+  livekit-react-native: 19e55a3273c412784aaa91d7c964ca20a2843941
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
   RCTRequired: 3c77b683474faf23920fbefc71c4e13af21470c0
