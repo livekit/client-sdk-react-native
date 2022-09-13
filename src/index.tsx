@@ -1,6 +1,7 @@
 import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import AudioSession from './audio/AudioSession';
+import type { AudioConfiguration } from './audio/AudioSession';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -33,4 +34,4 @@ function shimPromiseAllSettled() {
 export * from './components/VideoView';
 export * from './useParticipant';
 export * from './useRoom';
-export { AudioSession };
+export { AudioSession, AudioConfiguration };

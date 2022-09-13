@@ -34,3 +34,6 @@ jobs:
 
     - name: Run Tests
       run: yarn test
+
+    - name: Validate docs
+      run: yarn build-docs --treatWarningsAsErrors

@@ -38,7 +38,7 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  *
  *   By default, this is set to `"speaker"`
  */
-type AudioConfiguration = {
+export type AudioConfiguration = {
   android: {
     preferredOutputList: ('speaker' | 'earpiece' | 'headset' | 'bluetooth')[];
   };
@@ -51,28 +51,39 @@ export default class AudioSession {
   /**
    * Applies the provided audio configuration to the underlying AudioSession.
    *
-   * Must be called prior to connecting to a {@link Room} for the configuration to apply correctly.
+   * Must be called prior to connecting to a Room for the configuration to apply correctly.
    */
   static configureAudio = async (config: AudioConfiguration) => {
     await LivekitReactNative.configureAudio(config);
   };
 
+  /**
+   * Starts an AudioSession.
+   */
   static startAudioSession = async () => {
     await LivekitReactNative.startAudioSession();
   };
 
+  /**
+   * Stops the existing AudioSession.
+   */
   static stopAudioSession = async () => {
     await LivekitReactNative.stopAudioSession();
   };
 
   /**
-   * Gets the available audio outputs for use with {@link setAudioOutputs}.
+   * Gets the available audio outputs for use with {@link selectAudioOutput}.
+   *
+   * {@link startAudioSession} must be called prior to using this method.
    *
    * For Android, will return if available:
    * * "speaker"
    * * "earpiece"
    * * "headset"
    * * "bluetooth"
+   *
+   * Note: For applications targeting SDK versions over 30, the runtime BLUETOOTH_CONNECT
+   * permission must be requested to send audio to bluetooth headsets.
    *
    * ----
    *
@@ -99,6 +110,9 @@ export default class AudioSession {
 
   /**
    * Select the provided audio output if available.
+   *
+   * {@link startAudioSession} must be called prior to using this method.
+   *
    * @param deviceId A deviceId retrieved from {@link getAudioOutputs}
    */
   static selectAudioOutput = async (deviceId: string) => {
