@@ -27,7 +27,10 @@ jobs:
     - name: Install Yarn
       run: |
         npm install -g yarn
-        yarn install
+        yarn
+
+    - name: Typescript
+      run: yarn typescript
 
     - name: ESLint
       run: yarn lint
