@@ -4,11 +4,13 @@ LiveKit Client SDK for React Native. (beta)
 
 ## Installation
 
-This library depends on react-native-webrtc's unreleased Transceiver support.
-Currently present in our fork.
-
+### NPM
 ```sh
-yarn add https://github.com/livekit/react-native-webrtc.git#dl/wip-transceiver
+npm install https://github.com/livekit/client-sdk-react-native
+```
+
+### Yarn
+```sh
 yarn add https://github.com/livekit/client-sdk-react-native
 ```
 
