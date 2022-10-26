@@ -19,6 +19,7 @@ import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
 import { ScreenCapturePickerView } from 'react-native-webrtc';
+import { startCallService, stopCallService } from './callservice/CallService';
 
 export const RoomPage = ({
   navigation,
@@ -35,13 +36,33 @@ export const RoomPage = ({
   const { participants } = useRoom(room);
   const { url, token } = route.params;
 
+  // Perform platform specific call setup.
+  useEffect(() => {
+    startCallService();
+    return () => {
+      stopCallService();
+    };
+  }, [url, token, room]);
+
   // Connect to room.
   useEffect(() => {
-    AudioSession.startAudioSession();
-    room.connect(url, token, {}).then(() => {
+    let connect = async () => {
+      // If you wish to configure audio, uncomment the following:
+      // await AudioSession.configureAudio({
+      //   android: {
+      //     preferredOutputList: ["earpiece"]
+      //   },
+      //   ios: {
+      //     defaultOutput: "earpiece"
+      //   }
+      // });
+      await AudioSession.startAudioSession();
+      await room.connect(url, token, {});
       console.log('connected to ', url, ' ', token);
       setIsConnected(true);
-    });
+    };
+
+    connect();
     return () => {
       room.disconnect();
       AudioSession.stopAudioSession();

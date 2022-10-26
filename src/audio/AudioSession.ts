@@ -23,7 +23,7 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  * Android specific options:
  *
  * * preferredOutputList - The preferred order in which to automatically select an audio output.
- *   This is ignored when an output is manually selected with {@link selectAudioOutput}.
+ *   This is ignored when an output is manually selected with {@link AudioSession.selectAudioOutput}.
  *
  *   By default, the order is set to:
  *   1. `"speaker"`
