@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
   LayoutChangeEvent,
   PixelRatio,
+  StyleProp,
   StyleSheet,
   View,
   ViewStyle,
@@ -15,7 +16,7 @@ import ViewPortDetector from './ViewPortDetector';
 
 export type Props = {
   videoTrack?: VideoTrack | undefined;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   objectFit?: 'cover' | 'contain' | undefined;
 };
 export const VideoView = ({
@@ -43,7 +44,7 @@ export const VideoView = ({
 
   return (
     <View
-      style={{ ...style, ...styles.container }}
+      style={style}
       onLayout={(event) => {
         elementInfo.onLayout(event);
       }}
