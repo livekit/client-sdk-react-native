@@ -53,6 +53,7 @@ export const VideoView = ({
         style={styles.videoView}
       >
         <RTCView
+          //@ts-ignore
           style={styles.videoView}
           streamURL={videoTrack?.mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
