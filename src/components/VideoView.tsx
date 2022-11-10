@@ -31,7 +31,7 @@ export const VideoView = ({
   });
 
   useEffect(() => {
-    if (videoTrack instanceof RemoteVideoTrack) {
+    if (videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream) {
       videoTrack?.observeElementInfo(elementInfo);
       return () => {
         videoTrack?.stopObservingElementInfo(elementInfo);
