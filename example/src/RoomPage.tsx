@@ -24,7 +24,7 @@ import { useRoom, useParticipant, AudioSession } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
-import { ScreenCapturePickerView } from 'react-native-webrtc';
+import { mediaDevices, ScreenCapturePickerView } from 'react-native-webrtc';
 import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
@@ -44,6 +44,7 @@ export const RoomPage = ({
   );
   const { participants } = useRoom(room);
   const { url, token } = route.params;
+  const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
 
   // Perform platform specific call setup.
   useEffect(() => {
@@ -156,6 +157,31 @@ export const RoomPage = ({
         cameraEnabled={isTrackEnabled(cameraPublication)}
         setCameraEnabled={(enabled: boolean) => {
           room.localParticipant.setCameraEnabled(enabled);
+        }}
+        switchCamera={async () => {
+          let facingModeStr = !isCameraFrontFacing ? 'front' : 'environment';
+          setCameraFrontFacing(!isCameraFrontFacing);
+
+          let devices = await mediaDevices.enumerateDevices();
+          var newDevice;
+          //@ts-ignore
+          for (const device of devices) {
+            //@ts-ignore
+            if (
+              device.kind === 'videoinput' &&
+              device.facing === facingModeStr
+            ) {
+              newDevice = device;
+              break;
+            }
+          }
+
+          if (newDevice == null) {
+            return;
+          }
+
+          //@ts-ignore
+          await room.switchActiveDevice('videoinput', newDevice.deviceId);
         }}
         screenShareEnabled={isTrackEnabled(screenSharePublication)}
         setScreenShareEnabled={(enabled: boolean) => {

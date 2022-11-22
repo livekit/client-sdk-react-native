@@ -18,6 +18,7 @@ export type Props = {
   setMicEnabled: (enabled: boolean) => void;
   cameraEnabled?: boolean;
   setCameraEnabled: (enabled: boolean) => void;
+  switchCamera: () => void;
   screenShareEnabled: boolean;
   setScreenShareEnabled: (enabled: boolean) => void;
   sendData: (message: string) => void;
@@ -29,6 +30,7 @@ export const RoomControls = ({
   setMicEnabled,
   cameraEnabled = false,
   setCameraEnabled,
+  switchCamera,
   screenShareEnabled = false,
   setScreenShareEnabled,
   sendData,
@@ -90,6 +92,16 @@ export const RoomControls = ({
         }}
       >
         <Image style={styles.icon} source={cameraImage} />
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          switchCamera();
+        }}
+      >
+        <Image
+          style={styles.icon}
+          source={require('./icons/camera_flip_outline.png')}
+        />
       </Pressable>
       <Pressable
         onPress={() => {
