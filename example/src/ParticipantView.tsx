@@ -9,8 +9,15 @@ import { useTheme } from '@react-navigation/native';
 export type Props = {
   participant: Participant;
   style?: ViewStyle;
+  zOrder?: number;
+  mirror?: boolean;
 };
-export const ParticipantView = ({ style = {}, participant }: Props) => {
+export const ParticipantView = ({
+  style = {},
+  participant,
+  zOrder,
+  mirror,
+}: Props) => {
   const { cameraPublication, screenSharePublication } =
     useParticipant(participant);
   let videoPublication = cameraPublication ?? screenSharePublication;
@@ -26,6 +33,8 @@ export const ParticipantView = ({ style = {}, participant }: Props) => {
       <VideoView
         style={styles.videoView}
         videoTrack={videoPublication?.videoTrack}
+        zOrder={zOrder}
+        mirror={mirror}
       />
     );
   } else {

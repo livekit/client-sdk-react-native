@@ -3981,10 +3981,10 @@ react-native-url-polyfill@^1.3.0:
   dependencies:
     whatwg-url-without-unicode "8.0.0-3"
 
-react-native-webrtc@106.0.0-beta.5:
-  version "106.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-106.0.0-beta.5.tgz#eaaa829d6909db3b2abb814ff0e8a65c8dc57cbd"
-  integrity sha512-3S5sw8SnCW3MoI2gqT+YkDIDWheIMk5cuj1AUG5E56HtRCWaqYpcN4JliW4rcEG6j7R5Wmy5mP/dizfIaITCuw==
+react-native-webrtc@^106.0.0-beta.7:
+  version "106.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-106.0.0-beta.7.tgz#c333c2a57a5fd2c1ca35f4b401912a95502d850b"
+  integrity sha512-GoIl/99BgVouFCb0gc9BfboPm6tOAQ1skHmpZR6CDtPxCbRxt8pEZXRiRxfvW9LbOm6yTpbSe2DK/kQrffZN3w==
   dependencies:
     adm-zip "0.5.9"
     base64-js "1.5.1"

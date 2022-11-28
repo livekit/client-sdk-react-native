@@ -17,11 +17,16 @@ export type Props = {
   videoTrack?: VideoTrack | undefined;
   style?: ViewStyle;
   objectFit?: 'cover' | 'contain' | undefined;
+  mirror?: boolean;
+  zOrder?: number;
 };
+
 export const VideoView = ({
   style = {},
   videoTrack,
   objectFit = 'cover',
+  zOrder,
+  mirror,
 }: Props) => {
   const [elementInfo] = useState(() => {
     let info = new VideoViewElementInfo();
@@ -53,10 +58,11 @@ export const VideoView = ({
         style={styles.videoView}
       >
         <RTCView
-          //@ts-ignore
           style={styles.videoView}
           streamURL={videoTrack?.mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
+          zOrder={zOrder}
+          mirror={mirror}
         />
       </ViewPortDetector>
     </View>
