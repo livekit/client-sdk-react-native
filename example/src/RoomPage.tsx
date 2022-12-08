@@ -13,13 +13,22 @@ import type { RootStackParamList } from './App';
 import { useEffect, useState } from 'react';
 import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
-import { Participant, Room } from 'livekit-client';
+import {
+  DataPacket_Kind,
+  Participant,
+  RemoteParticipant,
+  Room,
+  RoomEvent,
+} from 'livekit-client';
 import { useRoom, useParticipant, AudioSession } from 'livekit-react-native';
 import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
 import { ScreenCapturePickerView } from 'react-native-webrtc';
 import { startCallService, stopCallService } from './callservice/CallService';
+import Toast from 'react-native-toast-message';
+
+import 'fastestsmallesttextencoderdecoder';
 
 export const RoomPage = ({
   navigation,
@@ -68,6 +77,33 @@ export const RoomPage = ({
       AudioSession.stopAudioSession();
     };
   }, [url, token, room]);
+
+  // Setup room listeners
+  useEffect(() => {
+    const dataReceived = (
+      payload: Uint8Array,
+      participant?: RemoteParticipant
+    ) => {
+      //@ts-ignore
+      let decoder = new TextDecoder('utf-8');
+      let message = decoder.decode(payload);
+
+      let title = 'Received Message';
+      if (participant != null) {
+        title = 'Received Message from ' + participant.identity;
+      }
+      Toast.show({
+        type: 'success',
+        text1: title,
+        text2: message,
+      });
+    };
+    room.on(RoomEvent.DataReceived, dataReceived);
+
+    return () => {
+      room.off(RoomEvent.DataReceived, dataReceived);
+    };
+  });
 
   // Setup views.
   const stageView = participants.length > 0 && (
@@ -128,6 +164,21 @@ export const RoomPage = ({
           } else {
             room.localParticipant.setScreenShareEnabled(enabled);
           }
+        }}
+        sendData={(message: string) => {
+          Toast.show({
+            type: 'success',
+            text1: 'Sending Message',
+            text2: message,
+          });
+
+          //@ts-ignore
+          let encoder = new TextEncoder();
+          let encodedData = encoder.encode(message);
+          room.localParticipant.publishData(
+            encodedData,
+            DataPacket_Kind.RELIABLE
+          );
         }}
         onDisconnectClick={() => {
           navigation.pop();
