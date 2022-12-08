@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
+import Dialog from 'react-native-dialog';
 
 import {
   StyleSheet,
@@ -19,6 +20,7 @@ export type Props = {
   setCameraEnabled: (enabled: boolean) => void;
   screenShareEnabled: boolean;
   setScreenShareEnabled: (enabled: boolean) => void;
+  sendData: (message: string) => void;
   onDisconnectClick: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -29,6 +31,7 @@ export const RoomControls = ({
   setCameraEnabled,
   screenShareEnabled = false,
   setScreenShareEnabled,
+  sendData,
   onDisconnectClick,
   style,
 }: Props) => {
@@ -42,6 +45,18 @@ export const RoomControls = ({
   var screenShareImage = screenShareEnabled
     ? require('./icons/baseline_cast_connected_white_24dp.png')
     : require('./icons/baseline_cast_white_24dp.png');
+
+  let [message, setMessage] = useState('');
+  let [messageDialogVisible, setMessageDialogVisible] = useState(false);
+  const handleOk = () => {
+    sendData(message);
+    setMessageDialogVisible(false);
+  };
+
+  const handleCancel = () => {
+    setMessageDialogVisible(false);
+  };
+
   return (
     <View style={[style, styles.container]}>
       <Modal
@@ -83,6 +98,16 @@ export const RoomControls = ({
       >
         <Image style={styles.icon} source={screenShareImage} />
       </Pressable>
+      <Pressable
+        onPress={() => {
+          setMessageDialogVisible(true);
+        }}
+      >
+        <Image
+          style={styles.icon}
+          source={require('./icons/message_outline.png')}
+        />
+      </Pressable>
 
       <Pressable
         onPress={() => {
@@ -102,6 +127,21 @@ export const RoomControls = ({
       >
         <Image style={styles.icon} source={require('./icons/speaker.png')} />
       </Pressable>
+
+      <Dialog.Container
+        visible={messageDialogVisible}
+        onBackdropPress={handleCancel}
+      >
+        <Dialog.Title style={styles.dialogItemTextStyle}>
+          Send Message
+        </Dialog.Title>
+        <Dialog.Input
+          style={styles.dialogItemTextStyle}
+          onChangeText={setMessage}
+        />
+        <Dialog.Button label="Cancel" onPress={handleCancel} />
+        <Dialog.Button label="Ok" onPress={handleOk} />
+      </Dialog.Container>
     </View>
   );
 };
@@ -138,5 +178,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+
+  dialogItemTextStyle: {
+    color: 'black',
+    fontSize: 12,
   },
 });
