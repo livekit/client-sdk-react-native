@@ -70,7 +70,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-webrtc": "^106.0.0-beta.5"
+    "react-native-webrtc": "^106.0.0"
   },
   "scripts": {
     "test": "jest",
