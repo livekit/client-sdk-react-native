@@ -7,7 +7,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import type { ElementInfo, VideoTrack } from 'livekit-client';
+import {
+  ElementInfo,
+  LocalVideoTrack,
+  Track,
+  TrackEvent,
+  VideoTrack,
+} from 'livekit-client';
 import { RTCView } from 'react-native-webrtc';
 import { useEffect, useState } from 'react';
 import { RemoteVideoTrack } from 'livekit-client';
@@ -35,6 +41,23 @@ export const VideoView = ({
     return info;
   });
 
+  const [mediaStream, setMediaStream] = useState(videoTrack?.mediaStream);
+  useEffect(() => {
+    setMediaStream(videoTrack?.mediaStream);
+    if (videoTrack instanceof LocalVideoTrack) {
+      const onRestarted = (track: Track | null) => {
+        setMediaStream(track?.mediaStream);
+      };
+      videoTrack.on(TrackEvent.Restarted, onRestarted);
+
+      return () => {
+        videoTrack.off(TrackEvent.Restarted, onRestarted);
+      };
+    } else {
+      return () => {};
+    }
+  }, [videoTrack]);
+
   useEffect(() => {
     if (videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream) {
       videoTrack?.observeElementInfo(elementInfo);
@@ -59,7 +82,7 @@ export const VideoView = ({
       >
         <RTCView
           style={styles.videoView}
-          streamURL={videoTrack?.mediaStream?.toURL() ?? ''}
+          streamURL={mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
           zOrder={zOrder}
           mirror={mirror}
