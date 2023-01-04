@@ -4001,10 +4001,10 @@ react-native-url-polyfill@^1.3.0:
   dependencies:
     whatwg-url-without-unicode "8.0.0-3"
 
-react-native-webrtc@106.0.0:
-  version "106.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-106.0.0.tgz#dff0b341a250bf808aa322ae054874e6b6d9a940"
-  integrity sha512-nFl8WSNGMNxuIiaNAiJvILRcEC65yRxPOWTexLrM+vo44syt/4chEvzN9eOqXiPsOmsECQmwZupCUGR5XABUNg==
+react-native-webrtc@^106.0.0:
+  version "106.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-106.0.1.tgz#d858b96129a27e9866346948ca0379fcc3b040b1"
+  integrity sha512-0l911lDIqj7jKMvxwQEF6mQt6CMnmOZjgwyifNT28w3XY4p+0Tm/mg5S0UqjbFzcUWeI5w2q/Xk7zn0mcbEhPg==
   dependencies:
     adm-zip "0.5.9"
     base64-js "1.5.1"

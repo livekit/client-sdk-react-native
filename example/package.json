@@ -23,7 +23,7 @@
     "react-native-screens": "^3.12.0",
     "react-native-toast-message": "^2.1.5",
     "react-native-url-polyfill": "^1.3.0",
-    "react-native-webrtc": "106.0.0"
+    "react-native-webrtc": "^106.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
