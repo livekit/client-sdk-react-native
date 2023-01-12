@@ -1,5 +1,5 @@
 {
-  "name": "livekit-react-native",
+  "name": "@livekit/livekit-react-native",
   "version": "0.2.1",
   "description": "LiveKit for React Native",
   "main": "lib/commonjs/index",
