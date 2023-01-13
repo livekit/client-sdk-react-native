@@ -34,7 +34,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Dependencies Info (please reference your package-lock.json or yarn.lock file):**
 
- - livekit-react-native: [e.g. commit hash]
+ - @livekit/react-native: [e.g. commit hash]
  - livekit-client: [e.g. 1.6.0]
  - react-native-webrtc: [e.g. 106.0.0]
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Image, StyleSheet, ViewStyle } from 'react-native';
 import type { Participant } from 'livekit-client';
-import { useParticipant, VideoView } from 'livekit-react-native';
+import { useParticipant, VideoView } from '@livekit/react-native';
 import { View } from 'react-native';
 import { Text } from 'react-native';
 import { useTheme } from '@react-navigation/native';

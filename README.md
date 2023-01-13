@@ -29,7 +29,7 @@ In your `index.js` file, setup the LiveKit SDK by calling `registerGlobals()`.
 This sets up the required WebRTC libraries for use in Javascript, and is needed for LiveKit to work.
 
 ```js
-import { registerGlobals } from "livekit-react-native";
+import { registerGlobals } from "@livekit/react-native";
 
 // ...
 
@@ -41,7 +41,7 @@ A Room object can then be created and connected to.
 ```js
 
 import { Participant, Room, Track } from 'livekit-client';
-import { useRoom, AudioSession, VideoView } from 'livekit-react-native';
+import { useRoom, AudioSession, VideoView } from '@livekit/react-native';
 
 /*...*/
 
