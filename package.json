@@ -99,8 +99,8 @@
   },
   "release-it": {
     "hooks": {
-      "before:init": ["yarn lint", "yarn test"],
-      "after:bump": ["yarn build-docs", "yarn typescript"],
+      "before:init": ["yarn lint", "yarn test", "yarn typescript"],
+      "after:bump": ["yarn pods", "yarn build-docs"],
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
