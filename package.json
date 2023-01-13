@@ -98,6 +98,11 @@
     ]
   },
   "release-it": {
+    "hooks": {
+      "before:init": ["yarn lint", "yarn test"],
+      "after:bump": ["yarn build-docs", "yarn typescript"],
+      "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+    },
     "git": {
       "commitMessage": "chore: release ${version}",
       "tagName": "v${version}"
