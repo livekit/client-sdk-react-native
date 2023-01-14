@@ -31,6 +31,6 @@ jobs:
         npm install -g yarn
         yarn
 
-    - name: Compile Android
-      working-directory: ~/example/android/
-      run: ./gradlew assemble
+    - name: Compile Android Example (Debug)
+      working-directory: ./example/android/
+      run: ./gradlew assembleDebug
