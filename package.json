@@ -1,6 +1,6 @@
 {
   "name": "@livekit/react-native",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "LiveKit for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -99,8 +99,15 @@
   },
   "release-it": {
     "hooks": {
-      "before:init": ["yarn lint", "yarn test", "yarn typescript"],
-      "after:bump": ["yarn pods", "yarn build-docs"],
+      "before:init": [
+        "yarn lint",
+        "yarn test",
+        "yarn typescript"
+      ],
+      "after:bump": [
+        "yarn pods",
+        "yarn build-docs"
+      ],
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
