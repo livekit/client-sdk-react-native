@@ -11,9 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
         node-version: '16.x'
+        cache: 'yarn'
+        cache-dependency-path: '**/yarn.lock'
 
     - uses: actions/cache@v2
       with:
@@ -40,9 +42,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
         node-version: '16.x'
+        cache: 'yarn'
+        cache-dependency-path: '**/yarn.lock'
 
     - uses: actions/cache@v2
       with:
@@ -55,6 +59,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
+    - name: Cache cocoapods
+      uses: actions/cache@v2
+      with:
+        path: ./example/ios/Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+
     - name: Install Yarn
       run: |
         npm install -g yarn
@@ -62,4 +74,4 @@ jobs:
 
     - name: Compile iOS Example
       working-directory: ./example/ios/
-      run: xcodebuild -workspace LivekitReactNativeExample.xcworkspace/ -scheme LivekitReactNativeExample -destination generic/platform=iOS clean build | xcpretty
+      run: xcodebuild -workspace LivekitReactNativeExample.xcworkspace/ -scheme LivekitReactNativeExample -destination generic/platform=iOS clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED="NO" | xcpretty
