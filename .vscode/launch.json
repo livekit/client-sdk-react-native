@@ -6,14 +6,14 @@
   "configurations": [
     {
       "name": "Debug Android",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/example",
       "type": "reactnative",
       "request": "launch",
       "platform": "android"
     },
     {
       "name": "Run Android",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/example",
       "type": "reactnative",
       "request": "launch",
       "platform": "android",
@@ -21,14 +21,14 @@
     },
     {
       "name": "Debug iOS",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/example",
       "type": "reactnative",
       "request": "launch",
       "platform": "ios"
     },
     {
       "name": "Run iOS",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/example",
       "type": "reactnative",
       "request": "launch",
       "platform": "ios",
