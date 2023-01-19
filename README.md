@@ -5,48 +5,53 @@ LiveKit Client SDK for React Native. (beta)
 ## Installation
 
 ### NPM
+
 ```sh
-npm install https://github.com/livekit/client-sdk-react-native
+npm install @livekit/react-native
 ```
 
 ### Yarn
+
 ```sh
-yarn add https://github.com/livekit/client-sdk-react-native
+yarn add @livekit/react-native
 ```
 
-The `react-native-webrtc` library has additional installation instructions found here:
+This library depends on `react-native-webrtc`, which has additional installation instructions found here:
 
-* [iOS Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
-* [Android Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
+- [iOS Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
+- [Android Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
 
 ## Example app
 
 We've included an [example app](example/) that you can try out.
 
+## Beta limitations
+
+This library does not currently support simulcast due to a limitation with `react-native-webrtc`
+
 ## Usage
 
-In your `index.js` file, setup the LiveKit SDK by calling `registerGlobals()`. 
+In your `index.js` file, setup the LiveKit SDK by calling `registerGlobals()`.
 This sets up the required WebRTC libraries for use in Javascript, and is needed for LiveKit to work.
 
 ```js
-import { registerGlobals } from "@livekit/react-native";
+import { registerGlobals } from '@livekit/react-native';
 
 // ...
 
-registerGlobals()
+registerGlobals();
 ```
 
 A Room object can then be created and connected to.
 
 ```js
-
 import { Participant, Room, Track } from 'livekit-client';
 import { useRoom, AudioSession, VideoView } from '@livekit/react-native';
 
 /*...*/
 
 // Create a room state
-const [room,] = useState(() => new Room());
+const [room] = useState(() => new Room());
 
 // Get the participants from the room
 const { participants } = useRoom(room);
@@ -55,13 +60,16 @@ useEffect(() => {
   AudioSession.startAudioSession();
   room.connect(url, token, {});
   return () => {
-    room.disconnect()
+    room.disconnect();
     AudioSession.stopAudioSession();
-  }
+  };
 }, [url, token, room]);
 
 const videoView = participants.length > 0 && (
-  <VideoView style={{flex:1, width:"100%"}} videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack} />
+  <VideoView
+    style={{ flex: 1, width: '100%' }}
+    videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack}
+  />
 );
 ```
 
@@ -81,7 +89,7 @@ The example app uses [@voximplant/react-native-foreground-service](https://githu
 Ensure that the service is labelled a `mediaProjection` service like so:
 
 ```
-<service android:name="com.voximplant.foregroundservice.VIForegroundService" 
+<service android:name="com.voximplant.foregroundservice.VIForegroundService"
   android:foregroundServiceType="mediaProjection" />
 ```
 
@@ -93,10 +101,10 @@ iOS screenshare requires adding a Broadcast Extension to your iOS project. Follo
 
 https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ios-sdk/#screen-sharing-integration
 
-It involves copying the files found in this [sample project](https://github.com/jitsi/jitsi-meet-sdk-samples/tree/18c35f7625b38233579ff34f761f4c126ba7e03a/ios/swift-screensharing/JitsiSDKScreenSharingTest/Broadcast%20Extension) 
+It involves copying the files found in this [sample project](https://github.com/jitsi/jitsi-meet-sdk-samples/tree/18c35f7625b38233579ff34f761f4c126ba7e03a/ios/swift-screensharing/JitsiSDKScreenSharingTest/Broadcast%20Extension)
 to your iOS project, and registering a Broadcast Extension in Xcode.
 
-It's also recommended to use [CallKeep](https://github.com/react-native-webrtc/react-native-callkeep), 
+It's also recommended to use [CallKeep](https://github.com/react-native-webrtc/react-native-callkeep),
 to register a call with CallKit (as well as turning on the `voip` background mode).
 Due to background app processing limitations, screen recording may be interrupted if the app is restricted
 in the background. Registering with CallKit allows the app to continue processing for the duration of the call.
@@ -105,24 +113,22 @@ Once setup, iOS screenshare can be initiated like so:
 
 ```js
 const screenCaptureRef = React.useRef(null);
-const screenCapturePickerView = Platform.OS === "ios" && (
+const screenCapturePickerView = Platform.OS === 'ios' && (
   <ScreenCapturePickerView ref={screenCaptureRef} />
 );
 const startBroadcast = async () => {
-  if(Platform.OS === "ios") {
+  if (Platform.OS === 'ios') {
     const reactTag = findNodeHandle(screenCaptureRef.current);
     await NativeModules.ScreenCapturePickerViewManager.show(reactTag);
     room.localParticipant.setScreenShareEnabled(true);
-  }
-  else {
+  } else {
     room.localParticipant.setScreenShareEnabled(true);
   }
 };
 
 return (
   <View style={styles.container}>
-    /*...*/
-    // Make sure the ScreenCapturePickerView exists in the view tree.
+    /*...*/ // Make sure the ScreenCapturePickerView exists in the view tree.
     {screenCapturePickerView}
   </View>
 );
