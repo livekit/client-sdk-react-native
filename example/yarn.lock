@@ -3957,6 +3957,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-background-timer-android@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-background-timer-android/-/react-native-background-timer-android-1.0.4.tgz#51d2e88acbe14932771dc8ee721f2723e3bae927"
+  integrity sha512-/wtSEdvCMoSqeKAg+0fIiXUD6UK/TdQcOXu49CyWT1BB1Xlidjryzixm+BmBEcyRqPT7/cvXlXUrGoij3JmMSA==
+
 react-native-codegen@^0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.8.tgz#b7796a54074139d956fff2862cf1285db43c891b"

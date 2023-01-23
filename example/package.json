@@ -17,6 +17,7 @@
     "react": "17.0.2",
     "react-dom": "^17.0.0",
     "react-native": "0.67.5",
+    "react-native-background-timer-android": "^1.0.4",
     "react-native-dialog": "^9.3.0",
     "react-native-exception-handler": "^2.10.10",
     "react-native-safe-area-context": "^4.0.1",

@@ -64,6 +64,7 @@
     "prettier": "^2.5.1",
     "react": "18.0.0",
     "react-native": "0.69.5",
+    "react-native-background-timer-android": "^1.0.4",
     "react-native-builder-bob": "^0.18.2",
     "release-it": "^14.2.2",
     "typedoc": "^0.23.14",
@@ -72,7 +73,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-webrtc": "^106.0.0"
+    "react-native-webrtc": "^106.0.0",
+    "react-native-background-timer-android": "^1.0.4"
   },
   "scripts": {
     "test": "jest",
