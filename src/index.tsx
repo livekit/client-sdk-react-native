@@ -1,7 +1,7 @@
 import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import AudioSession from './audio/AudioSession';
-import AndroidTimer from "react-native-background-timer-android";
+import AndroidTimer from 'react-native-background-timer-android';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { Platform } from 'react-native';
 import { CriticalTimers as LKTimers } from 'livekit-client';
@@ -20,16 +20,15 @@ export function registerGlobals() {
 }
 
 function fixBackgroundAndroid() {
-  
   if (Platform.OS === 'android') {
     // @ts-ignore
-    LKTimers.setTimeout = AndroidTimer.setTimeout
+    LKTimers.setTimeout = AndroidTimer.setTimeout;
     // @ts-ignore
-    LKTimers.clearTimeout = AndroidTimer.clearTimeout
+    LKTimers.clearTimeout = AndroidTimer.clearTimeout;
     // @ts-ignore
-    LKTimers.setInterval = AndroidTimer.setInterval
+    LKTimers.setInterval = AndroidTimer.setInterval;
     // @ts-ignore
-    LKTimers.clearInterval = AndroidTimer.clearInterval
+    LKTimers.clearInterval = AndroidTimer.clearInterval;
   }
 }
 
