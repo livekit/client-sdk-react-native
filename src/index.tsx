@@ -21,14 +21,10 @@ export function registerGlobals() {
 
 function fixBackgroundAndroid() {
   if (Platform.OS === 'android') {
-    // @ts-ignore
-    LKTimers.setTimeout = AndroidTimer.setTimeout;
-    // @ts-ignore
-    LKTimers.clearTimeout = AndroidTimer.clearTimeout;
-    // @ts-ignore
-    LKTimers.setInterval = AndroidTimer.setInterval;
-    // @ts-ignore
-    LKTimers.clearInterval = AndroidTimer.clearInterval;
+    LKTimers.setTimeout = (...args: Parameters<typeof setTimeout>) => AndroidTimer.setTimeout(...args);
+    LKTimers.setInterval = (...args: Parameters<typeof setInterval>) => AndroidTimer.setInterval(...args);
+    LKTimers.clearTimeout = (...args: Parameters<typeof clearTimeout>) => AndroidTimer.clearTimeout(...args);
+    LKTimers.clearInterval = (...args: Parameters<typeof clearInterval>) => AndroidTimer.clearInterval(...args);
   }
 }
 
