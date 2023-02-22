@@ -20,6 +20,15 @@
       "enableDebug": false
     },
     {
+      "name": "Run Android (Release)",
+      "cwd": "${workspaceFolder}/example",
+      "type": "reactnative",
+      "request": "launch",
+      "platform": "android",
+      "variant": "release",
+      "enableDebug": false
+    },
+    {
       "name": "Debug iOS",
       "cwd": "${workspaceFolder}/example",
       "type": "reactnative",
