@@ -109,6 +109,7 @@ class VideoViewElementInfo implements ElementInfo {
   _observing = false;
   visible: boolean = true;
   visibilityChangedAt: number | undefined;
+  pictureInPicture = false;
   handleResize?: (() => void) | undefined;
   handleVisibilityChanged?: (() => void) | undefined;
   width = () => this._width;
