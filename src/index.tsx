@@ -2,6 +2,8 @@ import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import AudioSession from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
+import { Platform } from 'react-native';
+import type { PlatformOSType } from 'react-native';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -10,10 +12,24 @@ import type { AudioConfiguration } from './audio/AudioSession';
  */
 export function registerGlobals() {
   webrtcRegisterGlobals();
+  livekitRegisterGlobals();
   setupURLPolyfill();
   fixWebrtcAdapter();
   shimPromiseAllSettled();
 }
+function livekitRegisterGlobals() {
+  let lkGlobal: LiveKitReactNativeGlobal = {
+    platform: Platform.OS,
+  };
+
+  // @ts-ignore
+  global.LiveKitReactNativeGlobal = lkGlobal;
+}
+
+// Globals needed in the LiveKit JS client
+type LiveKitReactNativeGlobal = {
+  platform: PlatformOSType;
+};
 
 function fixWebrtcAdapter() {
   // @ts-ignore
