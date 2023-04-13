@@ -1,6 +1,13 @@
+<!--BEGIN_BANNER_IMAGE--><!--END_BANNER_IMAGE-->
+
 # livekit-react-native
 
+<!--BEGIN_DESCRIPTION-->
 LiveKit Client SDK for React Native. (beta)
+<!--END_DESCRIPTION-->
+
+> **Info**
+> Beta status currently
 
 ## Installation
 
@@ -145,3 +152,5 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 ## License
 
 Apache License 2.0
+
+<!--BEGIN_REPO_NAV--><!--END_REPO_NAV-->
