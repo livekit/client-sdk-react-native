@@ -1,12 +1,6 @@
 import * as React from 'react';
 
-import {
-  LayoutChangeEvent,
-  PixelRatio,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from 'react-native';
 import {
   ElementInfo,
   LocalVideoTrack,
@@ -124,9 +118,8 @@ class VideoViewElementInfo implements ElementInfo {
 
   onLayout(event: LayoutChangeEvent) {
     let { width, height } = event.nativeEvent.layout;
-    const pixelRatio = PixelRatio.get();
-    this._width = width * pixelRatio;
-    this._height = height * pixelRatio;
+    this._width = width;
+    this._height = height;
 
     if (this._observing) {
       this.handleResize?.();
