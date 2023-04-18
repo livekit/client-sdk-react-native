@@ -6,9 +6,6 @@
 LiveKit Client SDK for React Native. (beta)
 <!--END_DESCRIPTION-->
 
-> **Info**
-> Beta status currently
-
 ## Installation
 
 ### NPM
@@ -31,10 +28,6 @@ This library depends on `react-native-webrtc`, which has additional installation
 ## Example app
 
 We've included an [example app](example/) that you can try out.
-
-## Beta limitations
-
-This library does not currently support simulcast due to a limitation with `react-native-webrtc`
 
 ## Usage
 
