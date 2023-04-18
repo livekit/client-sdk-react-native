@@ -39,7 +39,7 @@
     "android"
   ],
   "dependencies": {
-    "livekit-client": "^1.6.0",
+    "livekit-client": "^1.8.0",
     "promise.allsettled": "^1.0.5",
     "react-native-url-polyfill": "^1.3.0"
   },

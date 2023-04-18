@@ -39,7 +39,7 @@ export const RoomPage = ({
     () =>
       new Room({
         publishDefaults: { simulcast: false },
-        adaptiveStream: true,
+        adaptiveStream: { pixelDensity: 'screen' },
       })
   );
   const { participants } = useRoom(room);
