@@ -72,7 +72,7 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - JitsiWebRTC (106.0.0)
+  - JitsiWebRTC (111.0.1)
   - libevent (2.1.12)
   - livekit-react-native (0.3.0):
     - React-Core
@@ -282,8 +282,8 @@ PODS:
     - RCTTypeSafety
     - React
     - ReactCommon/turbomodule/core
-  - react-native-webrtc (106.0.1):
-    - JitsiWebRTC (~> 106.0.0)
+  - react-native-webrtc (111.0.0):
+    - JitsiWebRTC (~> 111.0.0)
     - React-Core
   - React-perflogger (0.67.5)
   - React-RCTActionSheet (0.67.5):
@@ -532,7 +532,7 @@ SPEC CHECKSUMS:
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
-  JitsiWebRTC: f441eb0e2d67f0588bf24e21c5162e97342714fb
+  JitsiWebRTC: 9619c1f71cc16eeca76df68aa2d213c6d63274a8
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   livekit-react-native: dc473ba0e608a01c5aa8a8e51359fc5b1fb4ce26
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
@@ -549,7 +549,7 @@ SPEC CHECKSUMS:
   React-jsinspector: ec4fe4f65ccf9d67c8429dda955d3412db8a25ef
   React-logger: 85f4ef06b9723714b2dfa5b0e5502b673b271b58
   react-native-safe-area-context: 4a7fbd72ff607377d4b3006705e757d6530912b7
-  react-native-webrtc: aa3a0fdc4c410813892b97d18947f223d3e50f0c
+  react-native-webrtc: a9d4d8ef61adb634e006ffd956c494ad8318d95c
   React-perflogger: d32ee13196f4ae2e4098fb7f8e7ed4f864c6fb0f
   React-RCTActionSheet: 81779c09e34a6a3d6b15783407ba9016a774f535
   React-RCTAnimation: b778eaaa42a884abcc5719035a7a0b2f54672658
@@ -568,6 +568,6 @@ SPEC CHECKSUMS:
   Yoga: 099a946cbf84c9b32ffdc4278d72db26710ecf92
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 1cc2c374471698710b2ae2c087c72acc1fe8c69a
+PODFILE CHECKSUM: b1f6da209ef2b4012dc7c52d747acc42e1da0f44
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0
