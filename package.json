@@ -1,6 +1,6 @@
 {
   "name": "@livekit/react-native",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "LiveKit for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -72,7 +72,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-webrtc": "^106.0.0"
+    "react-native-webrtc": "^111.0.0"
   },
   "scripts": {
     "test": "jest",
