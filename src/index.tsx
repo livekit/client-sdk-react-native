@@ -16,6 +16,7 @@ export function registerGlobals() {
   setupURLPolyfill();
   fixWebrtcAdapter();
   shimPromiseAllSettled();
+  shimArrayAt();
 }
 function livekitRegisterGlobals() {
   let lkGlobal: LiveKitReactNativeInfo = {
@@ -41,6 +42,14 @@ function fixWebrtcAdapter() {
 function shimPromiseAllSettled() {
   var allSettled = require('promise.allsettled');
   allSettled.shim();
+}
+
+function shimArrayAt() {
+  // Some versions of RN don't have Array.prototype.at, which is used by sdp-transform
+  if (!Array.prototype.at) {
+    var at = require('array.prototype.at');
+    at.shim();
+  }
 }
 
 export * from './components/VideoView';
