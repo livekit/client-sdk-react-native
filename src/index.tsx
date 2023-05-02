@@ -48,7 +48,7 @@ function shimArrayAt() {
   // Some versions of RN don't have Array.prototype.at, which is used by sdp-transform
   if (!Array.prototype.at) {
     var at = require('array.prototype.at');
-    at.shim()
+    at.shim();
   }
 }
 
