@@ -15,19 +15,23 @@
 ### NPM
 
 ```sh
-npm install @livekit/react-native
+npm install @livekit/react-native react-native-webrtc
 ```
 
 ### Yarn
 
 ```sh
-yarn add @livekit/react-native
+yarn add @livekit/react-native react-native-webrtc
 ```
 
 This library depends on `react-native-webrtc`, which has additional installation instructions found here:
 
 - [iOS Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
 - [Android Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
+
+### Expo
+
+LiveKit is available on Expo through development builds. [See the instructions found here](https://github.com/livekit/client-sdk-react-native/wiki/Expo-Development-Build-Instructions).
 
 ## Example app
 
