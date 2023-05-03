@@ -74,7 +74,7 @@ PODS:
   - glog (0.3.5)
   - JitsiWebRTC (111.0.1)
   - libevent (2.1.12)
-  - livekit-react-native (1.0.0):
+  - livekit-react-native (1.0.1):
     - React-Core
     - react-native-webrtc
   - OpenSSL-Universal (1.1.180)
@@ -534,7 +534,7 @@ SPEC CHECKSUMS:
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   JitsiWebRTC: 9619c1f71cc16eeca76df68aa2d213c6d63274a8
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  livekit-react-native: b1fef6233f472517123a8fc525066a8ff2808e41
+  livekit-react-native: 5ec56a88d5b2d872c39f7c9ffbf03d3de310d82b
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: 803a9cfd78114b2ec0f140cfa6fa2a6bafb2d685
   RCTRequired: 412e994c1e570cf35378a32c18fd46e50634938b
