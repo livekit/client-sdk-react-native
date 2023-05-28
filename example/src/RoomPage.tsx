@@ -206,6 +206,9 @@ export const RoomPage = ({
             DataPacket_Kind.RELIABLE
           );
         }}
+        onSimulate={(scenario) => {
+          room.simulateScenario(scenario);
+        }}
         onDisconnectClick={() => {
           navigation.pop();
         }}

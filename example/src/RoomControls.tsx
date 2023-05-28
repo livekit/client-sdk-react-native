@@ -11,7 +11,9 @@ import {
   StyleProp,
   Modal,
 } from 'react-native';
-import { AudioOutputList } from './AudioOutputList';
+import { AudioOutputList } from './ui/AudioOutputList';
+import type { SimulationScenario } from 'livekit-client';
+import { SimulateScenarioList } from './ui/SimulateScenarioList';
 
 export type Props = {
   micEnabled?: boolean;
@@ -22,6 +24,7 @@ export type Props = {
   screenShareEnabled: boolean;
   setScreenShareEnabled: (enabled: boolean) => void;
   sendData: (message: string) => void;
+  onSimulate: (scenario: SimulationScenario) => void;
   onDisconnectClick: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -34,10 +37,12 @@ export const RoomControls = ({
   screenShareEnabled = false,
   setScreenShareEnabled,
   sendData,
+  onSimulate,
   onDisconnectClick,
   style,
 }: Props) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [audioModalVisible, setAudioModalVisible] = useState(false);
+  const [simulateModalVisible, setSimulateModalVisible] = useState(false);
   var micImage = micEnabled
     ? require('./icons/baseline_mic_white_24dp.png')
     : require('./icons/baseline_mic_off_white_24dp.png');
@@ -64,16 +69,36 @@ export const RoomControls = ({
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={audioModalVisible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setAudioModalVisible(!audioModalVisible);
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <AudioOutputList
               onSelect={() => {
-                return setModalVisible(false);
+                return setAudioModalVisible(false);
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={simulateModalVisible}
+        onRequestClose={() => {
+          setSimulateModalVisible(!simulateModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <SimulateScenarioList
+              onSelect={(simulate) => {
+                onSimulate(simulate);
+                return setSimulateModalVisible(false);
               }}
             />
           </View>
@@ -134,10 +159,21 @@ export const RoomControls = ({
 
       <Pressable
         onPress={() => {
-          setModalVisible(true);
+          setAudioModalVisible(true);
         }}
       >
         <Image style={styles.icon} source={require('./icons/speaker.png')} />
+      </Pressable>
+
+      <Pressable
+        onPress={() => {
+          setSimulateModalVisible(true);
+        }}
+      >
+        <Image
+          style={styles.icon}
+          source={require('./icons/outline_dots_white_24dp.png')}
+        />
       </Pressable>
 
       <Dialog.Container
