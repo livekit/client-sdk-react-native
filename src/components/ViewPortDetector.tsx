@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropsWithChildren } from 'react';
 import { View, ViewStyle } from 'react-native';
 
 export type Props = {
@@ -15,7 +15,9 @@ export type Props = {
  *
  * Will not fire visibility changes for zero width/height components.
  */
-export default class ViewPortDetector extends Component<Props> {
+export default class ViewPortDetector extends Component<
+  PropsWithChildren<Props>
+> {
   private lastValue: boolean | null = null;
   private interval: any | null = null;
   private view: View | null = null;
