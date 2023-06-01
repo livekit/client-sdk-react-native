@@ -4,3 +4,4 @@ include ':app'
 
 include ':livekitreactnative'
 project(':livekitreactnative').projectDir = new File(rootProject.projectDir, '../../android')
+includeBuild('../node_modules/react-native-gradle-plugin')

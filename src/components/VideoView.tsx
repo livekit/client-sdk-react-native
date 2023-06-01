@@ -75,7 +75,11 @@ export const VideoView = ({
         style={styles.videoView}
       >
         <RTCView
-          style={styles.videoView}
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={{
+            flex: 1,
+            width: '100%',
+          }}
           streamURL={mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
           zOrder={zOrder}
