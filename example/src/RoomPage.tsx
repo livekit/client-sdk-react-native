@@ -24,7 +24,10 @@ import { useRoom, useParticipant, AudioSession } from '@livekit/react-native';
 import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
-import { mediaDevices, ScreenCapturePickerView } from 'react-native-webrtc';
+import {
+  mediaDevices,
+  ScreenCapturePickerView,
+} from '@livekit/react-native-webrtc';
 import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
@@ -38,7 +41,6 @@ export const RoomPage = ({
   const [room] = useState(
     () =>
       new Room({
-        publishDefaults: { simulcast: false },
         adaptiveStream: { pixelDensity: 'screen' },
       })
   );

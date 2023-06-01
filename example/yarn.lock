@@ -1752,6 +1752,17 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@livekit/react-native-webrtc@^104.0.0-beta.0":
+  version "104.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.0-beta.0.tgz#d06f99fd744763983a3bbd94389967b2670b2702"
+  integrity sha512-dIrxkEJSFssZ91Dft7MDY/SEClsCTvRFH2aUWI3hYwbpmOrsrSrDmALe2BoUQOZyoqx9d3tzQlwkSFf9cIEtQA==
+  dependencies:
+    adm-zip "0.5.9"
+    base64-js "1.5.1"
+    debug "4.3.4"
+    event-target-shim "6.0.2"
+    tar "6.1.11"
+
 "@react-native-async-storage/async-storage@^1.17.10":
   version "1.17.10"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.10.tgz#8d6a4771912be8454a9e215eebd469b1b8e2e638"
@@ -4774,17 +4785,6 @@ react-native-url-polyfill@^1.3.0:
   integrity sha512-w9JfSkvpqqlix9UjDvJjm1EjSt652zVQ6iwCIj1cVVkwXf4jQhQgTNXY6EVTwuAmUjg6BC6k9RHCBynoLFo3IQ==
   dependencies:
     whatwg-url-without-unicode "8.0.0-3"
-
-react-native-webrtc@^111.0.0:
-  version "111.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-webrtc/-/react-native-webrtc-111.0.0.tgz#60a44d32207e4dce7b038d2056a3760fc5e21861"
-  integrity sha512-eCvjPiU28cT85K8TBV7geAA92+uCldhmJ6F+3CMtAAG7U4AOQzxYOI5HC3h9Lt2zfTwsUzg3tyamqWf00PWndA==
-  dependencies:
-    adm-zip "0.5.9"
-    base64-js "1.5.1"
-    debug "4.3.4"
-    event-target-shim "6.0.2"
-    tar "6.1.11"
 
 react-native@0.71.8:
   version "0.71.8"

@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.framework    = 'AVFAudio'
 
   s.dependency "React-Core"
-  s.dependency "react-native-webrtc"
+  s.dependency "livekit-react-native-webrtc"
 end

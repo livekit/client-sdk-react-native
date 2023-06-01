@@ -1,4 +1,4 @@
-import { registerGlobals as webrtcRegisterGlobals } from 'react-native-webrtc';
+import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import AudioSession from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
