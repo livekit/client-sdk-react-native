@@ -13,6 +13,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.livekit.reactnative.LivekitReactNativePackage;
+import com.livekit.reactnative.video.SimulcastVideoEncoderFactoryWrapper;
 import com.oney.WebRTCModule.WebRTCModuleOptions;
 import com.oney.WebRTCModule.webrtcutils.H264AndSoftwareVideoDecoderFactory;
 
@@ -61,9 +62,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     WebRTCModuleOptions options = WebRTCModuleOptions.getInstance();
-    VideoEncoderFactory primary = new HardwareVideoEncoderFactory(null, true, true);
-    VideoEncoderFactory fallback = new SoftwareVideoEncoderFactory();
-    options.videoEncoderFactory = new SimulcastVideoEncoderFactory(primary, fallback);
+    options.videoEncoderFactory = new SimulcastVideoEncoderFactoryWrapper(null, true, true);
     options.videoDecoderFactory = new H264AndSoftwareVideoDecoderFactory(null);
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
