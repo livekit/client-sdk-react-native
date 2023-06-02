@@ -80,7 +80,7 @@ PODS:
   - livekit-react-native (1.0.1):
     - livekit-react-native-webrtc
     - React-Core
-  - livekit-react-native-webrtc (104.0.0-beta.0):
+  - livekit-react-native-webrtc (104.0.0-beta.1):
     - React-Core
     - WebRTC-SDK (= 104.5112.17)
   - OpenSSL-Universal (1.1.1100)
@@ -626,7 +626,7 @@ SPEC CHECKSUMS:
   hermes-engine: 47986d26692ae75ee7a17ab049caee8864f855de
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   livekit-react-native: 91b95d5c60aaaa8d329e51348de600b56afb34c2
-  livekit-react-native-webrtc: 319f537266886eaa953f4d6fb54e19ba21084d93
+  livekit-react-native-webrtc: 2d7910bc35002d16153446c82ebaeed03136f957
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 8af6a32dfc2b65ec82193c2dee6e1011ff22ac2a

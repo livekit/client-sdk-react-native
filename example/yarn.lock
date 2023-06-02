@@ -1752,10 +1752,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@livekit/react-native-webrtc@^104.0.0-beta.0":
-  version "104.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.0-beta.0.tgz#d06f99fd744763983a3bbd94389967b2670b2702"
-  integrity sha512-dIrxkEJSFssZ91Dft7MDY/SEClsCTvRFH2aUWI3hYwbpmOrsrSrDmALe2BoUQOZyoqx9d3tzQlwkSFf9cIEtQA==
+"@livekit/react-native-webrtc@^104.0.0-beta.1":
+  version "104.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.0-beta.1.tgz#640b05f728c7a89e60a491aa571fd8b28a540dcb"
+  integrity sha512-SHVNl5alhDsZ8vEiX3uR514MUWmc488u6TEHzbgnPRYWjQldeFsRnkHTQMSATFR5MwPw77f0X8rQJ8/puMHxKQ==
   dependencies:
     adm-zip "0.5.9"
     base64-js "1.5.1"
@@ -1947,14 +1947,6 @@
   resolved "https://registry.yarnpkg.com/@react-native/polyfills/-/polyfills-2.0.0.tgz#4c40b74655c83982c8cf47530ee7dc13d957b6aa"
   integrity sha512-K0aGNn1TjalKj+65D7ycc1//H9roAQ51GJVk5ZJQFb2teECGmzd86bYDC0aYdbRf7gtovescq4Zt6FR0tgXiHQ==
 
-"@react-native/virtualized-lists@^0.72.4":
-  version "0.72.5"
-  resolved "https://registry.yarnpkg.com/@react-native/virtualized-lists/-/virtualized-lists-0.72.5.tgz#a7b261357ec7e0e5aa97a24d4acab1d903811e09"
-  integrity sha512-AtKE3dez3lf89O87wC2ZglV5aPsifopQgn/UmFhXAwi18Yp1BJfEGh3sUqOPNgZNByYPAGxFANeZq44VATXeJA==
-  dependencies:
-    invariant "^2.2.4"
-    nullthrows "^1.1.1"
-
 "@react-navigation/core@^6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-6.1.1.tgz#47b01d0263e413164431c886267a5139e093c706"
@@ -2065,22 +2057,6 @@
   version "15.7.5"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
-
-"@types/react-native-webrtc@^1.75.5":
-  version "1.75.5"
-  resolved "https://registry.yarnpkg.com/@types/react-native-webrtc/-/react-native-webrtc-1.75.5.tgz#3993f097152d25f3d9daf2b09b97e79552709584"
-  integrity sha512-UuZvF+7Y4aD9TrlN1u9IM3GuwQa8Qp0OSABiF2lVNTjil7DqcdwVnKZ6cIV9w/2rO+Z1II9b0vHtkhNpxFFp8w==
-  dependencies:
-    "@types/react" "*"
-    "@types/react-native" "*"
-
-"@types/react-native@*":
-  version "0.72.2"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.72.2.tgz#27c931a899c555b28e20cdd12e570b017808de96"
-  integrity sha512-/eEjr04Zqo7mTMszuSdrLx90+j5nWhDMMOgtnKZfAYyV3RwmlpSb7F17ilmMMxZWJY81n/JZ4e6wdhMJFpjrCg==
-  dependencies:
-    "@react-native/virtualized-lists" "^0.72.4"
-    "@types/react" "*"
 
 "@types/react-native@^0.71.3":
   version "0.71.7"
