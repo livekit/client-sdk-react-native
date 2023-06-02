@@ -49,13 +49,13 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@commitlint/config-conventional": "^16.2.1",
+    "@livekit/react-native-webrtc": "^104.0.0-beta.0",
     "@react-native-community/eslint-config": "^3.2.0",
     "@release-it/conventional-changelog": "^4.2.0",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
     "@types/react-native": "^0.71.3",
-    "@types/react-native-webrtc": "^1.75.5",
     "commitlint": "^16.2.1",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
@@ -75,7 +75,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-webrtc": "^111.0.0"
+    "@livekit/react-native-webrtc": "^104.0.0-beta.1"
   },
   "scripts": {
     "test": "jest",
