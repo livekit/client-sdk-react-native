@@ -35,7 +35,7 @@ Once the `@livekit/react-native-webrtc` dependency is installed, one last step i
 
 ### Android
 
-In your MainApplication.java file:
+In your [MainApplication.java](https://github.com/livekit/client-sdk-react-native/blob/main/example/android/app/src/main/java/com/example/livekitreactnative/MainApplication.java) file:
 
 ```
 import com.livekit.reactnative.video.SimulcastVideoEncoderFactoryWrapper;
@@ -59,7 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
 
 ### iOS
 
-In your AppDelegate.m file:
+In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/main/example/ios/LivekitReactNativeExample/AppDelegate.mm) file:
 
 ```
 #import "WebRTCModule.h"
