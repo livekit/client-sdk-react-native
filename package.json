@@ -75,7 +75,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "@livekit/react-native-webrtc": "^104.0.0-beta.1"
+    "@livekit/react-native-webrtc": "^104.0.0"
   },
   "scripts": {
     "test": "jest",
