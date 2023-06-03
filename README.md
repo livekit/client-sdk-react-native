@@ -15,19 +15,69 @@
 ### NPM
 
 ```sh
-npm install @livekit/react-native react-native-webrtc
+npm install @livekit/react-native @livekit/react-native-webrtc
 ```
 
 ### Yarn
 
 ```sh
-yarn add @livekit/react-native react-native-webrtc
+yarn add @livekit/react-native @livekit/react-native-webrtc
 ```
 
-This library depends on `react-native-webrtc`, which has additional installation instructions found here:
+This library depends on `@livekit/react-native-webrtc`, which has additional installation instructions found here:
 
-- [iOS Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
-- [Android Installation Guide](https://github.com/react-native-webrtc/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
+- [iOS Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
+- [Android Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
+
+----
+
+Once the `@livekit/react-native-webrtc` dependency is installed, one last step is needed to finish the installation:
+
+### Android
+
+In your MainApplication.java file:
+
+```
+import com.livekit.reactnative.video.SimulcastVideoEncoderFactoryWrapper;
+import com.oney.WebRTCModule.WebRTCModuleOptions;
+import com.oney.WebRTCModule.webrtcutils.H264AndSoftwareVideoDecoderFactory;
+
+import org.webrtc.*;
+
+public class MainApplication extends Application implements ReactApplication {
+
+  @Override
+  public void onCreate() {
+    // Place this above any other RN related initialization
+    WebRTCModuleOptions options = WebRTCModuleOptions.getInstance();
+    options.videoEncoderFactory = new SimulcastVideoEncoderFactoryWrapper(null, true, true);
+    options.videoDecoderFactory = new H264AndSoftwareVideoDecoderFactory(null);
+    // ...
+  }
+}
+```
+
+### iOS
+
+In your AppDelegate.m file:
+
+```
+#import "WebRTCModule.h"
+#import "WebRTCModuleOptions.h"
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  // Place this above any other RN related initialization
+  RTCDefaultVideoEncoderFactory *videoEncoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
+  RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = 
+          [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
+  WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
+  options.videoEncoderFactory = simulcastVideoEncoderFactory;
+  //...
+}
+```
 
 ### Expo
 
