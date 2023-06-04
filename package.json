@@ -73,9 +73,9 @@
     "typescript": "4.8.4"
   },
   "peerDependencies": {
+    "@livekit/react-native-webrtc": "^104.0.0",
     "react": "*",
-    "react-native": "*",
-    "@livekit/react-native-webrtc": "^104.0.0"
+    "react-native": "*"
   },
   "scripts": {
     "test": "jest",
@@ -98,7 +98,27 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ]
+    ],
+    "rules": {
+      "type-enum": [
+        2,
+        "always",
+        [
+          "build",
+          "chore",
+          "ci",
+          "docs",
+          "feat",
+          "fix",
+          "perf",
+          "refactor",
+          "revert",
+          "style",
+          "test",
+          "example"
+        ]
+      ]
+    }
   },
   "release-it": {
     "hooks": {
