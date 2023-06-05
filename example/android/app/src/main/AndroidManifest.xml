@@ -29,8 +29,18 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <service android:name="com.voximplant.foregroundservice.VIForegroundService" 
-        android:foregroundServiceType="mediaProjection" />
+      <meta-data
+        android:name="com.supersami.foregroundservice.notification_channel_name"
+        android:value="Call"
+      />
+      <meta-data
+        android:name="com.supersami.foregroundservice.notification_channel_description"
+        android:value=""
+      />
+      <service android:name="com.supersami.foregroundservice.ForegroundService"
+            android:foregroundServiceType="mediaProjection" />
+      <service android:name="com.supersami.foregroundservice.ForegroundServiceTask" />
+      <service android:name="com.voximplant.foregroundservice.VIForegroundService"  />
     </application>
 
 </manifest>
