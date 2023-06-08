@@ -15,10 +15,13 @@
     "cpp",
     "livekit-react-native.podspec",
     "!lib/typescript/example",
+    "!lib/typescript/ci",
     "!android/build",
     "!android/.gradle",
     "!android/.idea",
     "!ios/build",
+    "!example",
+    "!ci",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
@@ -91,6 +94,7 @@
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
+      "<rootDir>/ci/node_modules",
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]

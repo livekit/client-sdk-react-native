@@ -89,8 +89,8 @@ jobs:
       working-directory: ./ci/ios/
       run: |
         set -o pipefail && \
-        xcodebuild -workspace LivekitReactNativeExample.xcworkspace/ \
-          -scheme LivekitReactNativeExample \
+        xcodebuild -workspace ci.xcworkspace/ \
+          -scheme ci \
           -destination generic/platform=iOS \
           -configuration Debug \
           CODE_SIGN_IDENTITY="" \
