@@ -82,7 +82,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build-docs": "typedoc",
+    "build-docs": "typedoc  --tsconfig tsconfig.build.json",
     "typescript": "tsc --noEmit -p tsconfig.build.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
