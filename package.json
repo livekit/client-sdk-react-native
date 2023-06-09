@@ -15,10 +15,13 @@
     "cpp",
     "livekit-react-native.podspec",
     "!lib/typescript/example",
+    "!lib/typescript/ci",
     "!android/build",
     "!android/.gradle",
     "!android/.idea",
     "!ios/build",
+    "!example",
+    "!ci",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
@@ -79,8 +82,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build-docs": "typedoc",
-    "typescript": "tsc --noEmit",
+    "build-docs": "typedoc  --tsconfig tsconfig.build.json",
+    "typescript": "tsc --noEmit -p tsconfig.build.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
     "release": "release-it",
@@ -91,7 +94,8 @@
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
+      "<rootDir>/ci",
+      "<rootDir>/example",
       "<rootDir>/lib/"
     ]
   },

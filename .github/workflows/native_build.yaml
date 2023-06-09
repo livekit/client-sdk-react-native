@@ -22,7 +22,7 @@ jobs:
         path: |
           ~/.npm
           ~/node_modules
-          ~/example/node_modules
+          ~/ci/node_modules
           ~/.config/yarn/global
         key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
@@ -31,10 +31,15 @@ jobs:
     - name: Install Yarn
       run: |
         npm install -g yarn
+
+    - name: Yarn
+      run: |
+        yarn install
+        cd ci
         yarn
 
-    - name: Compile Android Example (Debug)
-      working-directory: ./example/android/
+    - name: Compile Android (Debug)
+      working-directory: ./ci/android/
       run: ./gradlew assembleDebug
 
   ios-compile:
@@ -53,7 +58,7 @@ jobs:
         path: |
           ~/.npm
           ~/node_modules
-          ~/example/node_modules
+          ~/ci/node_modules
           ~/.config/yarn/global
         key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
@@ -62,7 +67,7 @@ jobs:
     - name: Cache cocoapods
       uses: actions/cache@v2
       with:
-        path: ./example/ios/Pods
+        path: ./ci/ios/Pods
         key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-pods-
@@ -72,12 +77,20 @@ jobs:
         npm install -g yarn
         yarn
 
-    - name: Compile iOS Example
-      working-directory: ./example/ios/
+    - name: Yarn
+      run: |
+        yarn install
+        cd ci/
+        yarn
+        cd ios/
+        pod install
+
+    - name: Compile iOS
+      working-directory: ./ci/ios/
       run: |
         set -o pipefail && \
-        xcodebuild -workspace LivekitReactNativeExample.xcworkspace/ \
-          -scheme LivekitReactNativeExample \
+        xcodebuild -workspace ci.xcworkspace/ \
+          -scheme ci \
           -destination generic/platform=iOS \
           -configuration Debug \
           CODE_SIGN_IDENTITY="" \
