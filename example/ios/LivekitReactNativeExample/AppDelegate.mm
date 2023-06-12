@@ -1,18 +1,12 @@
 #import "AppDelegate.h"
-
+#import "LivekitReactNative.h"
 #import <React/RCTBundleURLProvider.h>
-#import "WebRTCModule.h"
-#import "WebRTCModuleOptions.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  RTCDefaultVideoEncoderFactory *videoEncoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
-  RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
-  WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
-  options.videoEncoderFactory = simulcastVideoEncoderFactory;
-  
+  [LivekitReactNative setup];
   self.moduleName = @"LivekitReactNativeExample";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

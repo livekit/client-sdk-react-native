@@ -1752,10 +1752,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@livekit/react-native-webrtc@^104.0.0":
-  version "104.0.0"
-  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.0.tgz#07f0a5de7b69b8aa859089f1f5ec339aa437cca0"
-  integrity sha512-4+//X6RA2vF9fEYRKbAOj0ay3Mktcb0wh1fI0eOtOY+OSMpW9ni1+VRUdwt1yR2eP7d2O1pVYtj2VXpW3qu2tQ==
+"@livekit/react-native-webrtc@^104.0.1":
+  version "104.0.1"
+  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.1.tgz#1ff7d2db984e9b00dbf29aabca0c1f037f845415"
+  integrity sha512-mlp0gsOEOQAhAeWsTZpw+m+dcLLWXdrU5wndQ3AT8kLrIaMqgyNJw11ybpDIJNRaHVIL35oOJKYgnIllwBT4tw==
   dependencies:
     adm-zip "0.5.9"
     base64-js "1.5.1"

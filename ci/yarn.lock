@@ -1506,7 +1506,7 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@livekit/react-native-webrtc@^104.0.0":
+"@livekit/react-native-webrtc@^104.0.1":
   version "104.0.1"
   resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.1.tgz#1ff7d2db984e9b00dbf29aabca0c1f037f845415"
   integrity sha512-mlp0gsOEOQAhAeWsTZpw+m+dcLLWXdrU5wndQ3AT8kLrIaMqgyNJw11ybpDIJNRaHVIL35oOJKYgnIllwBT4tw==
