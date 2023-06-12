@@ -1,5 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import "LivekitReactNative.h"
+#import "WebRTCModule.h"
+#import "WebRTCModuleOptions.h"
 #import <WebRTC/RTCAudioSession.h>
 #import <WebRTC/RTCAudioSessionConfiguration.h>
 #import <AVFAudio/AVFAudio.h>
@@ -29,6 +31,13 @@ RCT_EXPORT_MODULE();
 
 +(BOOL)requiresMainQueueSetup {
     return NO;
+}
+
++(void)setup {
+    RTCDefaultVideoEncoderFactory *videoEncoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
+    RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
+    WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
+    options.videoEncoderFactory = simulcastVideoEncoderFactory;
 }
 
 /// Configure default audio config for WebRTC

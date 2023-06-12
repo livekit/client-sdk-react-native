@@ -9,7 +9,7 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "@livekit/react-native-webrtc": "^104.0.0",
+    "@livekit/react-native-webrtc": "^104.0.1",
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",

@@ -8,4 +8,6 @@
 
 @interface LivekitReactNative : NSObject <RCTBridgeModule>
 
++(void)setup;
+
 @end

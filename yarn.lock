@@ -2759,10 +2759,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@livekit/react-native-webrtc@^104.0.0-beta.0":
-  version "104.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.0-beta.0.tgz#d06f99fd744763983a3bbd94389967b2670b2702"
-  integrity sha512-dIrxkEJSFssZ91Dft7MDY/SEClsCTvRFH2aUWI3hYwbpmOrsrSrDmALe2BoUQOZyoqx9d3tzQlwkSFf9cIEtQA==
+"@livekit/react-native-webrtc@^104.0.1":
+  version "104.0.1"
+  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-104.0.1.tgz#1ff7d2db984e9b00dbf29aabca0c1f037f845415"
+  integrity sha512-mlp0gsOEOQAhAeWsTZpw+m+dcLLWXdrU5wndQ3AT8kLrIaMqgyNJw11ybpDIJNRaHVIL35oOJKYgnIllwBT4tw==
   dependencies:
     adm-zip "0.5.9"
     base64-js "1.5.1"
@@ -7642,9 +7642,9 @@ lines-and-columns@^1.1.6:
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
 livekit-client@^1.8.0:
-  version "1.9.4"
-  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-1.9.4.tgz#1da512d9daa9249af71cfd93a9dec510e5ad0627"
-  integrity sha512-QaIEbkVKQl9/+fWCWzNgZ7jA7f5PoqvQQErwQborkqHQZX8O9v5u6DXbnHXtJkQmdvgE+83Og8Ct9sBeMN9zuQ==
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-1.10.0.tgz#bfd50bb59dc46637f975f3721de5504803fc4ab5"
+  integrity sha512-pyBIIy2+pvgDiqX9OM0htP8Bb8lDBFR2vswIvHuihtvMGZPrhKB+rg568acrGq0HDQM8OzZeZVrgedsaexD2Gg==
   dependencies:
     events "^3.3.0"
     loglevel "^1.8.0"
@@ -7652,7 +7652,6 @@ livekit-client@^1.8.0:
     sdp-transform "^2.14.1"
     ts-debounce "^4.0.0"
     typed-emitter "^2.1.0"
-    ua-parser-js "^1.0.2"
     webrtc-adapter "^8.1.1"
 
 load-json-file@^4.0.0:
@@ -10500,11 +10499,6 @@ typescript@^4.4.3:
   version "4.5.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
   integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
-
-ua-parser-js@^1.0.2:
-  version "1.0.32"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.32.tgz#786bf17df97de159d5b1c9d5e8e9e89806f8a030"
-  integrity sha512-dXVsz3M4j+5tTiovFVyVqssXBu5HM47//YSOeZ9fQkdDKkfzv2v3PP1jmH6FUyPW+yCSn7aBVK1fGGKNhowdDA==
 
 uglify-es@^3.1.9:
   version "3.3.9"

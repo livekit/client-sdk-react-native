@@ -1,11 +1,12 @@
 #import "AppDelegate.h"
-
+#import "LivekitReactNative.h"
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [LivekitReactNative setup];
   self.moduleName = @"ci";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
