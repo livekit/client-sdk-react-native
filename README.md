@@ -38,21 +38,16 @@ Once the `@livekit/react-native-webrtc` dependency is installed, one last step i
 In your [MainApplication.java](https://github.com/livekit/client-sdk-react-native/blob/main/example/android/app/src/main/java/com/example/livekitreactnative/MainApplication.java) file:
 
 ```
-import com.livekit.reactnative.video.SimulcastVideoEncoderFactoryWrapper;
-import com.oney.WebRTCModule.WebRTCModuleOptions;
-import com.oney.WebRTCModule.webrtcutils.H264AndSoftwareVideoDecoderFactory;
-
-import org.webrtc.*;
+import com.livekit.reactnative.LiveKitReactNative;
 
 public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public void onCreate() {
     // Place this above any other RN related initialization
-    WebRTCModuleOptions options = WebRTCModuleOptions.getInstance();
-    options.videoEncoderFactory = new SimulcastVideoEncoderFactoryWrapper(null, true, true);
-    options.videoDecoderFactory = new H264AndSoftwareVideoDecoderFactory(null);
-    // ...
+    LiveKitReactNative.setup();
+
+    //...
   }
 }
 ```
@@ -62,19 +57,15 @@ public class MainApplication extends Application implements ReactApplication {
 In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/main/example/ios/LivekitReactNativeExample/AppDelegate.mm) file:
 
 ```
-#import "WebRTCModule.h"
-#import "WebRTCModuleOptions.h"
+#import "LivekitReactNative.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   // Place this above any other RN related initialization
-  RTCDefaultVideoEncoderFactory *videoEncoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
-  RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = 
-          [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
-  WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
-  options.videoEncoderFactory = simulcastVideoEncoderFactory;
+  [LivekitReactNative setup];
+
   //...
 }
 ```
