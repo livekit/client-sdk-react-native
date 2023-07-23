@@ -43,6 +43,20 @@ public class AudioSwitchManager {
     @Nullable
     private AudioSwitch audioSwitch;
 
+    /**
+     * The audio focus mode to use while started.
+     *
+     * Defaults to [AudioManager.AUDIOFOCUS_GAIN].
+     */
+    private int focusMode = AudioManager.AUDIOFOCUS_GAIN;
+
+    /**
+     * The audio mode to use while started.
+     *
+     * Defaults to [AudioManager.MODE_NORMAL].
+     */
+    private int audioMode = AudioManager.MODE_NORMAL;
+
     public AudioSwitchManager(@NonNull Context context) {
         this.context = context;
         this.audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -64,6 +78,8 @@ public class AudioSwitchManager {
                         audioFocusChangeListener,
                         preferredDeviceList
                 );
+                audioSwitch.setFocusMode(focusMode);
+                audioSwitch.setAudioMode(audioMode);
                 audioSwitch.start(audioDeviceChangeListener);
                 audioSwitch.activate();
             });
@@ -136,5 +152,13 @@ public class AudioSwitchManager {
         if (kind != null) {
             selectAudioOutput(kind.audioDeviceClass);
         }
+    }
+
+    public void setFocusMode(int focusMode) {
+        this.focusMode = focusMode;
+    }
+
+    public void setAudioMode(int audioMode) {
+        this.audioMode = audioMode;
     }
 }

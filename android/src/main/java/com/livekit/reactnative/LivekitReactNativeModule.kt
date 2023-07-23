@@ -2,6 +2,7 @@ package com.livekit.reactnative
 
 import com.facebook.react.bridge.*
 import com.livekit.reactnative.audio.AudioDeviceKind
+import com.livekit.reactnative.audio.AudioManagerUtils
 import com.livekit.reactnative.audio.AudioSwitchManager
 
 
@@ -22,6 +23,19 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
                 AudioDeviceKind.fromTypeName(outputStr)?.audioDeviceClass
             }
             audioManager.preferredDeviceList = preferredDeviceList
+        }
+
+        androidConfig.getString("audioMode")?.let { audioModeString ->
+            val audioMode = AudioManagerUtils.audioModeFromString(audioModeString)
+            if (audioMode != null) {
+                audioManager.setAudioMode(audioMode)
+            }
+        }
+        androidConfig.getString("audioFocusMode")?.let { focusModeString ->
+            val focusMode = AudioManagerUtils.focusModeFromString(focusModeString)
+            if (focusMode != null) {
+                audioManager.setFocusMode(focusMode)
+            }
         }
     }
 
