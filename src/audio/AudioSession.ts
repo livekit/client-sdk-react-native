@@ -39,11 +39,22 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  *   By default, this is set to `"speaker"`
  */
 export type AudioConfiguration = {
-  android: {
-    preferredOutputList: ('speaker' | 'earpiece' | 'headset' | 'bluetooth')[];
+  android?: {
+    preferredOutputList?: ('speaker' | 'earpiece' | 'headset' | 'bluetooth')[];
+    audioMode?:
+      | 'normal'
+      | 'callScreening'
+      | 'inCall'
+      | 'inCommunication'
+      | 'ringtone';
+    audioFocusMode?:
+      | 'gain'
+      | 'gainTransient'
+      | 'gainTransientExclusive'
+      | 'gainTransientMayDuck';
   };
-  ios: {
-    defaultOutput: 'speaker' | 'earpiece';
+  ios?: {
+    defaultOutput?: 'speaker' | 'earpiece';
   };
 };
 
