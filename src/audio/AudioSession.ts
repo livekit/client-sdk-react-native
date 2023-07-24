@@ -31,6 +31,13 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  *   3. `"headset"`
  *   4. `"bluetooth"`
  *
+ * * audioMode - The audio mode to use for the audio session. Defaults to 'normal'.
+ *
+ * * audioFocusMode - The focus mode to use for the audio session. Defaults to 'gain'.
+ *
+ *  See [AudioManager](https://developer.android.com/reference/android/media/AudioManager) for details
+ *  on audio and focus modes.
+ *
  * ----
  * iOS
  *
