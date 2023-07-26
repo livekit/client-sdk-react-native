@@ -29,7 +29,7 @@ This library depends on `@livekit/react-native-webrtc`, which has additional ins
 - [iOS Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
 - [Android Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
 
-----
+---
 
 Once the `@livekit/react-native-webrtc` dependency is installed, one last step is needed to finish the installation:
 
@@ -106,8 +106,12 @@ const [room] = useState(() => new Room());
 const { participants } = useRoom(room);
 
 useEffect(() => {
-  AudioSession.startAudioSession();
-  room.connect(url, token, {});
+  let connect = async () => {
+    await AudioSession.startAudioSession();
+    await room.connect(url, token, {});
+    console.log('connected to ', url, ' ', token);
+  };
+  connect();
   return () => {
     room.disconnect();
     AudioSession.stopAudioSession();
@@ -125,6 +129,40 @@ const videoView = participants.length > 0 && (
 [API documentation is located here.](https://htmlpreview.github.io/?https://raw.githubusercontent.com/livekit/client-sdk-react-native/main/docs/modules.html)
 
 Additional documentation for the LiveKit SDK can be found at https://docs.livekit.io/references/client-sdks/
+
+## Audio sessions
+
+As seen in the above example, we've introduced a new class `AudioSession` that helps
+to manage the audio session on native platforms. This class wraps either [AudioManager](https://developer.android.com/reference/android/media/AudioManager) on Android, or [AVAudioSession](https://developer.apple.com/documentation/avfaudio/avaudiosession) on iOS.
+
+You can customize the configuration of the audio session with `configureAudio`.
+
+```js
+useEffect(() => {
+  let connect = async () => {
+    // configure audio session prior to starting it.
+    await AudioSession.configureAudio({
+      android: {
+        preferredOutputList: ['earpiece'],
+        // See [AudioManager](https://developer.android.com/reference/android/media/AudioManager)
+        // for details on audio and focus modes.
+        audioMode: 'normal',
+        audioFocusMode: 'gain',
+      },
+      ios: {
+        defaultOutput: 'earpiece',
+      },
+    });
+    await AudioSession.startAudioSession();
+    await room.connect(url, token, {});
+  };
+  connect();
+  return () => {
+    room.disconnect();
+    AudioSession.stopAudioSession();
+  };
+}, [url, token, room]);
+```
 
 ## Screenshare
 
@@ -196,7 +234,9 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 Apache License 2.0
 
 <!--BEGIN_REPO_NAV-->
+
 <br/><table>
+
 <thead><tr><th colspan="2">LiveKit Ecosystem</th></tr></thead>
 <tbody>
 <tr><td>Client SDKs</td><td><a href="https://github.com/livekit/components-js">Components</a> · <a href="https://github.com/livekit/client-sdk-js">JavaScript</a> · <a href="https://github.com/livekit/client-sdk-rust">Rust</a> · <a href="https://github.com/livekit/client-sdk-swift">iOS/macOS</a> · <a href="https://github.com/livekit/client-sdk-android">Android</a> · <a href="https://github.com/livekit/client-sdk-flutter">Flutter</a> · <a href="https://github.com/livekit/client-sdk-unity-web">Unity (web)</a> · <a href="https://github.com/livekit/client-sdk-python">Python</a> · <b>React Native (beta)</b></td></tr><tr></tr>
