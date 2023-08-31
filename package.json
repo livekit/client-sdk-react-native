@@ -43,6 +43,7 @@
   ],
   "dependencies": {
     "array.prototype.at": "^1.1.1",
+    "fast-text-encoding": "^1.0.6",
     "livekit-client": "^1.8.0",
     "promise.allsettled": "^1.0.5",
     "react-native-url-polyfill": "^1.3.0"
