@@ -129,7 +129,7 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  api 'com.github.davidliu:audioswitch:fb33b237aa50b3d1d2dea0e0695ecb7b38a98971'
+  api 'com.github.davidliu:audioswitch:1689af118f69dcd8c8dc95e5a711dd0a7a626e69'
   api 'io.github.webrtc-sdk:android:104.5112.10'
   implementation project(':livekit_react-native-webrtc')
   implementation "androidx.annotation:annotation:1.4.0"
