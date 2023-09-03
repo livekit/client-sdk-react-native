@@ -3292,6 +3292,11 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
+"@types/fastestsmallesttextencoderdecoder@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/fastestsmallesttextencoderdecoder/-/fastestsmallesttextencoderdecoder-1.0.0.tgz#24477652ac71737558fdf54ee0ab17385bd653b5"
+  integrity sha512-bCyxe0zloFjExUH/36vW/sMHItelWPYtf5Mp9w67hFDSc5a+IBZeb/1yQXxC55/DWYw+QrYftfhp8tl9lDl+ww==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
@@ -5631,6 +5636,11 @@ fast-levenshtein@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
+
+fastestsmallesttextencoderdecoder@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/fastestsmallesttextencoderdecoder/-/fastestsmallesttextencoderdecoder-1.0.22.tgz#59b47e7b965f45258629cc6c127bf783281c5e93"
+  integrity sha512-Pb8d48e+oIuY4MaM64Cd7OW1gt4nxCHs7/ddPPZ/Ic3sg8yVGM7O9wDvZ7us6ScaUupzM+pfBolwtYhN1IxBIw==
 
 fastq@^1.6.0:
   version "1.13.0"
