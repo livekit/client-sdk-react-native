@@ -45,7 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     // Place this above any other RN related initialization
-    LiveKitReactNative.setup();
+    LiveKitReactNative.setup(this);
 
     //...
   }

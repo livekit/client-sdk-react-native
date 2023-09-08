@@ -1,6 +1,9 @@
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
-import AudioSession from './audio/AudioSession';
+import AudioSession, {
+  AndroidAudioTypePresets,
+  AndroidAudioTypeOptions,
+} from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
 import type { LiveKitReactNativeInfo } from 'livekit-client';
@@ -55,4 +58,9 @@ function shimArrayAt() {
 export * from './components/VideoView';
 export * from './useParticipant';
 export * from './useRoom';
-export { AudioSession, AudioConfiguration };
+export {
+  AudioSession,
+  AudioConfiguration,
+  AndroidAudioTypeOptions,
+  AndroidAudioTypePresets,
+};

@@ -63,8 +63,7 @@ export const RoomPage = ({
       // await AudioSession.configureAudio({
       //   android: {
       //     preferredOutputList: ["earpiece"],
-      //     audioMode: 'normal',
-      //     audioFocusMode: 'gain',
+      //     audioTypeOptions: AndroidAudioTypePresets.communication
       //   },
       //   ios: {
       //     defaultOutput: "earpiece"
