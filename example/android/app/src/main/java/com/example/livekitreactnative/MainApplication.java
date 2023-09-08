@@ -56,7 +56,7 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     public void onCreate() {
-        LiveKitReactNative.setup();
+        LiveKitReactNative.setup(this);
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
         if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {

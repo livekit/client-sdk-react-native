@@ -26,17 +26,15 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  *   This is ignored when an output is manually selected with {@link AudioSession.selectAudioOutput}.
  *
  *   By default, the order is set to:
- *   1. `"speaker"`
- *   2. `"earpiece"`
- *   3. `"headset"`
- *   4. `"bluetooth"`
+ *   1. `"bluetooth"
+ *   2. `"headset"``
+ *   3. `"speaker"`
+ *   4. `"earpiece"`
  *
- * * audioMode - The audio mode to use for the audio session. Defaults to 'normal'.
+ * * audioTypeOptions - An {@link AndroidAudioTypeOptions} object which provides the
+ *   audio options to use on Android.
  *
- * * audioFocusMode - The focus mode to use for the audio session. Defaults to 'gain'.
- *
- *  See [AudioManager](https://developer.android.com/reference/android/media/AudioManager) for details
- *  on audio and focus modes.
+ *   See {@link AndroidAudioTypePresets} for pre-configured values.
  *
  * ----
  * iOS
@@ -48,22 +46,138 @@ const LivekitReactNative = NativeModules.LivekitReactNative
 export type AudioConfiguration = {
   android?: {
     preferredOutputList?: ('speaker' | 'earpiece' | 'headset' | 'bluetooth')[];
-    audioMode?:
-      | 'normal'
-      | 'callScreening'
-      | 'inCall'
-      | 'inCommunication'
-      | 'ringtone';
-    audioFocusMode?:
-      | 'gain'
-      | 'gainTransient'
-      | 'gainTransientExclusive'
-      | 'gainTransientMayDuck';
+    audioTypeOptions: AndroidAudioTypeOptions;
   };
   ios?: {
     defaultOutput?: 'speaker' | 'earpiece';
   };
 };
+
+export type AndroidAudioTypeOptions = {
+  /**
+   * Whether LiveKit should handle managing the audio focus or not.
+   *
+   * Defaults to true.
+   */
+  manageAudioFocus?: boolean;
+
+  /**
+   * Corresponds to {@link https://developer.android.com/reference/android/media/AudioManager#setMode(int)}
+   *
+   * Defaults to 'inCommunication'.
+   */
+  audioMode?:
+    | 'normal'
+    | 'callScreening'
+    | 'inCall'
+    | 'inCommunication'
+    | 'ringtone';
+
+  /**
+   * Corresponds to the duration hint when requesting audio focus.
+   *
+   * Defaults to 'gain'.
+   *
+   * See also {@link https://developer.android.com/reference/android/media/AudioManager#AUDIOFOCUS_GAIN}
+   */
+  audioFocusMode?:
+    | 'gain'
+    | 'gainTransient'
+    | 'gainTransientExclusive'
+    | 'gainTransientMayDuck';
+
+  /**
+   * Corresponds to Android's AudioAttributes usage type.
+   *
+   * Defaults to 'voiceCommunication'.
+   *
+   * See also {@link https://developer.android.com/reference/android/media/AudioAttributes}
+   */
+  audioAttributesUsageType?:
+    | 'alarm'
+    | 'assistanceAccessibility'
+    | 'assistanceNavigationGuidance'
+    | 'assistanceSonification'
+    | 'assistant'
+    | 'game'
+    | 'media'
+    | 'notification'
+    | 'notificationEvent'
+    | 'notificationRingtone'
+    | 'unknown'
+    | 'voiceCommunication'
+    | 'voiceCommunicationSignalling';
+
+  /**
+   * Corresponds to Android's AndroidAttributes content type.
+   *
+   * Defaults to 'speech'.
+   *
+   * See also {@link https://developer.android.com/reference/android/media/AudioAttributes}
+   */
+  audioAttributesContentType?:
+    | 'movie'
+    | 'music'
+    | 'sonification'
+    | 'speech'
+    | 'unknown';
+
+  /**
+   * Corresponds to the stream type when requesting audio focus. Used on pre-O devices.
+   *
+   * Defaults to 'voiceCall'
+   *
+   * See also {@link https://developer.android.com/reference/android/media/AudioManager#STREAM_VOICE_CALL}
+   */
+  audioStreamType?:
+    | 'accessibility'
+    | 'alarm'
+    | 'dtmf'
+    | 'music'
+    | 'notification'
+    | 'ring'
+    | 'system'
+    | 'voiceCall';
+
+  /**
+   * On certain Android devices, audio routing does not function properly and
+   * bluetooth microphones will not work unless audio mode is set to
+   * `inCommunication` or `inCall`. Audio routing is turned off those cases.
+   *
+   * If this set to true, will attempt to do audio routing regardless of audio mode.
+   *
+   * Defaults to false.
+   */
+  forceHandleAudioRouting?: boolean;
+};
+
+export const AndroidAudioTypePresets: {
+  /**
+   * A pre-configured AndroidAudioConfiguration for voice communication.
+   */
+  communication: AndroidAudioTypeOptions;
+  /**
+   * A pre-configured AndroidAudioConfiguration for media playback.
+   */
+  media: AndroidAudioTypeOptions;
+} = {
+  communication: {
+    manageAudioFocus: true,
+    audioMode: 'inCommunication',
+    audioFocusMode: 'gain',
+    audioStreamType: 'voiceCall',
+    audioAttributesUsageType: 'voiceCommunication',
+    audioAttributesContentType: 'speech',
+  },
+  media: {
+    manageAudioFocus: true,
+    audioMode: 'normal',
+    audioFocusMode: 'gain',
+    audioStreamType: 'music',
+    audioAttributesUsageType: 'media',
+    audioAttributesContentType: 'unknown',
+  },
+} as const;
 
 export default class AudioSession {
   /**
@@ -99,9 +213,6 @@ export default class AudioSession {
    * * "earpiece"
    * * "headset"
    * * "bluetooth"
-   *
-   * Note: For applications targeting SDK versions over 30, the runtime BLUETOOTH_CONNECT
-   * permission must be requested to send audio to bluetooth headsets.
    *
    * ----
    *
