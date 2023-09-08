@@ -1,5 +1,6 @@
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
+import 'fastestsmallesttextencoderdecoder';
 import AudioSession, {
   AndroidAudioTypePresets,
   AndroidAudioTypeOptions,
@@ -20,6 +21,8 @@ export function registerGlobals() {
   fixWebrtcAdapter();
   shimPromiseAllSettled();
   shimArrayAt();
+  shimAsyncIterator();
+  shimIterator();
 }
 function livekitRegisterGlobals() {
   let lkGlobal: LiveKitReactNativeInfo = {
@@ -53,6 +56,16 @@ function shimArrayAt() {
     var at = require('array.prototype.at');
     at.shim();
   }
+}
+
+function shimAsyncIterator() {
+  var shim = require('well-known-symbols/Symbol.asyncIterator/shim');
+  shim();
+}
+
+function shimIterator() {
+  var shim = require('well-known-symbols/Symbol.iterator/shim');
+  shim();
 }
 
 export * from './components/VideoView';
