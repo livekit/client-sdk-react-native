@@ -39,13 +39,16 @@ In your [MainApplication.java](https://github.com/livekit/client-sdk-react-nativ
 
 ```
 import com.livekit.reactnative.LiveKitReactNative;
+import com.livekit.reactnative.audio.AudioType;
 
 public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public void onCreate() {
     // Place this above any other RN related initialization
-    LiveKitReactNative.setup(this);
+    // When AudioType is omitted, it'll default to CommunicationAudioType
+    // use MediaAudioType if user is only consuming audio, and not publishing
+    LiveKitReactNative.setup(this, new AudioType.CommunicationAudioType());
 
     //...
   }
@@ -137,26 +140,26 @@ to manage the audio session on native platforms. This class wraps either [AudioM
 
 You can customize the configuration of the audio session with `configureAudio`.
 
+### Media playback
+
+By default, the audio session is set up for bidirectional communication. In this mode, the audio framework exhibits the following behaviors:
+
+- The volume cannot be reduced to 0.
+- Echo cancellation is available and is enabled by default.
+- A microphone indicator can be displayed, depending on the platform.
+
+If you're leveraging LiveKit primarily for media playback, you have the option to reconfigure the audio session to better suit media playback. Here's how:
+
+Note: iOS audio session customization is in development, and will be documented here when released.
+
 ```js
 useEffect(() => {
   let connect = async () => {
     // configure audio session prior to starting it.
     await AudioSession.configureAudio({
       android: {
-        preferredOutputList: ['earpiece'],
-        // See [AudioManager](https://developer.android.com/reference/android/media/AudioManager)
-        // for details on audio and focus modes.
-        audioTypeOptions: {
-          manageAudioFocus: true,
-          audioMode: 'normal',
-          audioFocusMode: 'gain',
-          audioStreamType: 'music',
-          audioAttributesUsageType: 'media',
-          audioAttributesContentType: 'unknown',
-        }
-      },
-      ios: {
-        defaultOutput: 'earpiece',
+        // currently supports .media and .communication presets
+        audioTypeOptions: AndroidAudioTypePresets.media,
       },
     });
     await AudioSession.startAudioSession();
@@ -170,7 +173,28 @@ useEffect(() => {
 }, [url, token, room]);
 ```
 
-Presets for android are also available through `AndroidAudioTypePresets` for common use cases such as dedicated media playback.
+### Customizing audio session
+
+Instead of using our presets, you can further customize the audio session to suit your specific needs.
+
+```js
+await AudioSession.configureAudio({
+  android: {
+    preferredOutputList: ['earpiece'],
+    // See [AudioManager](https://developer.android.com/reference/android/media/AudioManager)
+    // for details on audio and focus modes.
+    audioTypeOptions: {
+      manageAudioFocus: true,
+      audioMode: 'normal',
+      audioFocusMode: 'gain',
+      audioStreamType: 'music',
+      audioAttributesUsageType: 'media',
+      audioAttributesContentType: 'unknown',
+    },
+  },
+});
+await AudioSession.startAudioSession();
+```
 
 ## Screenshare
 
