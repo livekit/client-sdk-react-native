@@ -146,8 +146,14 @@ useEffect(() => {
         preferredOutputList: ['earpiece'],
         // See [AudioManager](https://developer.android.com/reference/android/media/AudioManager)
         // for details on audio and focus modes.
-        audioMode: 'normal',
-        audioFocusMode: 'gain',
+        audioTypeOptions: {
+          manageAudioFocus: true,
+          audioMode: 'normal',
+          audioFocusMode: 'gain',
+          audioStreamType: 'music',
+          audioAttributesUsageType: 'media',
+          audioAttributesContentType: 'unknown',
+        }
       },
       ios: {
         defaultOutput: 'earpiece',
@@ -163,6 +169,8 @@ useEffect(() => {
   };
 }, [url, token, room]);
 ```
+
+Presets for android are also available through `AndroidAudioTypePresets` for common use cases such as dedicated media playback.
 
 ## Screenshare
 
