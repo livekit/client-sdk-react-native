@@ -265,8 +265,8 @@ This error could happen if you are using yarn and have incompatible versions of 
 
 To fix this, you can either:
 
-- use another package manager like npm
-- run [yarn-deduplicate](https://www.npmjs.com/package/yarn-deduplicate) to deduplicate dependencies
+- use another package manager, like npm
+- use [yarn-deduplicate](https://www.npmjs.com/package/yarn-deduplicate) to deduplicate dependencies
 
 ## Contributing
 
