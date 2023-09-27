@@ -255,7 +255,18 @@ return (
 
 ### Note
 
-Currently it does not run on iOS Simulator on M1 Macs.
+You will not be able to publish camera or microphone tracks on iOS Simulator.
+
+## Troubleshooting
+
+#### Cannot read properties of undefined (reading 'split')
+
+This error could happen if you are using yarn and have incompatible versions of dependencies with livekit-client.
+
+To fix this, you can either:
+
+- use another package manager like npm
+- run [yarn-deduplicate](https://www.npmjs.com/package/yarn-deduplicate) to deduplicate dependencies
 
 ## Contributing
 
