@@ -4,8 +4,8 @@ import loglevel from 'loglevel';
 export const log = loglevel.getLogger('lk-react-native');
 log.setDefaultLevel('WARN');
 
-type LogLevel = Parameters<typeof setClientSdkLogLevel>[0];
-type SetLogLevelOptions = {
+export type LogLevel = Parameters<typeof setClientSdkLogLevel>[0];
+export type SetLogLevelOptions = {
   liveKitClientLogLevel?: LogLevel;
 };
 

@@ -2,12 +2,20 @@ import { useState, useEffect, useMemo } from 'react';
 import { Platform } from 'react-native';
 import { RoomEvent, type Room } from 'livekit-client';
 import AudioSession, {
-  getAppleAudioConfigurationForMode,
+  getDefaultAppleAudioConfigurationForMode,
   type AppleAudioConfiguration,
   type AudioTrackState,
 } from './AudioSession';
 import { log } from '..';
 
+/**
+ * Handles setting the appropriate AVAudioSession options automatically 
+ * depending on the audio track states of the Room.
+ * 
+ * @param room 
+ * @param preferSpeakerOutput 
+ * @param onConfigureNativeAudio 
+ */
 export function useIOSAudioManagement(
   room: Room,
   preferSpeakerOutput: boolean = true,
@@ -79,7 +87,7 @@ export function useIOSAudioManagement(
     }
 
     let configFunc =
-      onConfigureNativeAudio ?? getAppleAudioConfigurationForMode;
+      onConfigureNativeAudio ?? getDefaultAppleAudioConfigurationForMode;
     let audioConfig = configFunc(trackState, preferSpeakerOutput);
 
     AudioSession.setAppleAudioConfiguration(audioConfig);

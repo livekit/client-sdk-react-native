@@ -218,7 +218,8 @@ export type AudioTrackState =
   | 'localOnly'
   | 'localAndRemote';
 
-export function getAppleAudioConfigurationForMode(
+
+export function getDefaultAppleAudioConfigurationForMode(
   mode: AudioTrackState,
   preferSpeakerOutput: boolean = true
 ): AppleAudioConfiguration {
