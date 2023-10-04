@@ -9,12 +9,12 @@ import AudioSession, {
 import { log } from '..';
 
 /**
- * Handles setting the appropriate AVAudioSession options automatically 
+ * Handles setting the appropriate AVAudioSession options automatically
  * depending on the audio track states of the Room.
- * 
- * @param room 
- * @param preferSpeakerOutput 
- * @param onConfigureNativeAudio 
+ *
+ * @param room
+ * @param preferSpeakerOutput
+ * @param onConfigureNativeAudio
  */
 export function useIOSAudioManagement(
   room: Room,

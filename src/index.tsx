@@ -14,7 +14,7 @@ import AudioSession, {
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
 import type { LiveKitReactNativeInfo } from 'livekit-client';
-import type { LogLevel, SetLogLevelOptions  } from './logger';
+import type { LogLevel, SetLogLevelOptions } from './logger';
 
 /**
  * Registers the required globals needed for LiveKit to work.
