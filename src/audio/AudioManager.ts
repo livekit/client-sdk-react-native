@@ -71,7 +71,7 @@ export function useIOSAudioManagement(
         .off(RoomEvent.TrackPublished, onRemotePublished)
         .off(RoomEvent.TrackUnpublished, onRemoteUnpublished);
     };
-  }, [room]);
+  }, [room, localTrackCount, remoteTrackCount]);
 
   useEffect(() => {
     if (Platform.OS !== 'ios') {
@@ -83,7 +83,7 @@ export function useIOSAudioManagement(
     let audioConfig = configFunc(trackState, preferSpeakerOutput);
 
     AudioSession.setAppleAudioConfiguration(audioConfig);
-  }, [trackState]);
+  }, [trackState, onConfigureNativeAudio, preferSpeakerOutput]);
 }
 
 function computeAudioTrackState(
