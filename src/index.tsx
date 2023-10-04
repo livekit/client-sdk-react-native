@@ -4,6 +4,11 @@ import 'fastestsmallesttextencoderdecoder';
 import AudioSession, {
   AndroidAudioTypePresets,
   AndroidAudioTypeOptions,
+  AppleAudioCategory,
+  AppleAudioCategoryOption,
+  AppleAudioConfiguration,
+  AppleAudioMode,
+  getAppleAudioConfigurationForMode,
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
@@ -71,9 +76,17 @@ function shimIterator() {
 export * from './components/VideoView';
 export * from './useParticipant';
 export * from './useRoom';
+export * from './logger';
+export * from './audio/AudioManager';
+
 export {
   AudioSession,
   AudioConfiguration,
   AndroidAudioTypeOptions,
   AndroidAudioTypePresets,
+  AppleAudioCategory,
+  AppleAudioCategoryOption,
+  AppleAudioConfiguration,
+  AppleAudioMode,
+  getAppleAudioConfigurationForMode,
 };
