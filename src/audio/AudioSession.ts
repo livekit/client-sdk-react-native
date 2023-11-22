@@ -179,6 +179,70 @@ export const AndroidAudioTypePresets: {
   },
 } as const;
 
+export type AppleAudioMode =
+  | 'default'
+  | 'gameChat'
+  | 'measurement'
+  | 'moviePlayback'
+  | 'spokenAudio'
+  | 'videoChat'
+  | 'videoRecording'
+  | 'voiceChat'
+  | 'voicePrompt';
+
+export type AppleAudioCategory =
+  | 'soloAmbient'
+  | 'playback'
+  | 'record'
+  | 'playAndRecord'
+  | 'multiRoute';
+
+export type AppleAudioCategoryOption =
+  | 'mixWithOthers'
+  | 'duckOthers'
+  | 'interruptSpokenAudioAndMixWithOthers'
+  | 'allowBluetooth'
+  | 'allowBluetoothA2DP'
+  | 'allowAirPlay'
+  | 'defaultToSpeaker';
+
+export type AppleAudioConfiguration = {
+  audioCategory?: AppleAudioCategory;
+  audioCategoryOptions?: AppleAudioCategoryOption[];
+  audioMode?: AppleAudioMode;
+};
+
+export type AudioTrackState =
+  | 'none'
+  | 'remoteOnly'
+  | 'localOnly'
+  | 'localAndRemote';
+
+export function getDefaultAppleAudioConfigurationForMode(
+  mode: AudioTrackState,
+  preferSpeakerOutput: boolean = true
+): AppleAudioConfiguration {
+  if (mode === 'remoteOnly') {
+    return {
+      audioCategory: 'playback',
+      audioCategoryOptions: ['mixWithOthers'],
+      audioMode: 'spokenAudio',
+    };
+  } else if (mode === 'localAndRemote' || mode === 'localOnly') {
+    return {
+      audioCategory: 'playAndRecord',
+      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+      audioMode: preferSpeakerOutput ? 'videoChat' : 'voiceChat',
+    };
+  }
+
+  return {
+    audioCategory: 'soloAmbient',
+    audioCategoryOptions: [],
+    audioMode: 'default',
+  };
+}
+
 export default class AudioSession {
   /**
    * Applies the provided audio configuration to the underlying AudioSession.
@@ -256,6 +320,14 @@ export default class AudioSession {
   static showAudioRoutePicker = async () => {
     if (Platform.OS === 'ios') {
       await LivekitReactNative.showAudioRoutePicker();
+    }
+  };
+
+  static setAppleAudioConfiguration = async (
+    config: AppleAudioConfiguration
+  ) => {
+    if (Platform.OS === 'ios') {
+      await LivekitReactNative.setAppleAudioConfiguration(config);
     }
   };
 }

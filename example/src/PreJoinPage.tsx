@@ -7,8 +7,9 @@ import type { RootStackParamList } from './App';
 import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DEFAULT_URL = 'wss://www.example.com';
-const DEFAULT_TOKEN = '';
+const DEFAULT_URL = 'ws://192.168.11.5:7880';
+const DEFAULT_TOKEN =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTg5MDYzMzQsImlzcyI6IkFQSVNRdmdrYWJZdXFUQSIsIm5iZiI6MTY5NjMxNDMzNCwic3ViIjoicGhvbmUiLCJ2aWRlbyI6eyJyb29tIjoibXlyb29tIiwicm9vbUpvaW4iOnRydWV9fQ.MddYq8UXR4aZ1MJh2tln26R_jaDZ6HwLQPicdsNd0eY';
 
 const URL_KEY = 'url';
 const TOKEN_KEY = 'token';
