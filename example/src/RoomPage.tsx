@@ -20,7 +20,12 @@ import {
   Room,
   RoomEvent,
 } from 'livekit-client';
-import { useRoom, useParticipant, AudioSession } from '@livekit/react-native';
+import {
+  useRoom,
+  useParticipant,
+  AudioSession,
+  useIOSAudioManagement,
+} from '@livekit/react-native';
 import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
@@ -56,6 +61,7 @@ export const RoomPage = ({
     };
   }, [url, token, room]);
 
+  useIOSAudioManagement(room);
   // Connect to room.
   useEffect(() => {
     let connect = async () => {

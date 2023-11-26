@@ -4,10 +4,17 @@ import 'fastestsmallesttextencoderdecoder';
 import AudioSession, {
   AndroidAudioTypePresets,
   AndroidAudioTypeOptions,
+  AppleAudioCategory,
+  AppleAudioCategoryOption,
+  AppleAudioConfiguration,
+  AppleAudioMode,
+  AudioTrackState,
+  getDefaultAppleAudioConfigurationForMode,
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
 import type { LiveKitReactNativeInfo } from 'livekit-client';
+import type { LogLevel, SetLogLevelOptions } from './logger';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -71,9 +78,20 @@ function shimIterator() {
 export * from './components/VideoView';
 export * from './useParticipant';
 export * from './useRoom';
+export * from './logger';
+export * from './audio/AudioManager';
+
 export {
   AudioSession,
   AudioConfiguration,
   AndroidAudioTypeOptions,
   AndroidAudioTypePresets,
+  AppleAudioCategory,
+  AppleAudioCategoryOption,
+  AppleAudioConfiguration,
+  AppleAudioMode,
+  AudioTrackState,
+  getDefaultAppleAudioConfigurationForMode,
+  LogLevel,
+  SetLogLevelOptions,
 };
