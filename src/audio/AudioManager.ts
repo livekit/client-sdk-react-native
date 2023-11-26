@@ -40,11 +40,9 @@ export function useIOSAudioManagement(
     setRemoteTrackCount(getRemoteAudioTrackCount(room));
 
     let onLocalPublished = () => {
-      log.error('onlocalpub');
       setLocalTrackCount(localTrackCount + 1);
     };
     let onLocalUnpublished = () => {
-      log.error('onlocal unpub');
       if (localTrackCount - 1 < 0) {
         log.warn(
           'mismatched local audio track count! attempted to reduce track count below zero.'
@@ -53,11 +51,9 @@ export function useIOSAudioManagement(
       setLocalTrackCount(Math.max(localTrackCount - 1, 0));
     };
     let onRemotePublished = () => {
-      log.error('onremotepub');
       setRemoteTrackCount(remoteTrackCount + 1);
     };
     let onRemoteUnpublished = () => {
-      log.error('onremote unpub');
       if (remoteTrackCount - 1 < 0) {
         log.warn(
           'mismatched remote audio track count! attempted to reduce track count below zero.'
