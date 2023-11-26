@@ -1,6 +1,7 @@
 package com.livekit.reactnative.video
 
 import android.util.Log
+import com.oney.WebRTCModule.webrtcutils.SoftwareVideoEncoderFactoryProxy
 import org.webrtc.EglBase
 import org.webrtc.HardwareVideoEncoderFactory
 import org.webrtc.SimulcastVideoEncoderFactory
@@ -64,7 +65,7 @@ open class SimulcastVideoEncoderFactoryWrapper(
     private class FallbackFactory(private val hardwareVideoEncoderFactory: VideoEncoderFactory) :
         VideoEncoderFactory {
 
-        private val softwareVideoEncoderFactory: VideoEncoderFactory = SoftwareVideoEncoderFactory()
+        private val softwareVideoEncoderFactory: VideoEncoderFactory = SoftwareVideoEncoderFactoryProxy()
 
         override fun createEncoder(info: VideoCodecInfo): VideoEncoder? {
             val softwareEncoder = softwareVideoEncoderFactory.createEncoder(info)
