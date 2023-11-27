@@ -77,7 +77,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.71.13)
   - hermes-engine/Pre-built (0.71.13)
   - libevent (2.1.12)
-  - livekit-react-native (1.3.0):
+  - livekit-react-native (1.4.0):
     - livekit-react-native-webrtc
     - React-Core
   - livekit-react-native-webrtc (104.0.1):
@@ -625,7 +625,7 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 8b9dc37355d2e12879267382f4256afd356349a1
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  livekit-react-native: abcaafe0da7d5f6ad8879a4c9af32519e9c64f5d
+  livekit-react-native: 90642ba36891089c48eb549f16fd55c4e575cd4b
   livekit-react-native-webrtc: 223c38f788e0e704eec630325d816e274e3b6e36
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
