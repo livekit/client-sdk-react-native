@@ -77,12 +77,12 @@ PODS:
     - hermes-engine/Pre-built (= 0.71.10)
   - hermes-engine/Pre-built (0.71.10)
   - libevent (2.1.12)
-  - livekit-react-native (1.1.1):
+  - livekit-react-native (1.4.1):
     - livekit-react-native-webrtc
     - React-Core
-  - livekit-react-native-webrtc (104.0.1):
+  - livekit-react-native-webrtc (114.0.0):
     - React-Core
-    - WebRTC-SDK (= 104.5112.17)
+    - WebRTC-SDK (= 114.5735.08)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -420,7 +420,7 @@ PODS:
     - React-logger (= 0.71.10)
     - React-perflogger (= 0.71.10)
   - SocketRocket (0.6.0)
-  - WebRTC-SDK (104.5112.17)
+  - WebRTC-SDK (114.5735.08)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -600,8 +600,8 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: d27603b55a48402501ad1928c05411dae9cd6b85
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  livekit-react-native: 4ed78861134a09e58f628852c3499ed585959a30
-  livekit-react-native-webrtc: 223c38f788e0e704eec630325d816e274e3b6e36
+  livekit-react-native: 703df0dfa5af9eb399bb0824bfcc02102bac3928
+  livekit-react-native-webrtc: 478f06fc2c1193851676a94e05e0c107a0b7e626
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 8ef706f91e2b643cd32c26a57700b5f24fab0585
@@ -631,10 +631,10 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a9a1cd79996c9a0846e3232ecb25c64e1cc0172e
   ReactCommon: 65718685d4095d06b4b1af8042e12f1df2925c31
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
-  WebRTC-SDK: 082ae4893212534a779ca233f19a9df8efd5f3bd
+  WebRTC-SDK: c24d2a6c9f571f2ed42297cb8ffba9557093142b
   Yoga: e7ea9e590e27460d28911403b894722354d73479
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 49282089342c16d196f727a7701c8bcabe11a5a0
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0
