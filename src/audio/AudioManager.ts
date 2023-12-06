@@ -14,7 +14,7 @@ import { log } from '..';
  *
  * @param room
  * @param preferSpeakerOutput
- * @param onConfigureNativeAudio
+ * @param onConfigureNativeAudio A custom method for determining options used.
  */
 export function useIOSAudioManagement(
   room: Room,
