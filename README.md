@@ -37,7 +37,8 @@ Once the `@livekit/react-native-webrtc` dependency is installed, one last step i
 
 In your [MainApplication.java](https://github.com/livekit/client-sdk-react-native/blob/main/example/android/app/src/main/java/com/example/livekitreactnative/MainApplication.java) file:
 
-```
+#### Java
+```java
 import com.livekit.reactnative.LiveKitReactNative;
 import com.livekit.reactnative.audio.AudioType;
 
@@ -55,11 +56,30 @@ public class MainApplication extends Application implements ReactApplication {
 }
 ```
 
+Or in your **MainApplication.kt** if you are using RN 0.73+
+#### Kotlin
+```kt
+import com.livekit.reactnative.LiveKitReactNative
+import com.livekit.reactnative.audio.AudioType
+
+class MainActivity : ReactActivity() {
+  override fun onCreate(savedInstanceState: Bundle?) {
+    // Place this above any other RN related initialization
+    // When AudioType is omitted, it'll default to CommunicationAudioType
+    // use MediaAudioType if user is only consuming audio, and not publishing
+    LiveKitReactNative.setup(this, AudioType.CommunicationAudioType())
+
+    //...
+  }
+}
+```
+----
+
 ### iOS
 
 In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/main/example/ios/LivekitReactNativeExample/AppDelegate.mm) file:
 
-```
+```objc
 #import "LivekitReactNative.h"
 
 @implementation AppDelegate
