@@ -58,7 +58,7 @@ public class MainApplication extends Application implements ReactApplication {
 
 Or in your **MainApplication.kt** if you are using RN 0.73+
 #### Kotlin
-```kt
+```kotlin
 import com.livekit.reactnative.LiveKitReactNative
 import com.livekit.reactnative.audio.AudioType
 
