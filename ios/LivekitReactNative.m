@@ -1,4 +1,3 @@
-#import <React/RCTBridgeModule.h>
 #import "AudioUtils.h"
 #import "LivekitReactNative.h"
 #import "WebRTCModule.h"
