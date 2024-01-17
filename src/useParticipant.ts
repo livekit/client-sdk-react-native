@@ -34,22 +34,28 @@ export function useParticipant(participant: Participant): ParticipantState {
   );
 
   const [cameraPublication, setCameraPublication] = useState(
-    participant.getTrack(Track.Source.Camera)
+    participant.getTrackPublication(Track.Source.Camera)
   );
   const [microphonePublication, setMicrophonePublication] = useState(
-    participant.getTrack(Track.Source.Microphone)
+    participant.getTrackPublication(Track.Source.Microphone)
   );
   const [screenSharePublication, setScreenSharePublication] = useState(
-    participant.getTrack(Track.Source.ScreenShare)
+    participant.getTrackPublication(Track.Source.ScreenShare)
   );
   useEffect(() => {
     const onPublicationsChanged = () => {
-      setPublications(Array.from(participant.tracks.values()));
-      setCameraPublication(participant.getTrack(Track.Source.Camera));
-      setMicrophonePublication(participant.getTrack(Track.Source.Microphone));
-      setScreenSharePublication(participant.getTrack(Track.Source.ScreenShare));
+      setPublications(Array.from(participant.trackPublications.values()));
+      setCameraPublication(
+        participant.getTrackPublication(Track.Source.Camera)
+      );
+      setMicrophonePublication(
+        participant.getTrackPublication(Track.Source.Microphone)
+      );
+      setScreenSharePublication(
+        participant.getTrackPublication(Track.Source.ScreenShare)
+      );
       setSubscribedTracks(
-        Array.from(participant.tracks.values()).filter((pub) => {
+        Array.from(participant.trackPublications.values()).filter((pub) => {
           return pub.isSubscribed && pub.track !== undefined;
         })
       );
@@ -120,7 +126,7 @@ export function useParticipant(participant: Participant): ParticipantState {
   }, [participant]);
 
   let muted: boolean | undefined;
-  participant.audioTracks.forEach((pub) => {
+  participant.audioTrackPublications.forEach((pub) => {
     muted = pub.isMuted;
   });
   if (muted === undefined) {

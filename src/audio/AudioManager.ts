@@ -116,13 +116,13 @@ function computeAudioTrackState(
 }
 
 function getLocalAudioTrackCount(room: Room): number {
-  return room.localParticipant.audioTracks.size;
+  return room.localParticipant.audioTrackPublications.size;
 }
 
 function getRemoteAudioTrackCount(room: Room): number {
   var audioTracks = 0;
-  room.participants.forEach((participant) => {
-    audioTracks += participant.audioTracks.size;
+  room.remoteParticipants.forEach((participant) => {
+    audioTracks += participant.audioTrackPublications.size;
   });
 
   return audioTracks;

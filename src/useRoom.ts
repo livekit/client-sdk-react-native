@@ -32,7 +32,7 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
 
   useEffect(() => {
     const onParticipantsChanged = () => {
-      const remotes = Array.from(room.participants.values());
+      const remotes = Array.from(room.remoteParticipants.values());
       const newParticipants: Participant[] = [room.localParticipant];
       newParticipants.push(...remotes);
       sortFunc(newParticipants, room.localParticipant);
@@ -45,8 +45,8 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
         return;
       }
       const tracks: AudioTrack[] = [];
-      room.participants.forEach((p) => {
-        p.audioTracks.forEach((pub) => {
+      room.remoteParticipants.forEach((p) => {
+        p.audioTrackPublications.forEach((pub) => {
           if (pub.audioTrack) {
             tracks.push(pub.audioTrack);
           }
@@ -135,8 +135,8 @@ export function sortParticipants(
     }
 
     // video on
-    const aVideo = a.videoTracks.size > 0;
-    const bVideo = b.videoTracks.size > 0;
+    const aVideo = a.videoTrackPublications.size > 0;
+    const bVideo = b.videoTrackPublications.size > 0;
     if (aVideo !== bVideo) {
       if (aVideo) {
         return -1;
