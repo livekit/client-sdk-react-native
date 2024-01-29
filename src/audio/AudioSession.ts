@@ -35,7 +35,7 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  *   audio options to use on Android.
  *
  *   See {@link AndroidAudioTypePresets} for pre-configured values.
- * 
+ *
  *   NOTE: If `audioTypeOptions` is set, this must also be reflected in your android MainApplication setup.
  *
  * ----
