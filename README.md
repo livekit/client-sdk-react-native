@@ -159,12 +159,13 @@ Additional documentation for the LiveKit SDK can be found at https://docs.liveki
 
 ## Audio sessions
 
-As seen in the above example, we've introduced a new class `AudioSession` that helps
+As seen in the above example, we've introduced a class `AudioSession` that helps
 to manage the audio session on native platforms. This class wraps either [AudioManager](https://developer.android.com/reference/android/media/AudioManager) on Android, or [AVAudioSession](https://developer.apple.com/documentation/avfaudio/avaudiosession) on iOS.
 
 You can customize the configuration of the audio session with `configureAudio`.
 
-### Media playback
+### Android
+#### Media playback
 
 By default, the audio session is set up for bidirectional communication. In this mode, the audio framework exhibits the following behaviors:
 
@@ -173,8 +174,6 @@ By default, the audio session is set up for bidirectional communication. In this
 - A microphone indicator can be displayed, depending on the platform.
 
 If you're leveraging LiveKit primarily for media playback, you have the option to reconfigure the audio session to better suit media playback. Here's how:
-
-Note: iOS audio session customization is in development, and will be documented here when released.
 
 ```js
 useEffect(() => {
@@ -197,7 +196,7 @@ useEffect(() => {
 }, [url, token, room]);
 ```
 
-### Customizing audio session
+#### Customizing audio session
 
 Instead of using our presets, you can further customize the audio session to suit your specific needs.
 
@@ -219,6 +218,12 @@ await AudioSession.configureAudio({
 });
 await AudioSession.startAudioSession();
 ```
+
+### iOS
+
+For iOS, the most appropriate audio configuration may change over time when local/remote
+audio tracks publish and unpublish from the room. To adapt to this, the [`useIOSAudioManagement`](https://htmlpreview.github.io/?https://raw.githubusercontent.com/livekit/client-sdk-react-native/main/docs/functions/useIOSAudioManagement.html)
+hook is advised over just configuring the audio session once for the entire audio session.
 
 ## Screenshare
 
