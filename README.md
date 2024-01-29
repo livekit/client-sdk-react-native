@@ -51,8 +51,8 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     // Place this above any other RN related initialization
-    // When AudioType is omitted, it'll default to CommunicationAudioType
-    // use MediaAudioType if user is only consuming audio, and not publishing
+    // When AudioType is omitted, it'll default to CommunicationAudioType.
+    // Use MediaAudioType if user is only consuming audio, and not publishing.
     LiveKitReactNative.setup(this, new AudioType.CommunicationAudioType());
 
     //...
@@ -66,11 +66,11 @@ Or in your **MainApplication.kt** if you are using RN 0.73+
 import com.livekit.reactnative.LiveKitReactNative
 import com.livekit.reactnative.audio.AudioType
 
-class MainActivity : ReactActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
+class MainApplication : Application, ReactApplication() {
+  override fun onCreate() {
     // Place this above any other RN related initialization
-    // When AudioType is omitted, it'll default to CommunicationAudioType
-    // use MediaAudioType if user is only consuming audio, and not publishing
+    // When AudioType is omitted, it'll default to CommunicationAudioType.
+    // Use MediaAudioType if user is only consuming audio, and not publishing.
     LiveKitReactNative.setup(this, AudioType.CommunicationAudioType())
 
     //...

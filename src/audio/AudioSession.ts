@@ -36,6 +36,8 @@ const LivekitReactNative = NativeModules.LivekitReactNative
  *
  *   See {@link AndroidAudioTypePresets} for pre-configured values.
  *
+ *   NOTE: If `audioTypeOptions` is set, this must also be reflected in your android MainApplication setup.
+ *
  * ----
  * iOS
  *
