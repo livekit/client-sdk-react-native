@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Platform } from 'react-native';
-import { RoomEvent, type Room } from 'livekit-client';
+import { RoomEvent, Room } from 'livekit-client';
 import AudioSession, {
   getDefaultAppleAudioConfigurationForMode,
   type AppleAudioConfiguration,
@@ -32,12 +32,23 @@ export function useIOSAudioManagement(
   );
 
   useEffect(() => {
+    let recalculateTrackCounts = () => {
+      setLocalTrackCount(getLocalAudioTrackCount(room));
+      setRemoteTrackCount(getRemoteAudioTrackCount(room));
+    };
+
+    recalculateTrackCounts();
+
+    room.on(RoomEvent.Connected, recalculateTrackCounts);
+
+    return () => {
+      room.off(RoomEvent.Connected, recalculateTrackCounts);
+    };
+  }, [room]);
+  useEffect(() => {
     if (Platform.OS !== 'ios') {
       return () => {};
     }
-
-    setLocalTrackCount(getLocalAudioTrackCount(room));
-    setRemoteTrackCount(getRemoteAudioTrackCount(room));
 
     let onLocalPublished = () => {
       setLocalTrackCount(localTrackCount + 1);
@@ -85,7 +96,6 @@ export function useIOSAudioManagement(
     let configFunc =
       onConfigureNativeAudio ?? getDefaultAppleAudioConfigurationForMode;
     let audioConfig = configFunc(trackState, preferSpeakerOutput);
-
     AudioSession.setAppleAudioConfiguration(audioConfig);
   }, [trackState, onConfigureNativeAudio, preferSpeakerOutput]);
 }
@@ -106,13 +116,13 @@ function computeAudioTrackState(
 }
 
 function getLocalAudioTrackCount(room: Room): number {
-  return room.localParticipant.audioTracks.entries.length;
+  return room.localParticipant.audioTracks.size;
 }
 
 function getRemoteAudioTrackCount(room: Room): number {
   var audioTracks = 0;
   room.participants.forEach((participant) => {
-    audioTracks += participant.audioTracks.entries.length;
+    audioTracks += participant.audioTracks.size;
   });
 
   return audioTracks;
