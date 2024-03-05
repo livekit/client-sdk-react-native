@@ -14,6 +14,10 @@
 Use this SDK to add real-time video, audio and data features to your React Native app. By connecting to a self- or cloud-hosted <a href="https://livekit.io/">LiveKit</a> server, you can quickly build applications like interactive live streaming or video calls with just a few lines of code.
 <!--END_DESCRIPTION-->
 
+> [!NOTE]
+> This is v2 of the React-Native SDK. When migrating from v1.x to v2.x you might encounter a small set of breaking changes.
+> Read the [migration guide](https://docs.livekit.io/guides/migrate-from-v1/) for a detailed overview of what has changed.
+
 ## Installation
 
 ### NPM
