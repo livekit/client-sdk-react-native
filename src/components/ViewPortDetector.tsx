@@ -57,7 +57,7 @@ export default class ViewPortDetector extends Component<
       this.view.measure((_x, _y, width, height, _pageX, _pageY) => {
         this.checkInViewPort(width, height);
       });
-    }, this.props.delay || 100);
+    }, this.props.delay || 1000);
   }
 
   private stopWatching() {
