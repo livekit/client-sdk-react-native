@@ -3,12 +3,51 @@
 import React, { Component, PropsWithChildren } from 'react';
 import { View, ViewStyle } from 'react-native';
 
+const DEFAULT_DELAY = 1000;
+
 export type Props = {
   disabled?: boolean;
   style?: ViewStyle;
   onChange?: (isVisible: boolean) => void;
   delay?: number;
 };
+
+class TimeoutHandler {
+  private handlerRef: { id: any } = { id: -1 };
+
+  get handler(): any {
+    return this.handlerRef.id;
+  }
+  set handler(n: any) {
+    this.handlerRef.id = n;
+  }
+
+  clear() {
+    clearTimeout(this.handlerRef.id as any);
+  }
+}
+
+function setIntervalWithTimeout(
+  callback: (clear: () => void) => any,
+  intervalMs: number,
+  handleWrapper = new TimeoutHandler()
+): TimeoutHandler {
+  let cleared = false;
+
+  const timeout = () => {
+    handleWrapper.handler = setTimeout(() => {
+      callback(() => {
+        cleared = true;
+        handleWrapper.clear();
+      });
+      if (!cleared) {
+        timeout();
+      }
+    }, intervalMs);
+  };
+  timeout();
+  return handleWrapper;
+}
 
 /**
  * Detects when this is in the viewport and visible.
@@ -19,7 +58,7 @@ export default class ViewPortDetector extends Component<
   PropsWithChildren<Props>
 > {
   private lastValue: boolean | null = null;
-  private interval: any | null = null;
+  private interval: TimeoutHandler | null = null;
   private view: View | null = null;
 
   constructor(props: Props) {
@@ -28,7 +67,7 @@ export default class ViewPortDetector extends Component<
   }
 
   componentDidMount() {
-    if (!this.props.disabled) {
+    if (this.hasValidTimeout(this.props.disabled, this.props.delay)) {
       this.startWatching();
     }
   }
@@ -37,8 +76,14 @@ export default class ViewPortDetector extends Component<
     this.stopWatching();
   }
 
+  hasValidTimeout(disabled?: boolean, delay?: number): boolean {
+    let disabledValue = disabled ?? false;
+    let delayValue = delay ?? DEFAULT_DELAY;
+    return !disabledValue && delayValue > 0;
+  }
+
   UNSAFE_componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.disabled) {
+    if (!this.hasValidTimeout(nextProps.disabled, nextProps.delay)) {
       this.stopWatching();
     } else {
       this.lastValue = null;
@@ -50,18 +95,19 @@ export default class ViewPortDetector extends Component<
     if (this.interval) {
       return;
     }
-    this.interval = setInterval(() => {
+    this.interval = setIntervalWithTimeout(() => {
       if (!this.view) {
         return;
       }
       this.view.measure((_x, _y, width, height, _pageX, _pageY) => {
         this.checkInViewPort(width, height);
       });
-    }, this.props.delay || 100);
+    }, this.props.delay || DEFAULT_DELAY);
   }
 
   private stopWatching() {
-    this.interval = clearInterval(this.interval);
+    this.interval?.clear();
+    this.interval = null;
   }
 
   private checkInViewPort(width?: number, height?: number) {

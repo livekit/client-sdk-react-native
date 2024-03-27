@@ -9,7 +9,7 @@ import {
   VideoTrack,
 } from 'livekit-client';
 import { RTCView } from '@livekit/react-native-webrtc';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { RemoteVideoTrack } from 'livekit-client';
 import ViewPortDetector from './ViewPortDetector';
 
@@ -34,6 +34,12 @@ export const VideoView = ({
     info.something = videoTrack;
     return info;
   });
+
+  const shouldObserveVisibility = useMemo(() => {
+    return (
+      videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream
+    );
+  }, [videoTrack]);
 
   const [mediaStream, setMediaStream] = useState(videoTrack?.mediaStream);
   useEffect(() => {
@@ -73,6 +79,7 @@ export const VideoView = ({
       <ViewPortDetector
         onChange={(isVisible: boolean) => elementInfo.onVisibility(isVisible)}
         style={styles.videoView}
+        disabled={!shouldObserveVisibility}
       >
         <RTCView
           // eslint-disable-next-line react-native/no-inline-styles
