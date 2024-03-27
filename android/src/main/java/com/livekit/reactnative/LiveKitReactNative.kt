@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import com.livekit.reactnative.audio.AudioType
-import com.livekit.reactnative.video.SimulcastVideoEncoderFactoryWrapper
-import com.livekit.reactnative.video.WrappedVideoDecoderFactoryProxy
+import com.livekit.reactnative.video.CustomVideoEncoderFactory
+import com.livekit.reactnative.video.CustomVideoDecoderFactory
 import com.oney.WebRTCModule.WebRTCModuleOptions
 import org.webrtc.audio.JavaAudioDeviceModule
 
@@ -21,8 +21,8 @@ object LiveKitReactNative {
     @JvmOverloads
     fun setup(context: Context, audioType: AudioType = AudioType.CommunicationAudioType()) {
         val options = WebRTCModuleOptions.getInstance()
-        options.videoEncoderFactory = SimulcastVideoEncoderFactoryWrapper(null, true, true)
-        options.videoDecoderFactory = WrappedVideoDecoderFactoryProxy()
+        options.videoEncoderFactory = CustomVideoEncoderFactory(null, true, true)
+        options.videoDecoderFactory = CustomVideoDecoderFactory()
 
         val useHardwareAudioProcessing = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
