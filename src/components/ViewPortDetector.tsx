@@ -1,7 +1,13 @@
 'use strict';
 
 import React, { Component, PropsWithChildren } from 'react';
-import { View, ViewStyle } from 'react-native';
+import {
+  AppState,
+  AppStateStatus,
+  NativeEventSubscription,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 const DEFAULT_DELAY = 1000;
 
@@ -10,6 +16,7 @@ export type Props = {
   style?: ViewStyle;
   onChange?: (isVisible: boolean) => void;
   delay?: number;
+  propKey?: any;
 };
 
 class TimeoutHandler {
@@ -60,6 +67,8 @@ export default class ViewPortDetector extends Component<
   private lastValue: boolean | null = null;
   private interval: TimeoutHandler | null = null;
   private view: View | null = null;
+  private lastAppStateActive = false;
+  private appStateSubscription: NativeEventSubscription | null = null;
 
   constructor(props: Props) {
     super(props);
@@ -67,50 +76,84 @@ export default class ViewPortDetector extends Component<
   }
 
   componentDidMount() {
+    this.lastAppStateActive = AppState.currentState === 'active';
+    this.appStateSubscription = AppState.addEventListener(
+      'change',
+      this.handleAppStateChange
+    );
     if (this.hasValidTimeout(this.props.disabled, this.props.delay)) {
       this.startWatching();
     }
   }
 
   componentWillUnmount() {
+    this.appStateSubscription?.remove();
+    this.appStateSubscription = null;
     this.stopWatching();
   }
 
-  hasValidTimeout(disabled?: boolean, delay?: number): boolean {
+  hasValidTimeout = (disabled?: boolean, delay?: number): boolean => {
     let disabledValue = disabled ?? false;
     let delayValue = delay ?? DEFAULT_DELAY;
-    return !disabledValue && delayValue > 0;
-  }
+    return (
+      AppState.currentState === 'active' && !disabledValue && delayValue > 0
+    );
+  };
 
   UNSAFE_componentWillReceiveProps(nextProps: Props) {
     if (!this.hasValidTimeout(nextProps.disabled, nextProps.delay)) {
       this.stopWatching();
     } else {
-      this.lastValue = null;
+      if (this.props.propKey !== nextProps.propKey) {
+        this.lastValue = null;
+      }
       this.startWatching();
     }
   }
+  handleAppStateChange = (nextAppState: AppStateStatus) => {
+    let nextAppStateActive = nextAppState === 'active';
+    if (this.lastAppStateActive !== nextAppStateActive) {
+      this.checkVisibility();
+    }
+    this.lastAppStateActive = nextAppStateActive;
 
-  private startWatching() {
+    if (!this.hasValidTimeout(this.props.disabled, this.props.delay)) {
+      this.stopWatching();
+    } else {
+      this.startWatching();
+    }
+  };
+
+  startWatching = () => {
     if (this.interval) {
       return;
     }
-    this.interval = setIntervalWithTimeout(() => {
-      if (!this.view) {
-        return;
-      }
-      this.view.measure((_x, _y, width, height, _pageX, _pageY) => {
-        this.checkInViewPort(width, height);
-      });
-    }, this.props.delay || DEFAULT_DELAY);
-  }
+    this.interval = setIntervalWithTimeout(
+      this.checkVisibility,
+      this.props.delay || DEFAULT_DELAY
+    );
+  };
 
-  private stopWatching() {
+  stopWatching = () => {
     this.interval?.clear();
     this.interval = null;
-  }
+  };
 
-  private checkInViewPort(width?: number, height?: number) {
+  checkVisibility = () => {
+    if (!this.view) {
+      return;
+    }
+
+    if (AppState.currentState !== 'active') {
+      this.updateVisibility(false);
+      return;
+    }
+
+    this.view.measure((_x, _y, width, height, _pageX, _pageY) => {
+      this.checkInViewPort(width, height);
+    });
+  };
+  checkInViewPort = (width?: number, height?: number) => {
     let isVisible: boolean;
     // Not visible if any of these are missing.
     if (!width || !height) {
@@ -118,13 +161,15 @@ export default class ViewPortDetector extends Component<
     } else {
       isVisible = true;
     }
+    this.updateVisibility(isVisible);
+  };
 
+  updateVisibility = (isVisible: boolean) => {
     if (this.lastValue !== isVisible) {
       this.lastValue = isVisible;
       this.props.onChange?.(isVisible);
     }
-  }
-
+  };
   render() {
     return (
       <View
