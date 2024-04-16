@@ -8,6 +8,7 @@ import {
 } from 'livekit-client';
 import { useEffect, useState } from 'react';
 
+/** @deprecated use `useRemoteParticipant` or `useLocalParticipant` instead */
 export interface ParticipantState {
   isSpeaking: boolean;
   connectionQuality: ConnectionQuality;
@@ -19,7 +20,7 @@ export interface ParticipantState {
   microphonePublication?: TrackPublication;
   screenSharePublication?: TrackPublication;
 }
-
+/** @deprecated use `useRemoteParticipant` or `useLocalParticipant` instead */
 export function useParticipant(participant: Participant): ParticipantState {
   const [isAudioMuted, setAudioMuted] = useState(false);
   const [, setVideoMuted] = useState(false);

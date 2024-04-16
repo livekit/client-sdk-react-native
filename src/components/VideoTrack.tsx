@@ -6,38 +6,31 @@ import {
   LocalVideoTrack,
   Track,
   TrackEvent,
-  VideoTrack,
 } from 'livekit-client';
 import { RTCView } from '@livekit/react-native-webrtc';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RemoteVideoTrack } from 'livekit-client';
 import ViewPortDetector from './ViewPortDetector';
+import type { TrackReference } from '@livekit/components-react';
 
-/**
- * @deprecated use `VideoTrack` and `VideoTrackProps` instead.
- */
-export type Props = {
-  videoTrack?: VideoTrack | undefined;
+export type VideoTrackProps = {
+  trackRef: TrackReference | undefined;
   style?: ViewStyle;
   objectFit?: 'cover' | 'contain' | undefined;
   mirror?: boolean;
   zOrder?: number;
 };
 
-/**
- * @deprecated use `VideoTrack` and `VideoTrackProps` instead.
- */
-export const VideoView = ({
+export const VideoTrack = ({
   style = {},
-  videoTrack,
+  trackRef,
   objectFit = 'cover',
   zOrder,
   mirror,
-}: Props) => {
+}: VideoTrackProps) => {
   const [elementInfo] = useState(() => {
-    let info = new VideoViewElementInfo();
-    info.id = videoTrack?.sid;
-    info.something = videoTrack;
+    let info = new VideoTrackElementInfo();
+    info.id = trackRef?.publication?.trackSid;
     return info;
   });
 
@@ -49,6 +42,9 @@ export const VideoView = ({
     (isVisible: boolean) => elementInfo.onVisibility(isVisible),
     [elementInfo]
   );
+
+  const videoTrack = trackRef?.publication.track;
+
   const shouldObserveVisibility = useMemo(() => {
     return (
       videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream
@@ -87,12 +83,12 @@ export const VideoView = ({
     <View style={{ ...style, ...styles.container }} onLayout={layoutOnChange}>
       <ViewPortDetector
         onChange={visibilityOnChange}
-        style={styles.videoView}
+        style={styles.videoTrack}
         disabled={!shouldObserveVisibility}
         propKey={videoTrack}
       >
         <RTCView
-          style={styles.videoView}
+          style={styles.videoTrack}
           streamURL={mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
           zOrder={zOrder}
@@ -105,13 +101,13 @@ export const VideoView = ({
 
 const styles = StyleSheet.create({
   container: {},
-  videoView: {
+  videoTrack: {
     flex: 1,
     width: '100%',
   },
 });
 
-class VideoViewElementInfo implements ElementInfo {
+class VideoTrackElementInfo implements ElementInfo {
   element: object = {};
   something?: any;
   id?: string;

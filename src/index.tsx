@@ -74,10 +74,12 @@ function shimIterator() {
   var shim = require('well-known-symbols/Symbol.iterator/shim');
   shim();
 }
-
-export * from './components/VideoView';
-export * from './useParticipant';
-export * from './useRoom';
+export * from './hooks';
+export * from './components/LiveKitRoom';
+export * from './components/VideoTrack';
+export * from './components/VideoView'; // deprecated
+export * from './useParticipant'; // deprecated
+export * from './useRoom'; // deprecated
 export * from './logger';
 export * from './audio/AudioManager';
 
