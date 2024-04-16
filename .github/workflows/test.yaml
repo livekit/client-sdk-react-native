@@ -1,11 +1,11 @@
 name: Test
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - '**.md'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - '**.md'
 
@@ -13,34 +13,34 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
 
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.npm
-          ~/.config/yarn/global
-        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.config/yarn/global
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: Install Yarn
-      run: |
-        npm install -g yarn
-        yarn
+      - name: Install Yarn
+        run: |
+          npm install -g yarn
+          yarn
 
-    - name: Typescript
-      run: yarn typescript
+      - name: Typescript
+        run: yarn typescript
 
-    - name: ESLint
-      run: yarn lint
+      - name: ESLint
+        run: yarn lint
 
-    - name: Run Tests
-      run: yarn test
+      - name: Run Tests
+        run: yarn test
 
-    - name: Validate docs
-      run: yarn build-docs --treatWarningsAsErrors
+      - name: Validate docs
+        run: yarn build-docs --treatWarningsAsErrors

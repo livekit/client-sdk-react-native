@@ -1,11 +1,11 @@
 name: Test
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - '**.md'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - '**.md'
 
@@ -13,92 +13,92 @@ jobs:
   android-compile:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-        cache: 'yarn'
-        cache-dependency-path: '**/yarn.lock'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.npm
-          ~/node_modules
-          ~/ci/node_modules
-          ~/.config/yarn/global
-        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/node_modules
+            ~/ci/node_modules
+            ~/.config/yarn/global
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: Install Yarn
-      run: |
-        npm install -g yarn
+      - name: Install Yarn
+        run: |
+          npm install -g yarn
 
-    - name: Yarn
-      run: |
-        yarn install
-        cd ci
-        yarn
+      - name: Yarn
+        run: |
+          yarn install
+          cd ci
+          yarn
 
-    - name: Compile Android (Debug)
-      working-directory: ./ci/android/
-      run: ./gradlew assembleDebug
+      - name: Compile Android (Debug)
+        working-directory: ./ci/android/
+        run: ./gradlew assembleDebug
 
   ios-compile:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-        cache: 'yarn'
-        cache-dependency-path: '**/yarn.lock'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
 
-    - uses: actions/cache@v2
-      with:
-        path: |
-          ~/.npm
-          ~/node_modules
-          ~/ci/node_modules
-          ~/.config/yarn/global
-        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/node_modules
+            ~/ci/node_modules
+            ~/.config/yarn/global
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: Cache cocoapods
-      uses: actions/cache@v2
-      with:
-        path: ./ci/ios/Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-pods-
+      - name: Cache cocoapods
+        uses: actions/cache@v2
+        with:
+          path: ./ci/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
-    - name: Install Yarn
-      run: |
-        npm install -g yarn
-        yarn
+      - name: Install Yarn
+        run: |
+          npm install -g yarn
+          yarn
 
-    - name: Yarn
-      run: |
-        yarn install
-        cd ci/
-        yarn
-        cd ios/
-        pod install
+      - name: Yarn
+        run: |
+          yarn install
+          cd ci/
+          yarn
+          cd ios/
+          pod install
 
-    - name: Compile iOS
-      working-directory: ./ci/ios/
-      run: |
-        set -o pipefail && \
-        xcodebuild -workspace ci.xcworkspace/ \
-          -scheme ci \
-          -destination generic/platform=iOS \
-          -configuration Debug \
-          CODE_SIGN_IDENTITY="" \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGN_ENTITLEMENTS="" \
-          CODE_SIGNING_ALLOWED="NO" \
-          clean build | xcpretty
+      - name: Compile iOS
+        working-directory: ./ci/ios/
+        run: |
+          set -o pipefail && \
+          xcodebuild -workspace ci.xcworkspace/ \
+            -scheme ci \
+            -destination generic/platform=iOS \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_ENTITLEMENTS="" \
+            CODE_SIGNING_ALLOWED="NO" \
+            clean build | xcpretty
