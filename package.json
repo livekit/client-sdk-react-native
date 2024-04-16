@@ -42,6 +42,7 @@
     "android"
   ],
   "dependencies": {
+    "@livekit/components-react": "^2.0.6",
     "array.prototype.at": "^1.1.1",
     "fastestsmallesttextencoderdecoder": "^1.0.22",
     "livekit-client": "^2.0.0",
