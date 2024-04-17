@@ -1,38 +1,41 @@
 import * as React from 'react';
 
 import { Image, StyleSheet, ViewStyle } from 'react-native';
-import type { Participant } from 'livekit-client';
-import { useParticipant, VideoView } from '@livekit/react-native';
+import {
+  isTrackReference,
+  TrackReferenceOrPlaceholder,
+  useEnsureTrackRef,
+  useIsSpeaking,
+  useParticipantInfo,
+  VideoTrack,
+} from '@livekit/react-native';
 import { View } from 'react-native';
 import { Text } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 export type Props = {
-  participant: Participant;
+  trackRef: TrackReferenceOrPlaceholder;
   style?: ViewStyle;
   zOrder?: number;
   mirror?: boolean;
 };
 export const ParticipantView = ({
   style = {},
-  participant,
+  trackRef,
   zOrder,
   mirror,
 }: Props) => {
-  const { cameraPublication, screenSharePublication } =
-    useParticipant(participant);
-  let videoPublication = cameraPublication ?? screenSharePublication;
-
+  const trackReference = useEnsureTrackRef(trackRef);
+  const { identity, name } = useParticipantInfo({
+    participant: trackReference.participant,
+  });
+  const isSpeaking = useIsSpeaking(trackRef.participant);
   const { colors } = useTheme();
   let videoView;
-  if (
-    videoPublication &&
-    videoPublication.isSubscribed &&
-    !videoPublication.isMuted
-  ) {
+  if (isTrackReference(trackRef)) {
     videoView = (
-      <VideoView
+      <VideoTrack
         style={styles.videoView}
-        videoTrack={videoPublication?.videoTrack}
+        trackRef={trackRef}
         zOrder={zOrder}
         mirror={mirror}
       />
@@ -50,15 +53,14 @@ export const ParticipantView = ({
     );
   }
 
-  const displayName = participant.name
-    ? participant.name
-    : participant.identity;
+  const displayName = name ? name : identity;
   return (
     <View style={[styles.container, style]}>
       {videoView}
       <View style={styles.identityBar}>
         <Text style={{ color: colors.text }}>{displayName}</Text>
       </View>
+      {isSpeaking && <View style={styles.speakingIndicator} />}
     </View>
   );
 };
@@ -66,6 +68,14 @@ export const ParticipantView = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#00153C',
+  },
+  speakingIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    borderColor: '#007DFF',
+    borderWidth: 3,
   },
   spacer: {
     flex: 1,
@@ -78,7 +88,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    zIndex: 1,
     padding: 2,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
