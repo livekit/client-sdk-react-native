@@ -5,6 +5,7 @@ import {
   isTrackReference,
   TrackReferenceOrPlaceholder,
   useEnsureTrackRef,
+  useIsMuted,
   useIsSpeaking,
   useParticipantInfo,
   VideoTrack,
@@ -29,9 +30,10 @@ export const ParticipantView = ({
     participant: trackReference.participant,
   });
   const isSpeaking = useIsSpeaking(trackRef.participant);
+  const isVideoMuted = useIsMuted(trackRef);
   const { colors } = useTheme();
   let videoView;
-  if (isTrackReference(trackRef)) {
+  if (isTrackReference(trackRef) && !isVideoMuted) {
     videoView = (
       <VideoTrack
         style={styles.videoView}
