@@ -47,15 +47,15 @@ export const RoomPage = ({
   const { url, token } = route.params;
 
   useEffect(() => {
-    let connect = async () => {
+    let start = async () => {
       await AudioSession.startAudioSession();
     };
 
-    connect();
+    start();
     return () => {
       AudioSession.stopAudioSession();
     };
-  }, [url, token]);
+  }, []);
 
   return (
     <LiveKitRoom
