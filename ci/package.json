@@ -1,14 +1,13 @@
 {
+  "private": true,
   "name": "ci",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
-    "postinstall": "install-local ../"
+    "test": "jest"
   },
   "dependencies": {
     "@livekit/react-native": "*",

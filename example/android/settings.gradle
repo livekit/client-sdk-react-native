@@ -1,7 +1,8 @@
 rootProject.name = 'LivekitReactNativeExample'
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+includeBuild('../../node_modules/react-native-gradle-plugin')
+
 include ':app'
 
-include ':livekitreactnative'
-project(':livekitreactnative').projectDir = new File(rootProject.projectDir, '../../android')
-includeBuild('../node_modules/react-native-gradle-plugin')
+include ':livekit-react-native'
+project(':livekit-react-native').projectDir = new File(rootProject.projectDir, '../../packages/react-native/android')

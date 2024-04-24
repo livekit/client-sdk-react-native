@@ -27,4 +27,10 @@ allprojects {
         jcenter()
         maven { url 'https://www.jitpack.io' }
     }
+    project.pluginManager.withPlugin("com.facebook.react") {
+        react {
+            reactNativeDir = rootProject.file("../../node_modules/react-native/")
+            codegenDir = rootProject.file("../../node_modules/react-native-codegen/")
+        }
+    }
 }
