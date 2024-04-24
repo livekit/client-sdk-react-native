@@ -1,5 +1,8 @@
 import * as React from 'react';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 
 import {
   StyleSheet,
@@ -14,19 +17,17 @@ import { useEffect, useState } from 'react';
 import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import {
-  DataPacket_Kind,
-  Participant,
-  RemoteParticipant,
-  Room,
-  RoomEvent,
-} from 'livekit-client';
-import {
-  useRoom,
-  useParticipant,
   AudioSession,
   useIOSAudioManagement,
+  useLocalParticipant,
+  LiveKitRoom,
+  useDataChannel,
+  useRoomContext,
+  useVisualStableUpdate,
+  useTracks,
+  TrackReferenceOrPlaceholder,
+  ReceivedDataMessage,
 } from '@livekit/react-native';
-import type { TrackPublication } from 'livekit-client';
 import { Platform } from 'react-native';
 // @ts-ignore
 import {
@@ -37,120 +38,126 @@ import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
 import 'fastestsmallesttextencoderdecoder';
+import { Track } from 'livekit-client';
 
 export const RoomPage = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
-  const [, setIsConnected] = useState(false);
-  const [room] = useState(
-    () =>
-      new Room({
-        adaptiveStream: { pixelDensity: 'screen' },
-      })
-  );
-  const { participants } = useRoom(room);
   const { url, token } = route.params;
-  const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
 
+  useEffect(() => {
+    let start = async () => {
+      await AudioSession.startAudioSession();
+    };
+
+    start();
+    return () => {
+      AudioSession.stopAudioSession();
+    };
+  }, []);
+
+  return (
+    <LiveKitRoom
+      serverUrl={url}
+      token={token}
+      connect={true}
+      options={{
+        adaptiveStream: { pixelDensity: 'screen' },
+      }}
+      audio={true}
+      video={true}
+    >
+      <RoomView navigation={navigation} />
+    </LiveKitRoom>
+  );
+};
+
+interface RoomViewProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'RoomPage'>;
+}
+
+const RoomView = ({ navigation }: RoomViewProps) => {
+  const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
+  const room = useRoomContext();
+  useIOSAudioManagement(room);
   // Perform platform specific call setup.
   useEffect(() => {
     startCallService();
     return () => {
       stopCallService();
     };
-  }, [url, token, room]);
-
-  useIOSAudioManagement(room);
-  // Connect to room.
-  useEffect(() => {
-    let connect = async () => {
-      // If you wish to configure audio, uncomment the following:
-      // await AudioSession.configureAudio({
-      //   android: {
-      //     preferredOutputList: ["earpiece"],
-      //     audioTypeOptions: AndroidAudioTypePresets.communication
-      //   },
-      //   ios: {
-      //     defaultOutput: "earpiece"
-      //   }
-      // });
-      await AudioSession.startAudioSession();
-      await room.connect(url, token, {});
-      console.log('connected to ', url, ' ', token);
-      setIsConnected(true);
-    };
-
-    connect();
-    return () => {
-      room.disconnect();
-      AudioSession.stopAudioSession();
-    };
-  }, [url, token, room]);
+  }, []);
 
   // Setup room listeners
-  useEffect(() => {
-    const dataReceived = (
-      payload: Uint8Array,
-      participant?: RemoteParticipant
-    ) => {
+  const { send } = useDataChannel(
+    (dataMessage: ReceivedDataMessage<string>) => {
       //@ts-ignore
       let decoder = new TextDecoder('utf-8');
-      let message = decoder.decode(payload);
+      let message = decoder.decode(dataMessage.payload);
 
       let title = 'Received Message';
-      if (participant != null) {
-        title = 'Received Message from ' + participant.identity;
+      if (dataMessage.from != null) {
+        title = 'Received Message from ' + dataMessage.from?.identity;
       }
       Toast.show({
         type: 'success',
         text1: title,
         text2: message,
       });
-    };
-    room.on(RoomEvent.DataReceived, dataReceived);
-
-    return () => {
-      room.off(RoomEvent.DataReceived, dataReceived);
-    };
-  });
-
-  // Setup views.
-  const stageView = participants.length > 0 && (
-    <ParticipantView participant={participants[0]} style={styles.stage} />
+    }
   );
 
-  const renderParticipant: ListRenderItem<Participant> = ({ item }) => {
+  const tracks = useTracks(
+    [
+      { source: Track.Source.Camera, withPlaceholder: true },
+      { source: Track.Source.ScreenShare, withPlaceholder: false },
+    ],
+    { onlySubscribed: false }
+  );
+  const stableTracks = useVisualStableUpdate(tracks, 5);
+  // Setup views.
+  const stageView = tracks.length > 0 && (
+    <ParticipantView trackRef={stableTracks[0]} style={styles.stage} />
+  );
+
+  const renderParticipant: ListRenderItem<TrackReferenceOrPlaceholder> = ({
+    item,
+  }) => {
     return (
-      <ParticipantView participant={item} style={styles.otherParticipantView} />
+      <ParticipantView trackRef={item} style={styles.otherParticipantView} />
     );
   };
 
-  const otherParticipantsView = participants.length > 0 && (
+  const otherParticipantsView = stableTracks.length > 0 && (
     <FlatList
-      data={participants}
+      data={stableTracks}
       renderItem={renderParticipant}
-      keyExtractor={(item) => item.sid}
       horizontal={true}
       style={styles.otherParticipantsList}
     />
   );
 
-  const { cameraPublication, microphonePublication, screenSharePublication } =
-    useParticipant(room.localParticipant);
+  const {
+    isCameraEnabled,
+    isMicrophoneEnabled,
+    isScreenShareEnabled,
+    localParticipant,
+  } = useLocalParticipant();
 
   // Prepare for iOS screenshare.
   const screenCaptureRef = React.useRef(null);
   const screenCapturePickerView = Platform.OS === 'ios' && (
     <ScreenCapturePickerView ref={screenCaptureRef} />
   );
+
   const startBroadcast = async () => {
     if (Platform.OS === 'ios') {
       const reactTag = findNodeHandle(screenCaptureRef.current);
       await NativeModules.ScreenCapturePickerViewManager.show(reactTag);
-      room.localParticipant.setScreenShareEnabled(true);
+      localParticipant.setScreenShareEnabled(true);
     } else {
-      room.localParticipant.setScreenShareEnabled(true);
+      localParticipant.setScreenShareEnabled(true);
     }
   };
 
@@ -159,13 +166,13 @@ export const RoomPage = ({
       {stageView}
       {otherParticipantsView}
       <RoomControls
-        micEnabled={isTrackEnabled(microphonePublication)}
+        micEnabled={isMicrophoneEnabled}
         setMicEnabled={(enabled: boolean) => {
-          room.localParticipant.setMicrophoneEnabled(enabled);
+          localParticipant.setMicrophoneEnabled(enabled);
         }}
-        cameraEnabled={isTrackEnabled(cameraPublication)}
+        cameraEnabled={isCameraEnabled}
         setCameraEnabled={(enabled: boolean) => {
-          room.localParticipant.setCameraEnabled(enabled);
+          localParticipant.setCameraEnabled(enabled);
         }}
         switchCamera={async () => {
           let facingModeStr = !isCameraFrontFacing ? 'front' : 'environment';
@@ -192,12 +199,12 @@ export const RoomPage = ({
           //@ts-ignore
           await room.switchActiveDevice('videoinput', newDevice.deviceId);
         }}
-        screenShareEnabled={isTrackEnabled(screenSharePublication)}
+        screenShareEnabled={isScreenShareEnabled}
         setScreenShareEnabled={(enabled: boolean) => {
           if (enabled) {
             startBroadcast();
           } else {
-            room.localParticipant.setScreenShareEnabled(enabled);
+            localParticipant.setScreenShareEnabled(enabled);
           }
         }}
         sendData={(message: string) => {
@@ -210,10 +217,7 @@ export const RoomPage = ({
           //@ts-ignore
           let encoder = new TextEncoder();
           let encodedData = encoder.encode(message);
-          room.localParticipant.publishData(
-            encodedData,
-            DataPacket_Kind.RELIABLE
-          );
+          send(encodedData, { reliable: true });
         }}
         onSimulate={(scenario) => {
           room.simulateScenario(scenario);
@@ -226,10 +230,6 @@ export const RoomPage = ({
     </View>
   );
 };
-
-function isTrackEnabled(pub?: TrackPublication): boolean {
-  return !(pub?.isMuted ?? true);
-}
 
 const styles = StyleSheet.create({
   container: {

@@ -33,4 +33,8 @@ export {
   isTrackReference,
   useEnsureTrackRef,
   useTrackMutedIndicator,
+  useVisualStableUpdate,
+  UseVisualStableUpdateOptions,
 } from '@livekit/components-react';
+
+export { ReceivedDataMessage } from '@livekit/components-core';
