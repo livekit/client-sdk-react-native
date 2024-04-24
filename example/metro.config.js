@@ -13,8 +13,8 @@ module.exports = {
   projectRoot: __dirname,
   watchFolders: [
     root,
-    path.resolve(__dirname, '../../node_modules'),
-    path.resolve(__dirname, '../../node_modules/@livekit/react-native'),
+    path.resolve(__dirname, '../node_modules'),
+    path.resolve(__dirname, '../node_modules/@livekit/react-native'),
   ],
 
   // We need to make sure that only one version is loaded for peerDependencies

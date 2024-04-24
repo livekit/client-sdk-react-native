@@ -4,5 +4,8 @@ includeBuild('../../node_modules/react-native-gradle-plugin')
 
 include ':app'
 
-include ':livekit-react-native'
-project(':livekit-react-native').projectDir = new File(rootProject.projectDir, '../../packages/react-native/android')
+include ':livekit_react-native'
+project(':livekit_react-native').projectDir = new File(rootProject.projectDir, '../../packages/react-native/android')
+
+include ':livekit_react-native-webrtc'
+project(':livekit_react-native-webrtc').projectDir = new File(rootProject.projectDir, '../../node_modules/@livekit/react-native-webrtc/android')
