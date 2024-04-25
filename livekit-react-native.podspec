@@ -19,4 +19,9 @@ Pod::Spec.new do |s|
 
   s.dependency "React-Core"
   s.dependency "livekit-react-native-webrtc"
+
+  # Swift/Objective-C compatibility
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES'
+  }
 end
