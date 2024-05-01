@@ -122,44 +122,102 @@ import { registerGlobals } from '@livekit/react-native';
 registerGlobals();
 ```
 
-A Room object can then be created and connected to.
+In your app, wrap your component in a `LiveKitRoom` component, which manages a
+Room object and allows you to use our hooks to create your own real-time video/audio app.
 
 ```js
-import { Participant, Room, Track } from 'livekit-client';
-import { useRoom, AudioSession, VideoView } from '@livekit/react-native';
+import * as React from 'react';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ListRenderItem,
+} from 'react-native';
+import { useEffect } from 'react';
+import {
+  AudioSession,
+  LiveKitRoom,
+  useTracks,
+  TrackReferenceOrPlaceholder,
+  VideoTrack,
+  isTrackReference,
+  registerGlobals,
+} from '@livekit/react-native';
+import { Track } from 'livekit-client';
 
-/*...*/
+const wsURL = "wss://example.com"
+const token = "your-token-here"
 
-// Create a room state
-const [room] = useState(() => new Room());
+export default function App() {
+  // Start the audio session first.
+  useEffect(() => {
+    let start = async () => {
+      await AudioSession.startAudioSession();
+    };
 
-// Get the participants from the room
-const { participants } = useRoom(room);
+    start();
+    return () => {
+      AudioSession.stopAudioSession();
+    };
+  }, []);
 
-useEffect(() => {
-  let connect = async () => {
-    await AudioSession.startAudioSession();
-    await room.connect(url, token, {});
-    console.log('connected to ', url, ' ', token);
+  return (
+    <LiveKitRoom
+      serverUrl={wsURL}
+      token={token}
+      connect={true}
+      options={{
+        // Use screen pixel density to handle screens with differing densities.
+        adaptiveStream: { pixelDensity: 'screen' },
+      }}
+      audio={true}
+      video={true}
+    >
+      <RoomView />
+    </LiveKitRoom>
+  );
+};
+
+const RoomView = () => {
+  // Get all camera tracks.
+  // The useTracks hook grabs the tracks from LiveKitRoom component
+  // providing the context for the Room object.
+  const tracks = useTracks([Track.Source.Camera]);
+
+  const renderTrack: ListRenderItem<TrackReferenceOrPlaceholder> = ({item}) => {
+    // Render using the VideoTrack component.
+    if(isTrackReference(item)) {
+      return (<VideoTrack trackRef={item} style={styles.participantView} />)
+    } else {
+      return (<View style={styles.participantView} />)
+    }
   };
-  connect();
-  return () => {
-    room.disconnect();
-    AudioSession.stopAudioSession();
-  };
-}, [url, token, room]);
 
-const videoView = participants.length > 0 && (
-  <VideoView
-    style={{ flex: 1, width: '100%' }}
-    videoTrack={participants[0].getTrack(Track.Source.Camera)?.videoTrack}
-  />
-);
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={tracks}
+        renderItem={renderTrack}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  participantView: {
+    height: 300,
+  },
+});
 ```
 
 [API documentation is located here.](https://htmlpreview.github.io/?https://raw.githubusercontent.com/livekit/client-sdk-react-native/main/docs/modules.html)
 
-Additional documentation for the LiveKit SDK can be found at https://docs.livekit.io/references/client-sdks/
+Additional documentation for the LiveKit SDK can be found at https://docs.livekit.io/
 
 ## Audio sessions
 
