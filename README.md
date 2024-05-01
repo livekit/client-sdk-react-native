@@ -103,7 +103,7 @@ In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/
 
 ### Expo
 
-LiveKit is available on Expo through development builds. [See the instructions found here](https://github.com/livekit/client-sdk-react-native/wiki/Expo-Development-Build-Instructions).
+LiveKit is available on Expo through development builds. You can find our Expo plugin and setup instructions [here](https://github.com/livekit/client-sdk-react-native-expo-plugin).
 
 ## Example app
 
