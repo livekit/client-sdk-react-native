@@ -81,7 +81,7 @@
     "typescript": "4.8.4"
   },
   "peerDependencies": {
-    "@livekit/react-native-webrtc": "^114.0.0",
+    "@livekit/react-native-webrtc": "^114.1.2",
     "react": "*",
     "react-native": "*"
   },
