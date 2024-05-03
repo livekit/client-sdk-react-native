@@ -1275,10 +1275,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@livekit/react-native-webrtc@^114.0.0":
-  version "114.1.1"
-  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-114.1.1.tgz#afec1277e161cbb6c9f47194aa2f9b12946106f0"
-  integrity sha512-aw7xA95VXqhYC1ySFDRxoYWD2TUAMf5alDP1bkthSkprh6T7UMrdnl6Ie56SAFl8z64si0dkCLB8s0J0+xPVWw==
+"@livekit/react-native-webrtc@^114.1.2":
+  version "114.1.2"
+  resolved "https://registry.yarnpkg.com/@livekit/react-native-webrtc/-/react-native-webrtc-114.1.2.tgz#dc4b40bafee4fb03720aee37447ce138507bb6da"
+  integrity sha512-TAPf5wKj7yDFUfYkEHXkA4md1tNby7JAqpKPIoMXmYyoHQ+TiJMkLQi5/H2NBVkArHiY8GU9NUpEk5Gdaf7W6Q==
   dependencies:
     base64-js "1.5.1"
     debug "4.3.4"
