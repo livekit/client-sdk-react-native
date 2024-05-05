@@ -107,7 +107,7 @@ LiveKit is available on Expo through development builds. You can find our Expo p
 
 ## Example app
 
-We've included an [example app](example/) that you can try out.
+You can try our standalone example app [here](https://github.com/livekit-examples/react-native-meet/).
 
 ## Usage
 
