@@ -17,6 +17,7 @@ export {
   useSortedParticipants,
   useChat,
   useIsEncrypted,
+  useRoomInfo,
   useIsMuted,
   useParticipantTracks,
   useLiveKitRoom,
