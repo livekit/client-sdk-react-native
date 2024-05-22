@@ -1,6 +1,6 @@
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
-import 'fastestsmallesttextencoderdecoder';
+import './polyfills/EncoderDecoderTogether.min.js';
 import AudioSession, {
   AndroidAudioTypePresets,
   AndroidAudioTypeOptions,

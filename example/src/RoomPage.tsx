@@ -37,7 +37,6 @@ import {
 import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
-import 'fastestsmallesttextencoderdecoder';
 import { Track } from 'livekit-client';
 
 export const RoomPage = ({
