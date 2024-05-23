@@ -2,10 +2,12 @@ package com.livekit.reactnative
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.AudioAttributes
 import com.facebook.react.bridge.*
 import com.livekit.reactnative.audio.AudioDeviceKind
 import com.livekit.reactnative.audio.AudioManagerUtils
 import com.livekit.reactnative.audio.AudioSwitchManager
+import org.webrtc.audio.WebRtcAudioTrackHelper
 
 
 class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -31,6 +33,10 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
 
         if (androidConfig.hasKey("audioTypeOptions")) {
             val audioTypeOptions = androidConfig.getMap("audioTypeOptions") ?: return
+
+            val adm = LiveKitReactNative.audioDeviceModule
+            val oldAudioAttributes = WebRtcAudioTrackHelper.getAudioOutputAttributes(adm)
+            val attributesBuilder = AudioAttributes.Builder(oldAudioAttributes)
 
             if (audioTypeOptions.hasKey("manageAudioFocus")) {
                 val manageFocus = audioTypeOptions.getBoolean("manageAudioFocus")
@@ -68,6 +74,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
                     val usageType = AudioManagerUtils.audioAttributesUsageTypeFromString(usageTypeString)
                     if (usageType != null) {
                         audioManager.setAudioAttributesUsageType(usageType)
+                        attributesBuilder.setUsage(usageType)
                     }
                 }
             }
@@ -77,6 +84,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
                     val contentType = AudioManagerUtils.audioAttributesContentTypeFromString(contentTypeString)
                     if (contentType != null) {
                         audioManager.setAudioAttributesContentType(contentType)
+                        attributesBuilder.setContentType(contentType)
                     }
                 }
             }
@@ -85,6 +93,8 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
                 val force = audioTypeOptions.getBoolean("forceHandleAudioRouting")
                 audioManager.setForceHandleAudioRouting(force)
             }
+
+            WebRtcAudioTrackHelper.setAudioOutputAttributes(adm, attributesBuilder.build())
         }
     }
 

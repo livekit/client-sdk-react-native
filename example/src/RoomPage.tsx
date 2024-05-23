@@ -27,6 +27,8 @@ import {
   useTracks,
   TrackReferenceOrPlaceholder,
   ReceivedDataMessage,
+  AndroidAudioTypePresets,
+  AndroidAudioTypeOptions,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';
 // @ts-ignore
@@ -39,6 +41,7 @@ import Toast from 'react-native-toast-message';
 
 import { Track } from 'livekit-client';
 
+let audioType = false;
 export const RoomPage = ({
   navigation,
   route,
@@ -47,6 +50,21 @@ export const RoomPage = ({
 
   useEffect(() => {
     let start = async () => {
+      let preset: AndroidAudioTypeOptions;
+      if (audioType) {
+        console.log('using communication type');
+        preset = AndroidAudioTypePresets.communication;
+      } else {
+        console.log('using media type');
+        preset = AndroidAudioTypePresets.media;
+      }
+
+      audioType = !audioType;
+      AudioSession.configureAudio({
+        android: {
+          audioTypeOptions: preset,
+        },
+      });
       await AudioSession.startAudioSession();
     };
 

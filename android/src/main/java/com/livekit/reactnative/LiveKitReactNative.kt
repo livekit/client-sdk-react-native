@@ -11,6 +11,17 @@ import org.webrtc.audio.JavaAudioDeviceModule
 
 object LiveKitReactNative {
 
+    private lateinit var adm: JavaAudioDeviceModule
+
+    val audioDeviceModule: JavaAudioDeviceModule
+        get() {
+            if(!::adm.isInitialized) {
+                throw IllegalStateException("Audio device module is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
+            }
+
+            return adm
+        }
+
     /**
      * Initializes components required for LiveKit to work on Android.
      *
@@ -26,10 +37,12 @@ object LiveKitReactNative {
 
         val useHardwareAudioProcessing = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-        options.audioDeviceModule = JavaAudioDeviceModule.builder(context)
+        adm = JavaAudioDeviceModule.builder(context)
             .setUseHardwareAcousticEchoCanceler(useHardwareAudioProcessing)
             .setUseHardwareNoiseSuppressor(useHardwareAudioProcessing)
             .setAudioAttributes(audioType.audioAttributes)
             .createAudioDeviceModule()
+
+        options.audioDeviceModule = adm
     }
 }
