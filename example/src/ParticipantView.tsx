@@ -13,6 +13,7 @@ import {
 import { View } from 'react-native';
 import { Text } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { Track } from 'livekit-client';
 export type Props = {
   trackRef: TrackReferenceOrPlaceholder;
   style?: ViewStyle;
@@ -55,7 +56,11 @@ export const ParticipantView = ({
     );
   }
 
-  const displayName = name ? name : identity;
+  let displayName = name ? name : identity;
+  if (trackRef.source == Track.Source.ScreenShare) {
+    displayName = displayName + "'s screen"
+  }
+
   return (
     <View style={[styles.container, style]}>
       {videoView}
