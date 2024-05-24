@@ -295,7 +295,7 @@ Enabling screenshare requires extra installation steps:
 
 Android screenshare requires a foreground service with type `mediaProjection` to be present.
 
-The example app uses [@voximplant/react-native-foreground-service](https://github.com/voximplant/react-native-foreground-service) for this.
+The example app uses [@supersami/rn-foreground-service](https://github.com/Raja0sama/rn-foreground-service) for this.
 
 Add the following permissions to your `AndroidManifest.xml` file:
 
@@ -304,10 +304,11 @@ Add the following permissions to your `AndroidManifest.xml` file:
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 ```
 
-Ensure that the service is labelled a `mediaProjection` service like so:
+Declare the the service and ensure it's labelled a `mediaProjection` service like so:
 
 ```xml
-<service android:name="com.voximplant.foregroundservice.VIForegroundService" android:foregroundServiceType="mediaProjection" />
+<service android:name="com.supersami.foregroundservice.ForegroundService" android:foregroundServiceType="mediaProjection" />
+<service android:name="com.supersami.foregroundservice.ForegroundServiceTask" />
 ```
 
 Once setup, start the foreground service prior to using screenshare.
