@@ -57,8 +57,8 @@ export const ParticipantView = ({
   }
 
   let displayName = name ? name : identity;
-  if (trackRef.source == Track.Source.ScreenShare) {
-    displayName = displayName + "'s screen"
+  if (trackRef.source === Track.Source.ScreenShare) {
+    displayName = displayName + "'s screen";
   }
 
   return (
