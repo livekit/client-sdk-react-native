@@ -1,5 +1,5 @@
 import {
-  FeatureFlags,
+  type FeatureFlags,
   LKFeatureContext,
   RoomContext,
   useLiveKitRoom,

@@ -1,12 +1,12 @@
 'use strict';
 
-import React, { Component, PropsWithChildren } from 'react';
+import React, { Component, type PropsWithChildren } from 'react';
 import {
   AppState,
-  AppStateStatus,
-  NativeEventSubscription,
+  type AppStateStatus,
+  type NativeEventSubscription,
   View,
-  ViewStyle,
+  type ViewStyle,
 } from 'react-native';
 
 const DEFAULT_DELAY = 1000;

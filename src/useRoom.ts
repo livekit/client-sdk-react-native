@@ -1,5 +1,5 @@
 import {
-  AudioTrack,
+  type AudioTrack,
   ConnectionState,
   LocalParticipant,
   Participant,
