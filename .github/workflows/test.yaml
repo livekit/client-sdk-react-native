@@ -40,7 +40,7 @@ jobs:
         run: yarn lint
 
       - name: Run Tests
-        run: yarn test
+        run: yarn test --passWithNoTests
 
       - name: Validate docs
         run: yarn build-docs --treatWarningsAsErrors

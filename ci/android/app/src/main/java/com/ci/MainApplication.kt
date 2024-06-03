@@ -1,4 +1,4 @@
-package com.rndiffapp
+package com.ci
  
 import android.app.Application
 import com.facebook.react.PackageList
