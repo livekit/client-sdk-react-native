@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
 #import "LivekitReactNative.h"
+
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
@@ -19,7 +20,7 @@
 {
   return [self bundleURL];
 }
- 
+
 - (NSURL *)bundleURL
 {
 #if DEBUG
