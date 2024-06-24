@@ -1,3 +1,3 @@
-declare async function startCallService();
-declare async function stopCallService();
+declare function startCallService(): Promise<void>;
+declare function stopCallService(): Promise<void>;
 export { startCallService, stopCallService };
