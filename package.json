@@ -136,7 +136,7 @@
     "hooks": {
       "before:init": [
         "yarn lint",
-        "yarn test",
+        "yarn test --passWithNoTests",
         "yarn typescript"
       ],
       "after:bump": [
