@@ -2158,16 +2158,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/react-native-webrtc@npm:^114.1.4":
-  version: 114.1.4
-  resolution: "@livekit/react-native-webrtc@npm:114.1.4"
+"@livekit/react-native-webrtc@npm:^125.0.0":
+  version: 125.0.0
+  resolution: "@livekit/react-native-webrtc@npm:125.0.0"
   dependencies:
     base64-js: 1.5.1
     debug: 4.3.4
     event-target-shim: 6.0.2
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 64d4552418e44dabd6cf77248f83aff419de43cb0034369660363e7285fdbdb24c65f504c1f55082d6e814d94c60da9e0042b1b3698799b3935b1d25b84df8cd
+  checksum: 4d35600b3264299f9e4cfcb49d3e8be4630bf86084e8013a75ed5b7136de70a6327adf90c27d142334b741b9c48da2d2c6ec03d65339440dfd44188c3b2b1a0c
   languageName: node
   linkType: hard
 
@@ -3856,7 +3856,7 @@ __metadata:
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
     "@livekit/react-native": "*"
-    "@livekit/react-native-webrtc": ^114.1.4
+    "@livekit/react-native-webrtc": ^125.0.0
     "@react-native/babel-preset": 0.74.84
     "@react-native/eslint-config": 0.74.84
     "@react-native/metro-config": 0.74.84
