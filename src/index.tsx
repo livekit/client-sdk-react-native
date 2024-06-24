@@ -3,12 +3,12 @@ import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
 import AudioSession, {
   AndroidAudioTypePresets,
-  AndroidAudioTypeOptions,
-  AppleAudioCategory,
-  AppleAudioCategoryOption,
-  AppleAudioConfiguration,
-  AppleAudioMode,
-  AudioTrackState,
+  type AndroidAudioTypeOptions,
+  type AppleAudioCategory,
+  type AppleAudioCategoryOption,
+  type AppleAudioConfiguration,
+  type AppleAudioMode,
+  type AudioTrackState,
   getDefaultAppleAudioConfigurationForMode,
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
@@ -85,15 +85,17 @@ export * from './audio/AudioManager';
 
 export {
   AudioSession,
+  AndroidAudioTypePresets,
+  getDefaultAppleAudioConfigurationForMode,
+};
+export type {
   AudioConfiguration,
   AndroidAudioTypeOptions,
-  AndroidAudioTypePresets,
   AppleAudioCategory,
   AppleAudioCategoryOption,
   AppleAudioConfiguration,
   AppleAudioMode,
   AudioTrackState,
-  getDefaultAppleAudioConfigurationForMode,
   LogLevel,
   SetLogLevelOptions,
 };

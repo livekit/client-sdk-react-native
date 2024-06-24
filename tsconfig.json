@@ -1,4 +1,5 @@
 {
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
@@ -8,13 +9,8 @@
     "allowUnusedLabels": false,
     "allowSyntheticDefaultImports" : true,
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
-    "lib": ["esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
+    "noEmit": false,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
@@ -23,7 +19,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "verbatimModuleSyntax": true
   },
   "typedocOptions": {
     "entryPoints": ["src/index.tsx"],

@@ -1,12 +1,17 @@
 import * as React from 'react';
 
-import { LayoutChangeEvent, StyleSheet, View, ViewStyle } from 'react-native';
 import {
-  ElementInfo,
+  type LayoutChangeEvent,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from 'react-native';
+import {
+  type ElementInfo,
   LocalVideoTrack,
   Track,
   TrackEvent,
-  VideoTrack,
+  type VideoTrack,
 } from 'livekit-client';
 import { RTCView } from '@livekit/react-native-webrtc';
 import { useCallback, useEffect, useMemo, useState } from 'react';

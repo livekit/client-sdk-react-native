@@ -3,16 +3,11 @@ export {
   useDataChannel,
   useIsSpeaking,
   useLocalParticipant,
-  UseLocalParticipantOptions,
   useLocalParticipantPermissions,
   useParticipantInfo,
-  UseParticipantInfoOptions,
   useParticipants,
-  UseParticipantsOptions,
   useRemoteParticipants,
-  UseRemoteParticipantOptions,
   useRemoteParticipant,
-  UseRemoteParticipantsOptions,
   useSpeakingParticipants,
   useSortedParticipants,
   useChat,
@@ -28,14 +23,21 @@ export {
   TrackRefContext,
   useTrackRefContext,
   useTracks,
-  UseTracksOptions,
-  TrackReference,
-  TrackReferenceOrPlaceholder,
   isTrackReference,
   useEnsureTrackRef,
   useTrackMutedIndicator,
   useVisualStableUpdate,
+} from '@livekit/components-react';
+export type {
+  UseLocalParticipantOptions,
+  UseParticipantInfoOptions,
+  UseParticipantsOptions,
+  UseRemoteParticipantOptions,
+  UseRemoteParticipantsOptions,
+  UseTracksOptions,
+  TrackReference,
+  TrackReferenceOrPlaceholder,
   UseVisualStableUpdateOptions,
 } from '@livekit/components-react';
 
-export { ReceivedDataMessage } from '@livekit/components-core';
+export type { ReceivedDataMessage } from '@livekit/components-core';
