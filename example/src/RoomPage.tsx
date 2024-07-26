@@ -38,6 +38,7 @@ import {
 } from '@livekit/react-native-webrtc';
 import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
+import LKLocalMicIndicator from "./ui/LKLocalMicIndicator"
 
 import { Track } from 'livekit-client';
 
@@ -180,6 +181,7 @@ const RoomView = ({ navigation }: RoomViewProps) => {
 
   return (
     <View style={styles.container}>
+      <LKLocalMicIndicator style={styles.micIndicator}/>
       {stageView}
       {otherParticipantsView}
       <RoomControls
@@ -267,4 +269,8 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
   },
+  micIndicator: {
+    width: 50,
+    height: 50,
+  }
 });

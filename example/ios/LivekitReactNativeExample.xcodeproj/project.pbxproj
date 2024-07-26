@@ -22,6 +22,8 @@
 		D767E503283D293A0077477C /* SampleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FD283D293A0077477C /* SampleUploader.swift */; };
 		D767E504283D293A0077477C /* DarwinNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FE283D293A0077477C /* DarwinNotificationCenter.swift */; };
 		D767E505283D293A0077477C /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D767E4FF283D293A0077477C /* Atomic.swift */; };
+		D7B6B91C2C526CA0007C0250 /* LKAudioProcessingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B6B91B2C526CA0007C0250 /* LKAudioProcessingDelegate.m */; };
+		D7B6B91F2C5360FB007C0250 /* LKLocalMicIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B6B91E2C5360FB007C0250 /* LKLocalMicIndicatorManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +84,10 @@
 		D767E4FF283D293A0077477C /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		D767E506283D2BAE0077477C /* LivekitReactNativeExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LivekitReactNativeExample.entitlements; path = LivekitReactNativeExample/LivekitReactNativeExample.entitlements; sourceTree = "<group>"; };
 		D767E507283D2BF00077477C /* BroadcastExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExtension.entitlements; sourceTree = "<group>"; };
+		D7B6B91A2C526BE9007C0250 /* LKAudioProcessingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKAudioProcessingDelegate.h; sourceTree = "<group>"; };
+		D7B6B91B2C526CA0007C0250 /* LKAudioProcessingDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKAudioProcessingDelegate.m; sourceTree = "<group>"; };
+		D7B6B91D2C5360ED007C0250 /* LKLocalMicIndicatorManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKLocalMicIndicatorManager.h; sourceTree = "<group>"; };
+		D7B6B91E2C5360FB007C0250 /* LKLocalMicIndicatorManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKLocalMicIndicatorManager.m; sourceTree = "<group>"; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-LivekitReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LivekitReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-LivekitReactNativeExample/Pods-LivekitReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -138,6 +144,10 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				D7B6B91A2C526BE9007C0250 /* LKAudioProcessingDelegate.h */,
+				D7B6B91B2C526CA0007C0250 /* LKAudioProcessingDelegate.m */,
+				D7B6B91D2C5360ED007C0250 /* LKLocalMicIndicatorManager.h */,
+				D7B6B91E2C5360FB007C0250 /* LKLocalMicIndicatorManager.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -439,7 +449,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B6B91F2C5360FB007C0250 /* LKLocalMicIndicatorManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				D7B6B91C2C526CA0007C0250 /* LKAudioProcessingDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

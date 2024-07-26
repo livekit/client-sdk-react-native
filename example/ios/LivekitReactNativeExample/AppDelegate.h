@@ -7,7 +7,11 @@
 
 #import <RCTAppDelegate.h>
 #import <UIKit/UIKit.h>
+#import "LKAudioProcessingDelegate.h"
 
 @interface AppDelegate : RCTAppDelegate
+
+@property(nonatomic, strong, nullable) id<RTCAudioCustomProcessingDelegate> postDelegate;
+@property(nonatomic, strong, nullable) id<RTCAudioCustomProcessingDelegate> preDelegate;
 
 @end
