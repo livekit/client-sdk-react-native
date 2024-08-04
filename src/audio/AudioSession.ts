@@ -325,6 +325,13 @@ export default class AudioSession {
     }
   };
 
+  /**
+   * iOS only. Does nothing on other platforms.
+   *
+   * Changes the AVAudioSession config used when connected to a room.
+   *
+   * @param config an {@link AppleAudioConfiguration}
+   */
   static setAppleAudioConfiguration = async (
     config: AppleAudioConfiguration
   ) => {

@@ -2426,15 +2426,15 @@ __metadata:
   linkType: hard
 
 "@livekit/react-native-webrtc@npm:^114.0.0":
-  version: 114.1.5
-  resolution: "@livekit/react-native-webrtc@npm:114.1.5"
+  version: 114.1.6
+  resolution: "@livekit/react-native-webrtc@npm:114.1.6"
   dependencies:
     base64-js: 1.5.1
     debug: 4.3.4
     event-target-shim: 6.0.2
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 030070278da052ecf01a210541b406aa344b0f1754fe537e9857421c9bee0be996a7f4f8413a239e6edb9af3eeed57ba5c52c95ae349c93eb115a9fb591f01f0
+  checksum: 4f89677cbade5a3a1c1d87b534cb2719f0be09269818cb1067c0d3a10d3aacc9a621faf870efa6505b9b3e547879253fcc0119d60a4b6af8ad5934e53ccb37af
   languageName: node
   linkType: hard
 
