@@ -2416,12 +2416,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/protocol@npm:1.16.0":
-  version: 1.16.0
-  resolution: "@livekit/protocol@npm:1.16.0"
+"@livekit/protocol@npm:1.19.1":
+  version: 1.19.1
+  resolution: "@livekit/protocol@npm:1.19.1"
   dependencies:
     "@bufbuild/protobuf": ^1.7.2
-  checksum: 6f0b51d1a1722282d49979528ba7eb5fab8b0c24aa6caafa7dc01ece8210c6f26830f1c23d920c8263ac0dce6833553031870c913b89f27c302aea2cc5f5c3c5
+  checksum: 853da241af8ea9a0112f85193c2bb16904e30646d617d3dd7e614d13822787fb134157a11a5d17ba4950a4d1de11879fd94f830a4f3a5b06a936ec460b0baa3e
   languageName: node
   linkType: hard
 
@@ -2464,7 +2464,7 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     husky: ^7.0.4
     jest: ^29.6.3
-    livekit-client: ^2.0.0
+    livekit-client: ^2.4.2
     loglevel: ^1.8.0
     pod-install: ^0.2.2
     prettier: 2.8.8
@@ -8715,19 +8715,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"livekit-client@npm:^2.0.0":
-  version: 2.3.1
-  resolution: "livekit-client@npm:2.3.1"
+"livekit-client@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "livekit-client@npm:2.4.2"
   dependencies:
-    "@livekit/protocol": 1.16.0
+    "@livekit/protocol": 1.19.1
     events: ^3.3.0
     loglevel: ^1.8.0
     sdp-transform: ^2.14.1
     ts-debounce: ^4.0.0
-    tslib: 2.6.2
+    tslib: 2.6.3
     typed-emitter: ^2.1.0
-    webrtc-adapter: ^8.1.1
-  checksum: b5852f4fbe3ef955a7bf337e400fa786df0b39b89a186168336c026a21b0f66da3da1d8343cf033ecf01b2d8a52e7a764f09371aeaa2cb0f3e39653975162eab
+    webrtc-adapter: ^9.0.0
+  checksum: 1fb303a2372cc22aea182c9b3ca42bf7daf1e8f2bf5aaa07766a2bc8cca951da054d1c52171ffa7ec8277b8fae17d76bc2ecbbb12846b5f0e2e70deabcc9529c
   languageName: node
   linkType: hard
 
@@ -12185,10 +12185,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.6.2":
-  version: 2.6.2
-  resolution: "tslib@npm:2.6.2"
-  checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
+"tslib@npm:2.6.3, tslib@npm:^2.0.1, tslib@npm:^2.1.0":
+  version: 2.6.3
+  resolution: "tslib@npm:2.6.3"
+  checksum: 74fce0e100f1ebd95b8995fbbd0e6c91bdd8f4c35c00d4da62e285a3363aaa534de40a80db30ecfd388ed7c313c42d930ee0eaf108e8114214b180eec3dbe6f5
   languageName: node
   linkType: hard
 
@@ -12196,13 +12196,6 @@ __metadata:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2.0.1, tslib@npm:^2.1.0":
-  version: 2.6.3
-  resolution: "tslib@npm:2.6.3"
-  checksum: 74fce0e100f1ebd95b8995fbbd0e6c91bdd8f4c35c00d4da62e285a3363aaa534de40a80db30ecfd388ed7c313c42d930ee0eaf108e8114214b180eec3dbe6f5
   languageName: node
   linkType: hard
 
@@ -12743,12 +12736,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webrtc-adapter@npm:^8.1.1":
-  version: 8.2.3
-  resolution: "webrtc-adapter@npm:8.2.3"
+"webrtc-adapter@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "webrtc-adapter@npm:9.0.1"
   dependencies:
     sdp: ^3.2.0
-  checksum: 8239c9452c489c9aad2584b5d00af22462c3e0f1b7885c6e4036b518d2b9411d94c00d2ceadbed987459a3647cfc4ce04c0eb75dd5ae7c3d7df9b810525e6a07
+  checksum: b9a5d24dc43e00f5fb5423d4f5974ddfd6d45019eea374e8fb947560a820d66ad7ab5bee976c734b3db4ff09641be8a362e3e800b5906a5e81c6dbb155cc4256
   languageName: node
   linkType: hard
 

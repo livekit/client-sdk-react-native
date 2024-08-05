@@ -15,3 +15,7 @@ export async function startCallService() {
 export async function stopCallService() {
   await ReactNativeForegroundService.stop();
 }
+
+export function setupCallService() {
+  ReactNativeForegroundService.register();
+}

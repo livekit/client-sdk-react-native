@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
   FlatList,
-  ListRenderItem,
+  type ListRenderItem,
   findNodeHandle,
   NativeModules,
 } from 'react-native';
@@ -18,17 +18,15 @@ import { RoomControls } from './RoomControls';
 import { ParticipantView } from './ParticipantView';
 import {
   AudioSession,
-  useIOSAudioManagement,
   useLocalParticipant,
   LiveKitRoom,
   useDataChannel,
   useRoomContext,
   useVisualStableUpdate,
   useTracks,
-  TrackReferenceOrPlaceholder,
-  ReceivedDataMessage,
+  type TrackReferenceOrPlaceholder,
+  type ReceivedDataMessage,
   AndroidAudioTypePresets,
-  AndroidAudioTypeOptions,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';
 // @ts-ignore
@@ -41,28 +39,20 @@ import Toast from 'react-native-toast-message';
 
 import { Track } from 'livekit-client';
 
-let audioType = false;
 export const RoomPage = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
   const { url, token } = route.params;
-
   useEffect(() => {
     let start = async () => {
-      let preset: AndroidAudioTypeOptions;
-      if (audioType) {
-        console.log('using communication type');
-        preset = AndroidAudioTypePresets.communication;
-      } else {
-        console.log('using media type');
-        preset = AndroidAudioTypePresets.media;
-      }
+      // Perform platform specific call setup.
+      await startCallService();
 
-      audioType = !audioType;
+      // Configure audio session
       AudioSession.configureAudio({
         android: {
-          audioTypeOptions: preset,
+          audioTypeOptions: AndroidAudioTypePresets.communication,
         },
       });
       await AudioSession.startAudioSession();
@@ -70,6 +60,7 @@ export const RoomPage = ({
 
     start();
     return () => {
+      stopCallService();
       AudioSession.stopAudioSession();
     };
   }, []);
@@ -97,14 +88,6 @@ interface RoomViewProps {
 const RoomView = ({ navigation }: RoomViewProps) => {
   const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
   const room = useRoomContext();
-  useIOSAudioManagement(room);
-  // Perform platform specific call setup.
-  useEffect(() => {
-    startCallService();
-    return () => {
-      stopCallService();
-    };
-  }, []);
 
   // Setup room listeners
   const { send } = useDataChannel(
