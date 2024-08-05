@@ -10,9 +10,9 @@ PODS:
   - livekit-react-native (2.3.1):
     - livekit-react-native-webrtc
     - React-Core
-  - livekit-react-native-webrtc (125.0.0):
+  - livekit-react-native-webrtc (125.0.2):
     - React-Core
-    - WebRTC-SDK (~> 125.6422.02)
+    - WebRTC-SDK (~> 125.6422.04)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1199,7 +1199,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.0)
-  - WebRTC-SDK (125.6422.02)
+  - WebRTC-SDK (125.6422.04)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1402,7 +1402,7 @@ SPEC CHECKSUMS:
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 01d3e052018c2a13937aca1860fbedbccd4a41b7
   livekit-react-native: 97dde0e67c92fea3098b2862ca4c10f4acb0fd4d
-  livekit-react-native-webrtc: 480dba8e56c3e1cc6c8574dcb8686db2578891cb
+  livekit-react-native-webrtc: 3498ffc57fb23d78ff2349e5bbf387c29fdb6d8a
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: b03c35057846b685b3ccadc9bfe43e349989cdb2
   RCTRequired: 194626909cfa8d39ca6663138c417bc6c431648c
@@ -1455,7 +1455,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  WebRTC-SDK: 5319b8964f453c5ea6030d93c345082c4f40aa1c
+  WebRTC-SDK: c3d69a87e7185fad3568f6f3cff7c9ac5890acf3
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
 
 PODFILE CHECKSUM: 6fcbd8445e8602c6a7ab17fb1523c62772c821da
