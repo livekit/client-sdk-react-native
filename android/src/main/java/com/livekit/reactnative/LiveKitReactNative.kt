@@ -30,10 +30,14 @@ object LiveKitReactNative {
      */
     @JvmStatic
     @JvmOverloads
-    fun setup(context: Context, audioType: AudioType = AudioType.CommunicationAudioType()) {
+    fun setup(
+        context: Context,
+        audioType: AudioType = AudioType.CommunicationAudioType()
+    ) {
         val options = WebRTCModuleOptions.getInstance()
         options.videoEncoderFactory = CustomVideoEncoderFactory(null, true, true)
         options.videoDecoderFactory = CustomVideoDecoderFactory()
+        options.enableMediaProjectionService = true
 
         val useHardwareAudioProcessing = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
