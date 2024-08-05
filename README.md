@@ -295,6 +295,12 @@ Enabling screenshare requires extra installation steps:
 
 Android screenshare requires a foreground service with type `mediaProjection` to be present.
 
+From 2.4.0 onwards, this is handled internally and no extra setup is required.
+
+---
+
+On versions prior to 2.4.0, you must declare your own foreground service.
+
 The example app uses [@supersami/rn-foreground-service](https://github.com/Raja0sama/rn-foreground-service) for this.
 
 Add the following permissions to your `AndroidManifest.xml` file:
