@@ -295,29 +295,7 @@ Enabling screenshare requires extra installation steps:
 
 Android screenshare requires a foreground service with type `mediaProjection` to be present.
 
-From 2.4.0 onwards, this is handled internally and no extra setup is required.
-
----
-
-On versions prior to 2.4.0, you must declare your own foreground service.
-
-The example app uses [@supersami/rn-foreground-service](https://github.com/Raja0sama/rn-foreground-service) for this.
-
-Add the following permissions to your `AndroidManifest.xml` file:
-
-```xml
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
-```
-
-Declare the the service and ensure it's labelled a `mediaProjection` service like so:
-
-```xml
-<service android:name="com.supersami.foregroundservice.ForegroundService" android:foregroundServiceType="mediaProjection" />
-<service android:name="com.supersami.foregroundservice.ForegroundServiceTask" />
-```
-
-Once setup, start the foreground service prior to using screenshare.
+From version 2.4.0 onwards, this is handled internally and no extra setup is required.
 
 ### iOS
 
@@ -361,6 +339,50 @@ return (
 ### Note
 
 You will not be able to publish camera or microphone tracks on iOS Simulator.
+
+## Background Processing
+
+### Android
+
+To support staying connected to LiveKit in the background, you will need a foreground service on Android.
+
+The example app uses [@supersami/rn-foreground-service](https://github.com/Raja0sama/rn-foreground-service) for this.
+
+Add the following permissions to your `AndroidManifest.xml` file:
+
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+```
+
+Declare the the service and ensure it's labelled a `mediaProjection` service like so:
+
+```xml
+<service android:name="com.supersami.foregroundservice.ForegroundService" android:foregroundServiceType="camera|microphone|mediaPlayback" />
+<service android:name="com.supersami.foregroundservice.ForegroundServiceTask" />
+```
+
+The camera and microphone permissions/foreground service types can be omitted if you are not using those.
+
+Once setup, [start the foreground service](https://github.com/livekit/client-sdk-react-native/blob/main/example/src/callservice/CallService.android.ts) to keep the app alive in the background.
+
+### iOS
+
+By default, simple background processing can be enabled by selecting the `audio` and `voip` 
+[UIBackgroundModes](https://developer.apple.com/documentation/bundleresources/information_property_list/uibackgroundmodes) 
+in your XCode project. In your project, select your app target -> Signing & Capabilities -> Add Capability -> Background Modes.
+
+These background modes will keep the app alive in the background as long as a mic or audio track is playing.
+
+For a more robust background that isn't sensitive to the above conditions, we suggest using 
+[CallKit](https://developer.apple.com/documentation/callkit/) to maintain the 
+connection while in the background. The example uses 
+[react-native-callkeep](https://github.com/react-native-webrtc/react-native-callkeep)
+for simple integration with CallKit.
+
+Our example code can be found [here](https://github.com/livekit/client-sdk-react-native/blob/main/example/src/callservice/CallService.android.ts).
 
 ## Troubleshooting
 

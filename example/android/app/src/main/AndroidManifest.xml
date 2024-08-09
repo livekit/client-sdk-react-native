@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <application
       android:name=".MainApplication"
@@ -39,7 +41,7 @@
         android:value=""
       />
       <service android:name="com.supersami.foregroundservice.ForegroundService"
-            android:foregroundServiceType="mediaPlayback" />
+            android:foregroundServiceType="camera|microphone|mediaPlayback" />
       <service android:name="com.supersami.foregroundservice.ForegroundServiceTask" />
       <service android:name="com.voximplant.foregroundservice.VIForegroundService"  />
     </application>
