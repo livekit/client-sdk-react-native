@@ -325,6 +325,12 @@ export default class AudioSession {
     }
   };
 
+  /**
+   * Directly change the AVAudioSession category/mode.
+   *
+   * @param config The configuration to use. Null values will be omitted and the
+   * existing values will be unchanged.
+   */
   static setAppleAudioConfiguration = async (
     config: AppleAudioConfiguration
   ) => {

@@ -13,7 +13,7 @@ import AudioSession, {
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
-import type { LiveKitReactNativeInfo } from 'livekit-client';
+import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
 
 /**
@@ -23,6 +23,7 @@ import type { LogLevel, SetLogLevelOptions } from './logger';
  */
 export function registerGlobals() {
   webrtcRegisterGlobals();
+  iosCategoryEnforce();
   livekitRegisterGlobals();
   setupURLPolyfill();
   fixWebrtcAdapter();
@@ -31,6 +32,27 @@ export function registerGlobals() {
   shimAsyncIterator();
   shimIterator();
 }
+
+/**
+ * Enforces changing to playAndRecord category prior to obtaining microphone.
+ */
+function iosCategoryEnforce() {
+  if (Platform.OS === 'ios') {
+    // @ts-ignore
+    let getUserMediaFunc = global.navigator.mediaDevices.getUserMedia;
+    // @ts-ignore
+    global.navigator.mediaDevices.getUserMedia = async (constraints: any) => {
+      if (constraints.audio) {
+        await AudioSession.setAppleAudioConfiguration({
+          audioCategory: 'playAndRecord',
+        });
+      }
+
+      return await getUserMediaFunc(constraints);
+    };
+  }
+}
+
 function livekitRegisterGlobals() {
   let lkGlobal: LiveKitReactNativeInfo = {
     platform: Platform.OS,

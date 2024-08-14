@@ -27,6 +27,7 @@ import {
   type TrackReferenceOrPlaceholder,
   type ReceivedDataMessage,
   AndroidAudioTypePresets,
+  useIOSAudioManagement,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';
 // @ts-ignore
@@ -89,6 +90,7 @@ const RoomView = ({ navigation }: RoomViewProps) => {
   const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
   const room = useRoomContext();
 
+  useIOSAudioManagement(room, true);
   // Setup room listeners
   const { send } = useDataChannel(
     (dataMessage: ReceivedDataMessage<string>) => {

@@ -121,44 +121,59 @@ RCT_EXPORT_METHOD(selectAudioOutput:(NSString *)deviceId
 
 /// Configure audio config for WebRTC
 RCT_EXPORT_METHOD(setAppleAudioConfiguration:(NSDictionary *) configuration){
-  RTCAudioSession* session = [RTCAudioSession sharedInstance];
-  RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
+    RTCAudioSession* session = [RTCAudioSession sharedInstance];
+    RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
 
-  NSString* appleAudioCategory = configuration[@"audioCategory"];
-  NSArray* appleAudioCategoryOptions = configuration[@"audioCategoryOptions"];
-  NSString* appleAudioMode = configuration[@"audioMode"];
-  
-  [session lockForConfiguration];
+    NSString* appleAudioCategory = configuration[@"audioCategory"];
+    NSArray* appleAudioCategoryOptions = configuration[@"audioCategoryOptions"];
+    NSString* appleAudioMode = configuration[@"audioMode"];
+    
+    [session lockForConfiguration];
 
-  if(appleAudioCategoryOptions != nil) {
-    config.categoryOptions = 0;
-    for(NSString* option in appleAudioCategoryOptions) {
-      if([@"mixWithOthers" isEqualToString:option]) {
-        config.categoryOptions |= AVAudioSessionCategoryOptionMixWithOthers;
-      } else if([@"duckOthers" isEqualToString:option]) {
-        config.categoryOptions |= AVAudioSessionCategoryOptionDuckOthers;
-      } else if([@"allowBluetooth" isEqualToString:option]) {
-        config.categoryOptions |= AVAudioSessionCategoryOptionAllowBluetooth;
-      } else if([@"allowBluetoothA2DP" isEqualToString:option]) {
-        config.categoryOptions |= AVAudioSessionCategoryOptionAllowBluetoothA2DP;
-      } else if([@"allowAirPlay" isEqualToString:option]) {
-        config.categoryOptions |= AVAudioSessionCategoryOptionAllowAirPlay;
-      } else if([@"defaultToSpeaker" isEqualToString:option]) {
-        config.categoryOptions |= AVAudioSessionCategoryOptionDefaultToSpeaker;
-      }
+    NSError* error = nil;
+    BOOL categoryChanged = NO;
+    if(appleAudioCategoryOptions != nil) {
+        categoryChanged = YES;
+        config.categoryOptions = 0;
+        for(NSString* option in appleAudioCategoryOptions) {
+            if([@"mixWithOthers" isEqualToString:option]) {
+                config.categoryOptions |= AVAudioSessionCategoryOptionMixWithOthers;
+            } else if([@"duckOthers" isEqualToString:option]) {
+                config.categoryOptions |= AVAudioSessionCategoryOptionDuckOthers;
+            } else if([@"allowBluetooth" isEqualToString:option]) {
+                config.categoryOptions |= AVAudioSessionCategoryOptionAllowBluetooth;
+            } else if([@"allowBluetoothA2DP" isEqualToString:option]) {
+                config.categoryOptions |= AVAudioSessionCategoryOptionAllowBluetoothA2DP;
+            } else if([@"allowAirPlay" isEqualToString:option]) {
+                config.categoryOptions |= AVAudioSessionCategoryOptionAllowAirPlay;
+            } else if([@"defaultToSpeaker" isEqualToString:option]) {
+                config.categoryOptions |= AVAudioSessionCategoryOptionDefaultToSpeaker;
+            }
+        }
     }
-  }
 
-  if(appleAudioCategory != nil) {
-    config.category = [AudioUtils audioSessionCategoryFromString:appleAudioCategory];
-    [session setCategory:config.category withOptions:config.categoryOptions error:nil];
-  }
+    if(appleAudioCategory != nil) {
+        categoryChanged = YES;
+        config.category = [AudioUtils audioSessionCategoryFromString:appleAudioCategory];
+    }
+    
+    if(categoryChanged) {
+        [session setCategory:config.category withOptions:config.categoryOptions error:&error];
+        if(error != nil) {
+            NSLog(@"Error setting category: %@", [error localizedDescription]);
+            error = nil;
+        }
+    }
 
-  if(appleAudioMode != nil) {
-    config.mode = [AudioUtils audioSessionModeFromString:appleAudioMode];
-    [session setMode:config.mode error:nil];
-  }
+    if(appleAudioMode != nil) {
+        config.mode = [AudioUtils audioSessionModeFromString:appleAudioMode];
+        [session setMode:config.mode error:&error];
+        if(error != nil) {
+            NSLog(@"Error setting category: %@", [error localizedDescription]);
+            error = nil;
+        }
+    }
 
-  [session unlockForConfiguration];
+    [session unlockForConfiguration];
 }
 @end
