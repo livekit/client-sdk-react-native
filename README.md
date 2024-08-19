@@ -382,7 +382,11 @@ connection while in the background. The example uses
 [react-native-callkeep](https://github.com/react-native-webrtc/react-native-callkeep)
 for simple integration with CallKit.
 
-Our example code can be found [here](https://github.com/livekit/client-sdk-react-native/blob/main/example/src/callservice/CallService.android.ts).
+Our example code can be found [here](https://github.com/livekit/client-sdk-react-native/blob/main/example/src/callservice/CallService.ios.ts).
+
+For apps planning to use CallKit to handle incoming calls in the background, [it is important to call
+`RTCAudioSession.audioSessionDidActivate/Deactivate` when the call provider activates/deactivates
+the audio session.](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/iOSInstallation.md#callkit)
 
 ## Troubleshooting
 

@@ -5,6 +5,8 @@ import RNCallKeep, {
   AudioSessionMode,
 } from 'react-native-callkeep';
 
+import { RTCAudioSession } from '@livekit/react-native-webrtc';
+
 let uuid = '1932b99c-4fe1-4bf4-897f-763bc4dc21c2';
 
 // This keeps the app alive in the background.
@@ -50,5 +52,13 @@ export function setupCallService() {
     },
   };
   RNCallKeep.setSettings(options);
-  RNCallKeep.addEventListener('didChangeAudioRoute', () => {});
+  RNCallKeep.addEventListener('didChangeAudioRoute', () => {}); // To quell warnings.
+
+  // For apps handling incoming calls from the background.
+  RNCallKeep.addEventListener('didActivateAudioSession', () => {
+    RTCAudioSession.audioSessionDidActivate();
+  });
+  RNCallKeep.addEventListener('didDeactivateAudioSession', () => {
+    RTCAudioSession.audioSessionDidDeactivate();
+  });
 }
