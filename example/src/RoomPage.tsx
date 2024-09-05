@@ -39,6 +39,7 @@ import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
 import { Track } from 'livekit-client';
+import { PIPIOS } from './PIPIOS';
 
 export const RoomPage = ({
   navigation,
@@ -74,7 +75,7 @@ export const RoomPage = ({
       options={{
         adaptiveStream: { pixelDensity: 'screen' },
       }}
-      audio={true}
+      audio={false}
       video={true}
     >
       <RoomView navigation={navigation} />
@@ -117,10 +118,16 @@ const RoomView = ({ navigation }: RoomViewProps) => {
     ],
     { onlySubscribed: false }
   );
-  const stableTracks = useVisualStableUpdate(tracks, 5);
+  const stableTracks = useVisualStableUpdate(tracks, 5).filter((trackRef) => {
+    return trackRef.participant !== room.localParticipant;
+  });
   // Setup views.
-  const stageView = tracks.length > 0 && (
+  const stageView = stableTracks.length > 0 && (
     <ParticipantView trackRef={stableTracks[0]} style={styles.stage} />
+  );
+
+  let pipView = stableTracks.length > 0 && (
+    <PIPIOS trackRef={stableTracks[0]} style={styles.pip} />
   );
 
   const renderParticipant: ListRenderItem<TrackReferenceOrPlaceholder> = ({
@@ -165,6 +172,7 @@ const RoomView = ({ navigation }: RoomViewProps) => {
 
   return (
     <View style={styles.container}>
+      {pipView}
       {stageView}
       {otherParticipantsView}
       <RoomControls
@@ -234,6 +242,10 @@ const RoomView = ({ navigation }: RoomViewProps) => {
 };
 
 const styles = StyleSheet.create({
+  pip: {
+    width: 150,
+    height: 150,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

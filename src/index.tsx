@@ -15,6 +15,7 @@ import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
 import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
+import RTCPIPVideoView from './components/RTCPIPVideoView';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -109,6 +110,7 @@ export {
   AudioSession,
   AndroidAudioTypePresets,
   getDefaultAppleAudioConfigurationForMode,
+  RTCPIPVideoView,
 };
 export type {
   AudioConfiguration,
