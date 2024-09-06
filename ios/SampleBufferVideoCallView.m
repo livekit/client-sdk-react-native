@@ -1,75 +1,12 @@
+#import "I420Converter.h"
 #import "SampleBufferVideoCallView.h"
 #import <WebRTC/WebRTC.h>
+#import <Accelerate/Accelerate.h>
 
 
-@implementation RTCI420Buffer (CVPixelBuffer)
-
--(CVPixelBufferRef)toCVPixelBuffer {
-    CVPixelBufferRef pixelBuffer = NULL;
-            
-    NSDictionary *pixelBufferAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSDictionary dictionary],
-                                           (id)kCVPixelBufferIOSurfacePropertiesKey,
-                                           nil
-    ];
-
-    CVReturn result = CVPixelBufferCreate(kCFAllocatorDefault,
-                                          self.width,
-                                          self.height,
-                                          kCVPixelFormatType_32BGRA,
-                                          (__bridge CFDictionaryRef)pixelBufferAttributes,
-                                          &pixelBuffer);
-            
-    if (result != kCVReturnSuccess) {
-        return NULL;
-    }
-
-    result = CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-    
-    if (result != kCVReturnSuccess) {
-        NSLog(@"convertToCVPixelBufferWithI420Buffer result = %d",result);
-        CFRelease(pixelBuffer);
-        return NULL;
-    }
-
-    uint8_t *dst = CVPixelBufferGetBaseAddress(pixelBuffer);
-    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
-    
-    int ret = [RTCYUVHelper I420ToARGB:self.dataY
-                            srcStrideY:self.strideY
-                                  srcU:self.dataU
-                            srcStrideU:self.strideU
-                                  srcV:self.dataV
-                            srcStrideV:self.strideV
-                               dstARGB:dst
-                         dstStrideARGB:bytesPerRow
-                                 width:self.width
-                                height:self.height];
-        
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    if (ret) {
-        NSLog(@"I420ToARGB ret = %d",ret);
-        CFRelease(pixelBuffer);
-        return NULL;
-    }
-
-    return pixelBuffer;
-}
-
+@interface SampleBufferVideoCallView ()
+@property (nonatomic, retain) I420Converter *i420Converter;
 @end
-
-@implementation RTCVideoFrame (Helpers)
-
--(CVPixelBufferRef)toCVPixelBuffer {
-    if ([self.buffer isKindOfClass:[RTCCVPixelBuffer class]]) {
-        return [((RTCCVPixelBuffer *) self.buffer) pixelBuffer];
-    } else {
-        return [((RTCI420Buffer *)[self.buffer toI420]) toCVPixelBuffer];
-    }
-}
-
-@end
-
 
 @implementation SampleBufferVideoCallView
 
@@ -87,7 +24,6 @@
 - (void)layerFailedToDecode:(NSNotification*)note
 {
     NSLog(@"layerFailedToDecode");
-    AVSampleBufferDisplayLayer *videolayer = (AVSampleBufferDisplayLayer*)[self layer];
     NSError *error = [[note userInfo] valueForKey:AVSampleBufferDisplayLayerFailedToDecodeNotificationErrorKey];
     NSLog(@"Error: %@", error);
 }
@@ -109,6 +45,9 @@
     
     // Convert RTCVideoFrame to CMSampleBuffer
     CMSampleBufferRef sampleBuffer = [self sampleBufferFrom:frame];
+    if (sampleBuffer == nil) {
+        return;
+    }
 
     // TODO: handle overflows
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -122,7 +61,7 @@
     // Convert RTCVideoFrame to CMSampleBuffer
     
     // Assuming your RTCVideoFrame contains pixelBuffer
-    CVPixelBufferRef pixelBuffer = [rtcVideoFrame toCVPixelBuffer];
+    CVPixelBufferRef pixelBuffer = [self pixelBufferFrom:rtcVideoFrame];
     if (!pixelBuffer) {
         return nil;
     }
@@ -147,5 +86,36 @@
     
     return sampleBuffer;
 }
+
+
+-(CVPixelBufferRef)pixelBufferFrom:(RTCVideoFrame *)videoFrame {
+    if ([videoFrame.buffer isKindOfClass:[RTCCVPixelBuffer class]]) {
+        return [((RTCCVPixelBuffer *) videoFrame.buffer) pixelBuffer];
+    } else {
+        return [self pixelBufferFromI420:[videoFrame.buffer toI420]];
+    }
+}
+
+
+-(CVPixelBufferRef)pixelBufferFromI420:(RTCI420Buffer *)i420Buffer {
+    if (_i420Converter == nil) {
+        I420Converter * converter = [[I420Converter alloc] init];
+        vImage_Error err = [converter prepareForAccelerateConversion];
+        
+        if(err != kvImageNoError) {
+            NSLog(@"Error when preparing i420Converter: %ld", err);
+            return NULL;
+        }
+        
+        _i420Converter = converter;
+    }
+    
+    return [_i420Converter convertI420ToPixelBuffer:i420Buffer];
+}
+
+-(void)dealloc {
+    [_i420Converter unprepareForAccelerateConversion];
+}
+
 @end
 
