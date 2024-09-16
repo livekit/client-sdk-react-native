@@ -30,7 +30,7 @@ android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   namespace "com.livekit.reactnative"
   defaultConfig {
-    minSdkVersion 16
+    minSdkVersion 24
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
