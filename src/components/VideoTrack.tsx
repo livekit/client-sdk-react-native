@@ -20,6 +20,7 @@ import type { TrackReference } from '@livekit/components-react';
 
 /**
  * Props for the VideoTrack component.
+ * @public
  */
 export type VideoTrackProps = {
   /**
@@ -69,6 +70,7 @@ export type VideoTrackProps = {
  *
  * @param props - See VideoTrackProps for details.
  * @returns A React component that renders the given video track.
+ * @public
  */
 export const VideoTrack = ({
   style = {},
