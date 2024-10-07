@@ -45,7 +45,7 @@ export type VideoTrackProps = {
   /**
    * Specifies the depth-stacking order of this video view in the stacking space of all video views.
    * A larger zOrder value generally causes the view to cover those with lower values.
-   * 
+   *
    * The support for zOrder is platform-dependent and/or
    * implementation-specific. Thus, specifying a value for zOrder is to be
    * thought of as giving a hint rather than as imposing a requirement. For
