@@ -1201,7 +1201,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.0)
-  - WebRTC-SDK (125.6422.04)
+  - WebRTC-SDK (125.6422.05)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1461,7 +1461,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  WebRTC-SDK: c3d69a87e7185fad3568f6f3cff7c9ac5890acf3
+  WebRTC-SDK: 1990a1a595bd0b59c17485ce13ff17f575732c12
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
 
 PODFILE CHECKSUM: 6fcbd8445e8602c6a7ab17fb1523c62772c821da
