@@ -1,6 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Platform } from 'react-native';
-import { RoomEvent, Room } from 'livekit-client';
+import {
+  RoomEvent,
+  Room,
+  type LocalTrackPublication,
+  type RemoteTrackPublication,
+} from 'livekit-client';
 import AudioSession, {
   getDefaultAppleAudioConfigurationForMode,
   type AppleAudioConfiguration,
@@ -50,27 +55,35 @@ export function useIOSAudioManagement(
       return () => {};
     }
 
-    let onLocalPublished = () => {
-      setLocalTrackCount(localTrackCount + 1);
-    };
-    let onLocalUnpublished = () => {
-      if (localTrackCount - 1 < 0) {
-        log.warn(
-          'mismatched local audio track count! attempted to reduce track count below zero.'
-        );
+    let onLocalPublished = (publication: LocalTrackPublication) => {
+      if (publication.kind === 'audio') {
+        setLocalTrackCount(localTrackCount + 1);
       }
-      setLocalTrackCount(Math.max(localTrackCount - 1, 0));
     };
-    let onRemotePublished = () => {
-      setRemoteTrackCount(remoteTrackCount + 1);
-    };
-    let onRemoteUnpublished = () => {
-      if (remoteTrackCount - 1 < 0) {
-        log.warn(
-          'mismatched remote audio track count! attempted to reduce track count below zero.'
-        );
+    let onLocalUnpublished = (publication: LocalTrackPublication) => {
+      if (publication.kind === 'audio') {
+        if (localTrackCount - 1 < 0) {
+          log.warn(
+            'mismatched local audio track count! attempted to reduce track count below zero.'
+          );
+        }
+        setLocalTrackCount(Math.max(localTrackCount - 1, 0));
       }
-      setRemoteTrackCount(Math.max(remoteTrackCount - 1, 0));
+    };
+    let onRemotePublished = (publication: RemoteTrackPublication) => {
+      if (publication.kind === 'audio') {
+        setRemoteTrackCount(remoteTrackCount + 1);
+      }
+    };
+    let onRemoteUnpublished = (publication: RemoteTrackPublication) => {
+      if (publication.kind === 'audio') {
+        if (remoteTrackCount - 1 < 0) {
+          log.warn(
+            'mismatched remote audio track count! attempted to reduce track count below zero.'
+          );
+        }
+        setRemoteTrackCount(Math.max(remoteTrackCount - 1, 0));
+      }
     };
 
     room
@@ -124,6 +137,5 @@ function getRemoteAudioTrackCount(room: Room): number {
   room.remoteParticipants.forEach((participant) => {
     audioTracks += participant.audioTrackPublications.size;
   });
-
   return audioTracks;
 }
