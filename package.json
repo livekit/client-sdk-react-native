@@ -1,6 +1,6 @@
 {
   "name": "@livekit/react-native",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "LiveKit for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
