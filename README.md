@@ -16,7 +16,7 @@ Use this SDK to add realtime video, audio and data features to your React Native
 
 > [!NOTE]
 > This is v2 of the React-Native SDK. When migrating from v1.x to v2.x you might encounter a small set of breaking changes.
-> Read the [migration guide](https://docs.livekit.io/guides/migrate-from-v1/) for a detailed overview of what has changed.
+> Read the [migration guide](https://docs.livekit.io/recipes/migrate-from-v1/) for a detailed overview of what has changed.
 
 ## Installation
 
@@ -295,7 +295,7 @@ Enabling screenshare requires extra installation steps:
 
 Android screenshare requires a foreground service with type `mediaProjection` to be present.
 
-From version 2.4.0 onwards, the foreground service is handled internally, 
+From version 2.4.0 onwards, the foreground service is handled internally,
 but you must declare the permission yourself in your app's AndroidManifest.xml file.
 
 ```
@@ -375,15 +375,15 @@ Once setup, [start the foreground service](https://github.com/livekit/client-sdk
 
 ### iOS
 
-By default, simple background processing can be enabled by selecting the `audio` and `voip` 
-[UIBackgroundModes](https://developer.apple.com/documentation/bundleresources/information_property_list/uibackgroundmodes) 
+By default, simple background processing can be enabled by selecting the `audio` and `voip`
+[UIBackgroundModes](https://developer.apple.com/documentation/bundleresources/information_property_list/uibackgroundmodes)
 in your XCode project. In your project, select your app target -> Signing & Capabilities -> Add Capability -> Background Modes.
 
 These background modes will keep the app alive in the background as long as a mic or audio track is playing.
 
-For a more robust background that isn't sensitive to the above conditions, we suggest using 
-[CallKit](https://developer.apple.com/documentation/callkit/) to maintain the 
-connection while in the background. The example uses 
+For a more robust background that isn't sensitive to the above conditions, we suggest using
+[CallKit](https://developer.apple.com/documentation/callkit/) to maintain the
+connection while in the background. The example uses
 [react-native-callkeep](https://github.com/react-native-webrtc/react-native-callkeep)
 for simple integration with CallKit.
 
