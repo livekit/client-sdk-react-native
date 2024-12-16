@@ -16,7 +16,7 @@ import { PixelRatio, Platform } from 'react-native';
 import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
-import RNKeyProvider from './e2ee/RNKeyProvider';
+import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -124,4 +124,5 @@ export type {
   AudioTrackState,
   LogLevel,
   SetLogLevelOptions,
+  RNKeyProviderOptions,
 };

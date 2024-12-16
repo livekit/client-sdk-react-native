@@ -12,6 +12,9 @@ const defaultFailureTolerance = -1;
 const defaultKeyRingSize = 16;
 const defaultDiscardFrameWhenCryptorNotReady = false;
 
+/**
+ * Options for construction an RNKeyProvider
+ */
 export type RNKeyProviderOptions = KeyProviderOptions & {
   uncryptedMagicBytes?: string | Uint8Array;
 };
