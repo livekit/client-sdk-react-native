@@ -10,7 +10,7 @@ PODS:
   - livekit-react-native (2.4.3):
     - livekit-react-native-webrtc
     - React-Core
-  - livekit-react-native-webrtc (125.0.5):
+  - livekit-react-native-webrtc (125.0.6):
     - React-Core
     - WebRTC-SDK (~> 125.6422.06)
   - RCT-Folly (2024.01.01.00):
@@ -1407,7 +1407,7 @@ SPEC CHECKSUMS:
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 01d3e052018c2a13937aca1860fbedbccd4a41b7
   livekit-react-native: b93bfc9038869dcbd5cee53b419c956c28e44949
-  livekit-react-native-webrtc: 87b33c90c01d78b2d8016981ea0f20ecceac18fd
+  livekit-react-native-webrtc: 7f040d0557b0e0903d6cfe4977ddf608462988c6
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: b03c35057846b685b3ccadc9bfe43e349989cdb2
   RCTRequired: 194626909cfa8d39ca6663138c417bc6c431648c
