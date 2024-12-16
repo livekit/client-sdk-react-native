@@ -42,4 +42,4 @@ export type {
 
 export type { ReceivedDataMessage } from '@livekit/components-core';
 export * from './hooks/useE2EEManager';
-export type { UseRNE2EEManagerOptions } from './hooks/useE2EEManager'
+export type { UseRNE2EEManagerOptions } from './hooks/useE2EEManager';
