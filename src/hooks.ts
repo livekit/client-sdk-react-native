@@ -41,3 +41,4 @@ export type {
 } from '@livekit/components-react';
 
 export type { ReceivedDataMessage } from '@livekit/components-core';
+export * from './hooks/useE2EEManager';

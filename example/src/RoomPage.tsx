@@ -28,6 +28,7 @@ import {
   type ReceivedDataMessage,
   AndroidAudioTypePresets,
   useIOSAudioManagement,
+  useRNE2EEManager,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';
 // @ts-ignore
@@ -44,7 +45,7 @@ export const RoomPage = ({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'RoomPage'>) => {
-  const { url, token } = route.params;
+  const { url, token, e2ee, e2eeKey } = route.params;
   useEffect(() => {
     let start = async () => {
       // Perform platform specific call setup.
@@ -66,6 +67,9 @@ export const RoomPage = ({
     };
   }, []);
 
+  let { e2eeManager } = useRNE2EEManager({ sharedKey: e2eeKey });
+  let e2eeOptions = e2ee ? { e2eeManager } : undefined;
+
   return (
     <LiveKitRoom
       serverUrl={url}
@@ -73,6 +77,7 @@ export const RoomPage = ({
       connect={true}
       options={{
         adaptiveStream: { pixelDensity: 'screen' },
+        e2ee: e2eeOptions,
       }}
       audio={true}
       video={true}
@@ -89,6 +94,13 @@ interface RoomViewProps {
 const RoomView = ({ navigation }: RoomViewProps) => {
   const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
   const room = useRoomContext();
+  useEffect(() => {
+    let setup = async () => {
+      await room.setE2EEEnabled(true);
+    };
+    setup();
+    return () => {};
+  }, [room]);
 
   useIOSAudioManagement(room, true);
   // Setup room listeners

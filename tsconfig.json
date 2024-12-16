@@ -17,6 +17,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
+    "resolvePackageJsonExports": false,
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
