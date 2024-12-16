@@ -23,5 +23,5 @@ export default function App() {
 
 export type RootStackParamList = {
   PreJoinPage: undefined;
-  RoomPage: { url: string; token: string };
+  RoomPage: { url: string; token: string; e2ee: boolean; e2eeKey: string };
 };

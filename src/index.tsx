@@ -15,6 +15,8 @@ import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
 import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
+import RNE2EEManager from './e2ee/RNE2EEManager';
+import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -107,6 +109,8 @@ export * from './audio/AudioManager';
 
 export {
   AudioSession,
+  RNE2EEManager,
+  RNKeyProvider,
   AndroidAudioTypePresets,
   getDefaultAppleAudioConfigurationForMode,
 };
@@ -120,4 +124,5 @@ export type {
   AudioTrackState,
   LogLevel,
   SetLogLevelOptions,
+  RNKeyProviderOptions,
 };
