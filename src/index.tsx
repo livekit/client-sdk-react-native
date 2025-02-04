@@ -17,6 +17,7 @@ import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
 import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
+import { setupNativeEvents } from './events/EventEmitter';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -33,6 +34,7 @@ export function registerGlobals() {
   shimArrayAt();
   shimAsyncIterator();
   shimIterator();
+  setupNativeEvents();
 }
 
 /**
@@ -99,6 +101,7 @@ function shimIterator() {
   shim();
 }
 export * from './hooks';
+export * from './components/BarVisualizer';
 export * from './components/LiveKitRoom';
 export * from './components/VideoTrack';
 export * from './components/VideoView'; // deprecated

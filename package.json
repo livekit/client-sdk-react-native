@@ -42,10 +42,10 @@
     "android"
   ],
   "dependencies": {
-    "@livekit/components-react": "^2.0.6",
+    "@livekit/components-react": "^2.8.1",
     "array.prototype.at": "^1.1.1",
     "events": "^3.3.0",
-    "livekit-client": "^2.7.5",
+    "livekit-client": "^2.8.1",
     "loglevel": "^1.8.0",
     "promise.allsettled": "^1.0.5",
     "react-native-url-polyfill": "^1.3.0",
@@ -57,7 +57,7 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@commitlint/config-conventional": "^16.2.1",
-    "@livekit/react-native-webrtc": "^125.0.7",
+    "@livekit/react-native-webrtc": "^125.0.8",
     "@react-native/babel-preset": "0.74.84",
     "@react-native/eslint-config": "0.74.84",
     "@react-native/metro-config": "0.74.84",
@@ -83,7 +83,7 @@
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "@livekit/react-native-webrtc": "^125.0.7",
+    "@livekit/react-native-webrtc": "^125.0.8",
     "react": "*",
     "react-native": "*"
   },
