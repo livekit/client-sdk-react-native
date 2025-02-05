@@ -13,6 +13,9 @@ import LiveKitModule from '../LKNativeModule';
  * @alpha
  */
 export interface MultiBandTrackVolumeOptions {
+  /**
+   * the number of bands to split the audio into
+   */
   bands?: number;
   /**
    * cut off frequency on the lower end
@@ -35,6 +38,12 @@ const multibandDefaults = {
   updateInterval: 40,
 } as const satisfies MultiBandTrackVolumeOptions;
 
+/**
+ * A hook for tracking the volume of an audio track across multiple frequency bands.
+ *
+ * @param trackOrTrackReference
+ * @returns A number array containing the volume for each frequency band.
+ */
 export function useMultibandTrackVolume(
   trackOrTrackReference?:
     | LocalAudioTrack

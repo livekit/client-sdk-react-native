@@ -8,6 +8,12 @@ import { useEffect, useState } from 'react';
 import { addListener, removeListener } from '../events/EventEmitter';
 import LiveKitModule from '../LKNativeModule';
 
+/**
+ * A hook for tracking the volume of an audio track.
+ *
+ * @param trackOrTrackReference
+ * @returns A number between 0-1 representing the volume.
+ */
 export function useTrackVolume(
   trackOrTrackReference?:
     | LocalAudioTrack
