@@ -1,9 +1,12 @@
 package com.livekit.reactnative
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.media.AudioAttributes
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
 import com.livekit.reactnative.audio.AudioDeviceKind
 import com.livekit.reactnative.audio.AudioManagerUtils
 import com.livekit.reactnative.audio.AudioSwitchManager
@@ -119,5 +122,9 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     fun selectAudioOutput(deviceId: String, promise: Promise) {
         audioManager.selectAudioOutput(AudioDeviceKind.fromTypeName(deviceId))
         promise.resolve(null)
+    }
+
+    override fun invalidate() {
+        LiveKitReactNative.invalidate(reactApplicationContext)
     }
 }
