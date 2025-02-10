@@ -5,10 +5,14 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import com.livekit.reactnative.audio.AudioType
+import com.livekit.reactnative.audio.processing.AudioProcessingController
+import com.livekit.reactnative.audio.processing.AudioRecordSamplesDispatcher
+import com.livekit.reactnative.audio.processing.CustomAudioProcessingController
 import com.livekit.reactnative.video.CustomVideoDecoderFactory
 import com.livekit.reactnative.video.CustomVideoEncoderFactory
 import com.oney.WebRTCModule.WebRTCModuleOptions
 import org.webrtc.audio.JavaAudioDeviceModule
+import java.util.concurrent.Callable
 
 object LiveKitReactNative {
 
@@ -25,6 +29,28 @@ object LiveKitReactNative {
             return adm
         }
 
+    private lateinit var _audioProcessingController: AudioProcessingController
+
+    val audioProcessingController: AudioProcessingController
+        get() {
+            if (!::_audioProcessingController.isInitialized) {
+                throw IllegalStateException("audioProcessingController is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
+            }
+            return _audioProcessingController
+        }
+
+
+    lateinit var _audioRecordSamplesDispatcher: AudioRecordSamplesDispatcher
+
+    val audioRecordSamplesDispatcher: AudioRecordSamplesDispatcher
+        get() {
+            if (!::_audioRecordSamplesDispatcher.isInitialized) {
+                throw IllegalStateException("audioRecordSamplesDispatcher is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
+            }
+            return _audioRecordSamplesDispatcher
+        }
+
+
     /**
      * Initializes components required for LiveKit to work on Android.
      *
@@ -37,6 +63,8 @@ object LiveKitReactNative {
         context: Context,
         audioType: AudioType = AudioType.CommunicationAudioType()
     ) {
+        _audioRecordSamplesDispatcher = AudioRecordSamplesDispatcher()
+
         this.audioType = audioType
         val options = WebRTCModuleOptions.getInstance()
         options.videoEncoderFactory = CustomVideoEncoderFactory(null, true, true)
@@ -54,6 +82,7 @@ object LiveKitReactNative {
             .setUseHardwareAcousticEchoCanceler(useHardwareAudioProcessing)
             .setUseHardwareNoiseSuppressor(useHardwareAudioProcessing)
             .setAudioAttributes(audioType.audioAttributes)
+            .setSamplesReadyCallback(audioRecordSamplesDispatcher)
             .createAudioDeviceModule()
     }
 
@@ -67,5 +96,13 @@ object LiveKitReactNative {
 
         setupAdm(context)
         options.audioDeviceModule = adm
+
+        // CustomAudioProcessingController can't be instantiated before WebRTC is loaded.
+        options.audioProcessingFactoryFactory = Callable {
+            val apc = CustomAudioProcessingController()
+            _audioProcessingController = apc
+            return@Callable apc.externalAudioProcessor
+        }
+
     }
 }

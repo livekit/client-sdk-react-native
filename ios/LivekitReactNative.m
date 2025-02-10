@@ -1,14 +1,22 @@
 #import "AudioUtils.h"
 #import "LivekitReactNative.h"
+#import "LKAudioProcessingManager.h"
 #import "WebRTCModule.h"
 #import "WebRTCModuleOptions.h"
 #import <WebRTC/RTCAudioSession.h>
 #import <WebRTC/RTCAudioSessionConfiguration.h>
 #import <AVFAudio/AVFAudio.h>
 #import <AVKit/AVKit.h>
+#import "livekit_react_native-Swift.h"
+
+NSString *const kEventVolumeProcessed = @"LK_VOLUME_PROCESSED";
+NSString *const kEventMultibandProcessed = @"LK_MULTIBAND_PROCESSED";
 
 @implementation LivekitReactNative
+
+
 RCT_EXPORT_MODULE();
+
 
 -(instancetype)init {
     if(self = [super init]) {
@@ -38,6 +46,7 @@ RCT_EXPORT_MODULE();
     RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
     WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
     options.videoEncoderFactory = simulcastVideoEncoderFactory;
+    options.audioProcessingModule = LKAudioProcessingManager.sharedInstance.audioProcessingModule;
 }
 
 /// Configure default audio config for WebRTC
@@ -123,13 +132,13 @@ RCT_EXPORT_METHOD(selectAudioOutput:(NSString *)deviceId
 RCT_EXPORT_METHOD(setAppleAudioConfiguration:(NSDictionary *) configuration){
     RTCAudioSession* session = [RTCAudioSession sharedInstance];
     RTCAudioSessionConfiguration* config = [RTCAudioSessionConfiguration webRTCConfiguration];
-
+    
     NSString* appleAudioCategory = configuration[@"audioCategory"];
     NSArray* appleAudioCategoryOptions = configuration[@"audioCategoryOptions"];
     NSString* appleAudioMode = configuration[@"audioMode"];
     
     [session lockForConfiguration];
-
+    
     NSError* error = nil;
     BOOL categoryChanged = NO;
     if(appleAudioCategoryOptions != nil) {
@@ -151,7 +160,7 @@ RCT_EXPORT_METHOD(setAppleAudioConfiguration:(NSDictionary *) configuration){
             }
         }
     }
-
+    
     if(appleAudioCategory != nil) {
         categoryChanged = YES;
         config.category = [AudioUtils audioSessionCategoryFromString:appleAudioCategory];
@@ -164,7 +173,7 @@ RCT_EXPORT_METHOD(setAppleAudioConfiguration:(NSDictionary *) configuration){
             error = nil;
         }
     }
-
+    
     if(appleAudioMode != nil) {
         config.mode = [AudioUtils audioSessionModeFromString:appleAudioMode];
         [session setMode:config.mode error:&error];
@@ -173,7 +182,76 @@ RCT_EXPORT_METHOD(setAppleAudioConfiguration:(NSDictionary *) configuration){
             error = nil;
         }
     }
-
+    
     [session unlockForConfiguration];
 }
+
+-(AudioRendererManager *)audioRendererManager {
+    if(!_audioRendererManager) {
+        _audioRendererManager = [[AudioRendererManager alloc] initWithBridge:self.bridge];
+    }
+    
+    return _audioRendererManager;
+}
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createVolumeProcessor:(nonnull NSNumber *)pcId
+                                       trackId:(nonnull NSString *)trackId) {
+    
+    
+    VolumeAudioRenderer *renderer = [[VolumeAudioRenderer alloc] initWithIntervalMs:40.0 eventEmitter:self];
+    
+    NSString *reactTag = [self.audioRendererManager registerRenderer:renderer];
+    renderer.reactTag = reactTag;
+    [self.audioRendererManager attachWithRenderer:renderer pcId:pcId trackId:trackId];
+    return reactTag;
+}
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(deleteVolumeProcessor:(nonnull NSString *)reactTag
+                                       pcId:(nonnull NSNumber *)pcId
+                                       trackId:(nonnull NSString *)trackId) {
+    
+    [self.audioRendererManager detachWithRendererByTag:reactTag pcId:pcId trackId:trackId];
+    [self.audioRendererManager unregisterRendererForReactTag:reactTag];
+    
+    return nil;
+}
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createMultibandVolumeProcessor:(NSDictionary *)options
+                                       pcId:(nonnull NSNumber *)pcId
+                                       trackId:(nonnull NSString *)trackId) {
+    
+    NSInteger bands = [(NSNumber *)options[@"bands"] integerValue];
+    float minFrequency = [(NSNumber *)options[@"minFrequency"] floatValue];
+    float maxFrequency = [(NSNumber *)options[@"maxFrequency"] floatValue];
+    float intervalMs = [(NSNumber *)options[@"updateInterval"] floatValue];
+    MultibandVolumeAudioRenderer *renderer = [[MultibandVolumeAudioRenderer alloc] initWithBands:bands
+                                                                                    minFrequency:minFrequency
+                                                                                    maxFrequency:maxFrequency
+                                                                                      intervalMs:intervalMs
+                                                                                    eventEmitter:self];
+    
+    NSString *reactTag = [self.audioRendererManager registerRenderer:renderer];
+    renderer.reactTag = reactTag;
+    [self.audioRendererManager attachWithRenderer:renderer pcId:pcId trackId:trackId];
+    return reactTag;
+}
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(deleteMultibandVolumeProcessor:(nonnull NSString *)reactTag
+                                       pcId:(nonnull NSNumber *)pcId
+                                       trackId:(nonnull NSString *)trackId) {
+    
+    [self.audioRendererManager detachWithRendererByTag:reactTag pcId:pcId trackId:trackId];
+    [self.audioRendererManager unregisterRendererForReactTag:reactTag];
+    
+    return nil;
+}
+
+
+- (NSArray<NSString *> *)supportedEvents {
+    return @[
+        kEventVolumeProcessed,
+        kEventMultibandProcessed,
+    ];
+}
+
 @end

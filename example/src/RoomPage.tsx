@@ -82,25 +82,28 @@ export const RoomPage = ({
       audio={true}
       video={true}
     >
-      <RoomView navigation={navigation} />
+      <RoomView navigation={navigation} e2ee={e2ee} />
     </LiveKitRoom>
   );
 };
 
 interface RoomViewProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'RoomPage'>;
+  e2ee: boolean;
 }
 
-const RoomView = ({ navigation }: RoomViewProps) => {
+const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
   const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
   const room = useRoomContext();
   useEffect(() => {
     let setup = async () => {
-      await room.setE2EEEnabled(true);
+      if (e2ee) {
+        await room.setE2EEEnabled(true);
+      }
     };
     setup();
     return () => {};
-  }, [room]);
+  }, [room, e2ee]);
 
   useIOSAudioManagement(room, true);
   // Setup room listeners
