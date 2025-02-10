@@ -16,14 +16,16 @@ import java.util.concurrent.Callable
 
 object LiveKitReactNative {
 
+
+    private var audioType: AudioType = AudioType.CommunicationAudioType()
+
     @SuppressLint("StaticFieldLeak")
-    private lateinit var adm: JavaAudioDeviceModule
+    private var adm: JavaAudioDeviceModule? = null
 
     val audioDeviceModule: JavaAudioDeviceModule
         get() {
-            if (!::adm.isInitialized) {
-                throw IllegalStateException("Audio device module is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
-            }
+            val adm = this.adm
+                ?: throw IllegalStateException("Audio device module is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
             return adm
         }
 
@@ -63,11 +65,17 @@ object LiveKitReactNative {
     ) {
         _audioRecordSamplesDispatcher = AudioRecordSamplesDispatcher()
 
+        this.audioType = audioType
         val options = WebRTCModuleOptions.getInstance()
         options.videoEncoderFactory = CustomVideoEncoderFactory(null, true, true)
         options.videoDecoderFactory = CustomVideoDecoderFactory()
         options.enableMediaProjectionService = true
 
+        setupAdm(context)
+        options.audioDeviceModule = adm
+    }
+
+    private fun setupAdm(context: Context) {
         val useHardwareAudioProcessing = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
         adm = JavaAudioDeviceModule.builder(context)
@@ -76,7 +84,17 @@ object LiveKitReactNative {
             .setAudioAttributes(audioType.audioAttributes)
             .setSamplesReadyCallback(audioRecordSamplesDispatcher)
             .createAudioDeviceModule()
+    }
 
+    internal fun invalidate(context: Context) {
+        val options = WebRTCModuleOptions.getInstance()
+        if (options.audioDeviceModule == adm) {
+            options.audioDeviceModule = null
+        }
+        adm?.release()
+        adm = null
+
+        setupAdm(context)
         options.audioDeviceModule = adm
 
         // CustomAudioProcessingController can't be instantiated before WebRTC is loaded.

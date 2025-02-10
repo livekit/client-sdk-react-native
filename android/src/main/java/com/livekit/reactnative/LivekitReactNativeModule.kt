@@ -193,4 +193,8 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     fun removeListeners(count: Int?) {
         // Keep: Required for RN built in Event Emitter Calls.
     }
+
+    override fun invalidate() {
+        LiveKitReactNative.invalidate(reactApplicationContext)
+    }
 }
