@@ -1,5 +1,6 @@
 import Foundation
 import WebRTC
+import React
 
 public class AudioRendererManager: NSObject {
     private let bridge: RCTBridge

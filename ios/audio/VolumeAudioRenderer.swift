@@ -1,4 +1,5 @@
 import WebRTC
+import React
 
 public class VolumeAudioRenderer: BaseVolumeAudioRenderer {
     private let eventEmitter: RCTEventEmitter
@@ -16,7 +17,7 @@ public class VolumeAudioRenderer: BaseVolumeAudioRenderer {
         guard let rmsAvg = audioLevels.combine()?.average,
             let reactTag = self.reactTag
         else { return }
-        eventEmitter.sendEvent(withName: kEventVolumeProcessed, body: [
+        eventEmitter.sendEvent(withName: LKEvents.kEventVolumeProcessed, body: [
             "volume": rmsAvg,
             "id": reactTag
         ])
