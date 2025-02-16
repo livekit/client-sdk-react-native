@@ -1,4 +1,3 @@
-
 import livekit_react_native_webrtc
 import AVFoundation
 import AVFAudio
@@ -9,12 +8,11 @@ struct LKEvents {
     static let kEventMultibandProcessed = "LK_MULTIBAND_PROCESSED";
 }
 
-@objc(LivekitReactNative)
-public class LivekitReactNative: RCTEventEmitter {
+@objc(LivekitReactNativeModule)
+public class LivekitReactNativeModule: RCTEventEmitter {
     
     // This cannot be initialized in init as self.bridge is given afterwards.
     private var _audioRendererManager: AudioRendererManager? = nil
-    @objc
     public var audioRendererManager: AudioRendererManager {
         get {
             if _audioRendererManager == nil {
@@ -36,6 +34,11 @@ public class LivekitReactNative: RCTEventEmitter {
         RTCAudioSessionConfiguration.setWebRTC(config)
     }
     
+    @objc
+    override public static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+
     @objc
     public static func setup() {
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
@@ -175,53 +178,53 @@ public class LivekitReactNative: RCTEventEmitter {
         session.unlockForConfiguration()
     }
     
-    @objc(createVolumeProcessor:trackId:)
-    public func createVolumeProcessor(_ pcId: NSNumber, trackId: String) -> String {
-        let renderer = VolumeAudioRenderer(intervalMs: 40.0, eventEmitter: self)
-        let reactTag = self.audioRendererManager.registerRenderer(renderer)
-        renderer.reactTag = reactTag
-        self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
-        
-        return reactTag
-    }
-
-    @objc(deleteVolumeProcessor:pcId:trackId:)
-    public func deleteVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
-        self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
-        self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
-        
-        return nil
-    }
-    
-    @objc(createMultibandVolumeProcessor:pcId:trackId:)
-    public func createMultibandVolumeProcessor(_ options: NSDictionary, pcId: NSNumber, trackId: String) -> String {
-        let bands = (options["bands"] as? NSString)?.integerValue
-        let minFrequency = (options["minFrequency"] as? NSString)?.floatValue
-        let maxFrequency = (options["maxFrequency"] as? NSString)?.floatValue
-        let intervalMs = (options["updateInterval"] as? NSString)?.floatValue
-        
-        let renderer = MultibandVolumeAudioRenderer(
-            bands: bands,
-            minFrequency: minFrequency,
-            maxFrequency: maxFrequency,
-            intervalMs: intervalMs,
-            eventEmitter: self
-        )
-        let reactTag = self.audioRendererManager.registerRenderer(renderer)
-        renderer.reactTag = reactTag
-        self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
-        
-        return reactTag
-    }
-    
-    @objc(deleteMultibandVolumeProcessor:pcId:trackId:)
-    public func deleteMultibandVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
-        self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
-        self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
-        
-        return nil
-    }
-    
+//    @objc(createVolumeProcessor:trackId:)
+//    public func createVolumeProcessor(_ pcId: NSNumber, trackId: String) -> String {
+//        let renderer = VolumeAudioRenderer(intervalMs: 40.0, eventEmitter: self)
+//        let reactTag = self.audioRendererManager.registerRenderer(renderer)
+//        renderer.reactTag = reactTag
+//        self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
+//        
+//        return reactTag
+//    }
+//
+//    @objc(deleteVolumeProcessor:pcId:trackId:)
+//    public func deleteVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
+//        self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
+//        self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
+//        
+//        return nil
+//    }
+//    
+//    @objc(createMultibandVolumeProcessor:pcId:trackId:)
+//    public func createMultibandVolumeProcessor(_ options: NSDictionary, pcId: NSNumber, trackId: String) -> String {
+//        let bands = (options["bands"] as? NSString)?.integerValue ?? 5
+//        let minFrequency = (options["minFrequency"] as? NSString)?.floatValue ?? 1000
+//        let maxFrequency = (options["maxFrequency"] as? NSString)?.floatValue ?? 8000
+//        let intervalMs = (options["updateInterval"] as? NSString)?.floatValue ?? 40
+//        
+//        let renderer = MultibandVolumeAudioRenderer(
+//            bands: bands,
+//            minFrequency: minFrequency,
+//            maxFrequency: maxFrequency,
+//            intervalMs: intervalMs,
+//            eventEmitter: self
+//        )
+//        let reactTag = self.audioRendererManager.registerRenderer(renderer)
+//        renderer.reactTag = reactTag
+//        self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
+//        
+//        return reactTag
+//    }
+//    
+//    @objc(deleteMultibandVolumeProcessor:pcId:trackId:)
+//    public func deleteMultibandVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
+//        self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
+//        self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
+//        
+//        return nil
+//    }
+//    
     override public func supportedEvents() -> [String]! {
         return [
             LKEvents.kEventVolumeProcessed,

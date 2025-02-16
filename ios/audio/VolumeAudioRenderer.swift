@@ -1,6 +1,7 @@
 import WebRTC
 import React
 
+@objc
 public class VolumeAudioRenderer: BaseVolumeAudioRenderer {
     private let eventEmitter: RCTEventEmitter
     

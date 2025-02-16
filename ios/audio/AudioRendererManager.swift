@@ -1,13 +1,11 @@
-import Foundation
-import WebRTC
-import React
+import livekit_react_native_webrtc
 
+@objc
 public class AudioRendererManager: NSObject {
     private let bridge: RCTBridge
     public private(set) var renderers: [String: RTCAudioRenderer] = [:]
     
-    @objc
-    public init(bridge: RCTBridge) {
+    init(bridge: RCTBridge) {
         self.bridge = bridge
     }
     

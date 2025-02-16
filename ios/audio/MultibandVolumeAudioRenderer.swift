@@ -1,6 +1,7 @@
 import WebRTC
 import React
 
+@objc
 public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
     private let eventEmitter: RCTEventEmitter
     

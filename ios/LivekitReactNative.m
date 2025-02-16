@@ -1,12 +1,24 @@
-#import "livekit_react_native-Swift.h"
+
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
+#import "WebRTCModule.h"
+#import "WebRTCModuleOptions.h"
+#import "LivekitReactNative.h"
+#import "LKAudioProcessingManager.h"
 
-@interface RCT_EXTERN_MODULE(LivekitReactNative, NSObject)
+@implementation LivekitReactNative
 
-+(BOOL)requiresMainQueueSetup {
-    return NO;
++(void)setup {
+    RTCDefaultVideoEncoderFactory *videoEncoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
+    RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
+    WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
+    options.videoEncoderFactory = simulcastVideoEncoderFactory;
+    options.audioProcessingModule = LKAudioProcessingManager.sharedInstance.audioProcessingModule;
 }
+
+@end
+
+@interface RCT_EXTERN_MODULE(LivekitReactNativeModule, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(configureAudio:(NSDictionary *) config)
 RCT_EXTERN_METHOD(startAudioSession)
