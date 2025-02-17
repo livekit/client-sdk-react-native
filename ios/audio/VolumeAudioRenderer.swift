@@ -1,4 +1,4 @@
-import WebRTC
+import livekit_react_native_webrtc
 import React
 
 @objc

@@ -5,8 +5,8 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
-const LiveKitModule = NativeModules.LivekitReactNative
-  ? NativeModules.LivekitReactNative
+const LiveKitModule = NativeModules.LivekitReactNativeModule
+  ? NativeModules.LivekitReactNativeModule
   : new Proxy(
       {},
       {

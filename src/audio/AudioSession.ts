@@ -1,20 +1,5 @@
-import { NativeModules, Platform } from 'react-native';
-const LINKING_ERROR =
-  `The package '@livekit/react-native' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo managed workflow\n';
-
-const LivekitReactNative = NativeModules.LivekitReactNative
-  ? NativeModules.LivekitReactNative
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+import { Platform } from 'react-native';
+import LiveKitModule from "../LKNativeModule";
 
 /**
  * Configuration for the underlying AudioSession.
@@ -252,21 +237,21 @@ export default class AudioSession {
    * See also useIOSAudioManagement for automatic configuration of iOS audio options.
    */
   static configureAudio = async (config: AudioConfiguration) => {
-    await LivekitReactNative.configureAudio(config);
+    await LiveKitModule.configureAudio(config);
   };
 
   /**
    * Starts an AudioSession.
    */
   static startAudioSession = async () => {
-    await LivekitReactNative.startAudioSession();
+    await LiveKitModule.startAudioSession();
   };
 
   /**
    * Stops the existing AudioSession.
    */
   static stopAudioSession = async () => {
-    await LivekitReactNative.stopAudioSession();
+    await LiveKitModule.stopAudioSession();
   };
 
   /**
@@ -297,7 +282,7 @@ export default class AudioSession {
     if (Platform.OS === 'ios') {
       return ['default', 'force_speaker'];
     } else if (Platform.OS === 'android') {
-      return (await LivekitReactNative.getAudioOutputs()) as string[];
+      return (await LiveKitModule.getAudioOutputs()) as string[];
     } else {
       return [];
     }
@@ -311,7 +296,7 @@ export default class AudioSession {
    * @param deviceId A deviceId retrieved from {@link getAudioOutputs}
    */
   static selectAudioOutput = async (deviceId: string) => {
-    await LivekitReactNative.selectAudioOutput(deviceId);
+    await LiveKitModule.selectAudioOutput(deviceId);
   };
 
   /**
@@ -321,7 +306,7 @@ export default class AudioSession {
    */
   static showAudioRoutePicker = async () => {
     if (Platform.OS === 'ios') {
-      await LivekitReactNative.showAudioRoutePicker();
+      await LiveKitModule.showAudioRoutePicker();
     }
   };
 
@@ -335,7 +320,7 @@ export default class AudioSession {
     config: AppleAudioConfiguration
   ) => {
     if (Platform.OS === 'ios') {
-      await LivekitReactNative.setAppleAudioConfiguration(config);
+      await LiveKitModule.setAppleAudioConfiguration(config);
     }
   };
 }

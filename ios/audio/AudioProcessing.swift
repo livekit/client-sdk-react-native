@@ -17,7 +17,7 @@
 import Accelerate
 import AVFoundation
 import Foundation
-import WebRTC
+import livekit_react_native_webrtc
 
 public struct AudioLevel {
     /// Linear Scale RMS Value
