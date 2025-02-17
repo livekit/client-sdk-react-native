@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import LiveKitModule from "../LKNativeModule";
+import LiveKitModule from '../LKNativeModule';
 
 /**
  * Configuration for the underlying AudioSession.
