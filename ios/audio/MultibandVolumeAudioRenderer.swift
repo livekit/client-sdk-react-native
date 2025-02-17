@@ -1,5 +1,7 @@
-import WebRTC
+import livekit_react_native_webrtc
+import React
 
+@objc
 public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
     private let eventEmitter: RCTEventEmitter
     
@@ -24,7 +26,7 @@ public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
     override func onMagnitudesCalculated(_ magnitudes: [Float]) {
         guard !magnitudes.isEmpty, let reactTag = self.reactTag
         else { return }
-        eventEmitter.sendEvent(withName: kEventMultibandProcessed, body: [
+        eventEmitter.sendEvent(withName: LKEvents.kEventMultibandProcessed, body: [
             "magnitudes": magnitudes,
             "id": reactTag
         ])
