@@ -23,7 +23,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     val audioSinkManager = AudioSinkManager(reactContext)
     val audioManager = AudioSwitchManager(reactContext.applicationContext)
     override fun getName(): String {
-        return "LivekitReactNative"
+        return "LivekitReactNativeModule"
     }
 
     @ReactMethod
