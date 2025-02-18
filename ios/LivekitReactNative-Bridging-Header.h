@@ -1,5 +1,2 @@
-#import "RCTBridgeModule.h"
-#import "RCTEventEmitter.h"
-#import "RCTViewManager.h"
 #import "WebRTCModule.h"
 #import "WebRTCModule+RTCMediaStream.h"
