@@ -23,13 +23,13 @@ Use this SDK to add realtime video, audio and data features to your React Native
 ### NPM
 
 ```sh
-npm install @livekit/react-native @livekit/react-native-webrtc
+npm install @livekit/react-native @livekit/react-native-webrtc livekit-client
 ```
 
 ### Yarn
 
 ```sh
-yarn add @livekit/react-native @livekit/react-native-webrtc
+yarn add @livekit/react-native @livekit/react-native-webrtc livekit-client
 ```
 
 This library depends on `@livekit/react-native-webrtc`, which has additional installation instructions found here:
