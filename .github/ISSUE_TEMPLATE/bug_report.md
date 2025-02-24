@@ -29,14 +29,14 @@ If applicable, add screenshots to help explain your problem.
 
 **Device Info:**
 
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
+ - Device: 
+ - OS: 
 
-**Dependencies Info (please reference your package-lock.json or yarn.lock file):**
+**Dependencies Info (please reference your package-lock.json or yarn.lock file, not just your package.json):**
 
- - @livekit/react-native: [e.g. commit hash]
- - livekit-client: [e.g. 1.6.0]
- - react-native-webrtc: [e.g. 106.0.0]
+ - @livekit/react-native: 
+ - livekit-client: 
+ - react-native-webrtc: 
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here, such as crash logs and stack traces if applicable.
