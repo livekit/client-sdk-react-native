@@ -199,9 +199,9 @@ public class LivekitReactNativeModule: RCTEventEmitter {
     @objc(createMultibandVolumeProcessor:pcId:trackId:)
     public func createMultibandVolumeProcessor(_ options: NSDictionary, pcId: NSNumber, trackId: String) -> String {
         let bands = (options["bands"] as? NSNumber)?.intValue ?? 5
-        let minFrequency = (options["minFrequency"] as? NSString)?.floatValue ?? 1000
-        let maxFrequency = (options["maxFrequency"] as? NSString)?.floatValue ?? 8000
-        let intervalMs = (options["updateInterval"] as? NSString)?.floatValue ?? 40
+        let minFrequency = (options["minFrequency"] as? NSNumber)?.floatValue ?? 1000
+        let maxFrequency = (options["maxFrequency"] as? NSNumber)?.floatValue ?? 8000
+        let intervalMs = (options["updateInterval"] as? NSNumber)?.floatValue ?? 40
         
         let renderer = MultibandVolumeAudioRenderer(
             bands: bands,
