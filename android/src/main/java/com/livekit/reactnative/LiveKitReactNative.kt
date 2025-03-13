@@ -24,30 +24,25 @@ object LiveKitReactNative {
 
     val audioDeviceModule: JavaAudioDeviceModule
         get() {
-            val adm = this.adm
+            return this.adm
                 ?: throw IllegalStateException("Audio device module is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
-            return adm
         }
 
-    private lateinit var _audioProcessingController: AudioProcessingController
+    private var _audioProcessingController: CustomAudioProcessingController? = null
 
     val audioProcessingController: AudioProcessingController
         get() {
-            if (!::_audioProcessingController.isInitialized) {
-                throw IllegalStateException("audioProcessingController is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
-            }
-            return _audioProcessingController
+            return this._audioProcessingController
+                ?: throw IllegalStateException("audioProcessingController is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
         }
 
 
-    lateinit var _audioRecordSamplesDispatcher: AudioRecordSamplesDispatcher
+    private var _audioRecordSamplesDispatcher: AudioRecordSamplesDispatcher? = null
 
     val audioRecordSamplesDispatcher: AudioRecordSamplesDispatcher
         get() {
-            if (!::_audioRecordSamplesDispatcher.isInitialized) {
+            return this._audioRecordSamplesDispatcher ?:
                 throw IllegalStateException("audioRecordSamplesDispatcher is not initialized! Did you remember to call LiveKitReactNative.setup in your Application.onCreate?")
-            }
-            return _audioRecordSamplesDispatcher
         }
 
 
@@ -73,6 +68,13 @@ object LiveKitReactNative {
 
         setupAdm(context)
         options.audioDeviceModule = adm
+        // CustomAudioProcessingController can't be instantiated before WebRTC is loaded.
+        options.audioProcessingFactoryFactory = Callable {
+            val apc = CustomAudioProcessingController()
+            _audioProcessingController = apc
+            return@Callable apc.externalAudioProcessor
+        }
+
     }
 
     private fun setupAdm(context: Context) {
@@ -94,15 +96,11 @@ object LiveKitReactNative {
         adm?.release()
         adm = null
 
+        _audioProcessingController = null
+
+        // adm needs to be re-setup with a new one each time.
         setupAdm(context)
         options.audioDeviceModule = adm
-
-        // CustomAudioProcessingController can't be instantiated before WebRTC is loaded.
-        options.audioProcessingFactoryFactory = Callable {
-            val apc = CustomAudioProcessingController()
-            _audioProcessingController = apc
-            return@Callable apc.externalAudioProcessor
-        }
 
     }
 }
