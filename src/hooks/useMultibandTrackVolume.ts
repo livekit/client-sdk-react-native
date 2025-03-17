@@ -49,7 +49,7 @@ export function useMultibandTrackVolume(
     | LocalAudioTrack
     | RemoteAudioTrack
     | TrackReferenceOrPlaceholder,
-  options: MultiBandTrackVolumeOptions = {}
+  options?: MultiBandTrackVolumeOptions
 ) {
   const track =
     trackOrTrackReference instanceof Track
@@ -59,39 +59,41 @@ export function useMultibandTrackVolume(
         );
   const opts = useMemo(() => {
     return { ...multibandDefaults, ...options };
-  }, [options]);
+  }, [JSON.stringify(options)]);
   const mediaStreamTrack = track?.mediaStreamTrack;
+  const hasMediaStreamTrack = mediaStreamTrack != null
+  const peerConnectionId = mediaStreamTrack?.peerConnectionId ?? -1;
+  const mediaStreamTrackId = mediaStreamTrack?.id;
 
   let [magnitudes, setMagnitudes] = useState<number[]>([]);
   useEffect(() => {
     let listener = Object();
     let reactTag: string | null = null;
-    if (mediaStreamTrack) {
+    if (hasMediaStreamTrack) {
       reactTag = LiveKitModule.createMultibandVolumeProcessor(
         opts,
-        mediaStreamTrack._peerConnectionId ?? -1,
-        mediaStreamTrack.id
+        peerConnectionId,
+        mediaStreamTrackId
       );
       addListener(listener, 'LK_MULTIBAND_PROCESSED', (event: any) => {
         if (event.magnitudes && reactTag && event.id === reactTag) {
-          console.log('event received: ', event.magnitudes[0]);
           setMagnitudes(event.magnitudes);
         }
       });
     }
     return () => {
-      if (mediaStreamTrack) {
+      if (hasMediaStreamTrack) {
         removeListener(listener);
         if (reactTag) {
           LiveKitModule.deleteMultibandVolumeProcessor(
             reactTag,
-            mediaStreamTrack._peerConnectionId ?? -1,
-            mediaStreamTrack.id
+            peerConnectionId,
+            mediaStreamTrackId
           );
         }
       }
     };
-  }, [mediaStreamTrack, opts]);
+  }, [hasMediaStreamTrack, peerConnectionId, mediaStreamTrackId, JSON.stringify(opts)]);
 
   return magnitudes;
 }

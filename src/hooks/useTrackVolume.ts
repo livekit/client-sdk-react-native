@@ -28,6 +28,9 @@ export function useTrackVolume(
         );
 
   const mediaStreamTrack = track?.mediaStreamTrack;
+  const peerConnectionId = mediaStreamTrack.peerConnectionId ?? -1;
+  const mediaStreamTrackId = mediaStreamTrack.id;
+
 
   let [volume, setVolume] = useState(0.0);
   useEffect(() => {
@@ -35,8 +38,8 @@ export function useTrackVolume(
     let reactTag: string | null = null;
     if (mediaStreamTrack) {
       reactTag = LiveKitModule.createVolumeProcessor(
-        mediaStreamTrack._peerConnectionId ?? -1,
-        mediaStreamTrack.id
+        peerConnectionId,
+        mediaStreamTrackId
       );
       addListener(listener, 'LK_VOLUME_PROCESSED', (event: any) => {
         if (event.volume && reactTag && event.id === reactTag) {
@@ -50,13 +53,13 @@ export function useTrackVolume(
         if (reactTag) {
           LiveKitModule.deleteVolumeProcessor(
             reactTag,
-            mediaStreamTrack._peerConnectionId ?? -1,
-            mediaStreamTrack.id
+            peerConnectionId,
+            mediaStreamTrackId
           );
         }
       }
     };
-  }, [mediaStreamTrack]);
+  }, [peerConnectionId, mediaStreamTrackId]);
 
   return volume;
 }
