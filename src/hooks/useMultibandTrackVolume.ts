@@ -59,9 +59,12 @@ export function useMultibandTrackVolume(
         );
   const opts = useMemo(() => {
     return { ...multibandDefaults, ...options };
+
+    // disabled due to use of JSON.stringify, dependencies are reference equality
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(options)]);
   const mediaStreamTrack = track?.mediaStreamTrack;
-  const hasMediaStreamTrack = mediaStreamTrack != null
+  const hasMediaStreamTrack = mediaStreamTrack != null;
   const peerConnectionId = mediaStreamTrack?.peerConnectionId ?? -1;
   const mediaStreamTrackId = mediaStreamTrack?.id;
 
@@ -93,7 +96,7 @@ export function useMultibandTrackVolume(
         }
       }
     };
-  }, [hasMediaStreamTrack, peerConnectionId, mediaStreamTrackId, JSON.stringify(opts)]);
+  }, [hasMediaStreamTrack, peerConnectionId, mediaStreamTrackId, opts]);
 
   return magnitudes;
 }
