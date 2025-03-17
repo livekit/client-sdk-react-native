@@ -21,13 +21,14 @@ import android.os.SystemClock
 import org.webrtc.AudioTrackSink
 import org.webrtc.audio.JavaAudioDeviceModule
 import java.nio.ByteBuffer
+import java.util.Collections
 
 /**
  * Dispatches recorded audio samples from the local microphone.
  */
 class AudioRecordSamplesDispatcher : JavaAudioDeviceModule.SamplesReadyCallback {
 
-    private val sinks = mutableSetOf<AudioTrackSink>()
+    private val sinks = Collections.synchronizedSet(mutableSetOf<AudioTrackSink>())
 
     @Synchronized
     fun registerSink(sink: AudioTrackSink) {

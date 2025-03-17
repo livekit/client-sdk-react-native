@@ -5,13 +5,14 @@ import com.livekit.reactnative.LiveKitReactNative
 import com.oney.WebRTCModule.WebRTCModule
 import org.webrtc.AudioTrack
 import org.webrtc.AudioTrackSink
+import java.util.Collections
 import java.util.UUID
 
 private const val LOCAL_PC_ID = -1
 
 class AudioSinkManager(val reactContext: ReactContext) {
 
-    private val sinks = mutableMapOf<String, AudioTrackSink>()
+    private val sinks = Collections.synchronizedMap(mutableMapOf<String, AudioTrackSink>())
 
     /**
      * Registers a sink to this manager.
@@ -35,7 +36,12 @@ class AudioSinkManager(val reactContext: ReactContext) {
      * Unregisters a sink from this manager. Does not detach the sink from tracks.
      */
     fun unregisterSink(sink: AudioTrackSink) {
-        sinks.filterNot { entry -> entry.value == sink }
+        synchronized(sinks) {
+            val keysToRemove = sinks.filterValues { it == sink }.keys
+            for(key in keysToRemove) {
+                sinks.remove(key)
+            }
+        }
     }
 
     fun getSink(reactTag: String) = sinks[reactTag]
