@@ -218,9 +218,12 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
             return;
           }
 
-          const localCameraTrack = cameraTrack.videoTrack
+          const localCameraTrack = cameraTrack.videoTrack;
           if (localCameraTrack instanceof LocalVideoTrack) {
-            localCameraTrack.restartTrack({"deviceId": newDevice.deviceId, "facingMode": facingModeStr})
+            localCameraTrack.restartTrack({
+              deviceId: newDevice.deviceId,
+              facingMode: facingModeStr,
+            });
           }
         }}
         screenShareEnabled={isScreenShareEnabled}
