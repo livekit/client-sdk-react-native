@@ -39,7 +39,7 @@ import {
 import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
-import { Track } from 'livekit-client';
+import { LocalVideoTrack, Track } from 'livekit-client';
 
 export const RoomPage = ({
   navigation,
@@ -160,6 +160,7 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
     isMicrophoneEnabled,
     isScreenShareEnabled,
     localParticipant,
+    cameraTrack,
   } = useLocalParticipant();
 
   // Prepare for iOS screenshare.
@@ -192,6 +193,10 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
           localParticipant.setCameraEnabled(enabled);
         }}
         switchCamera={async () => {
+          if (!cameraTrack) {
+            return;
+          }
+
           let facingModeStr = !isCameraFrontFacing ? 'front' : 'environment';
           setCameraFrontFacing(!isCameraFrontFacing);
 
@@ -209,12 +214,17 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
             }
           }
 
-          if (newDevice == null) {
+          if (!newDevice) {
             return;
           }
 
-          //@ts-ignore
-          await room.switchActiveDevice('videoinput', newDevice.deviceId);
+          const localCameraTrack = cameraTrack.videoTrack;
+          if (localCameraTrack instanceof LocalVideoTrack) {
+            localCameraTrack.restartTrack({
+              deviceId: newDevice.deviceId,
+              facingMode: facingModeStr,
+            });
+          }
         }}
         screenShareEnabled={isScreenShareEnabled}
         setScreenShareEnabled={(enabled: boolean) => {
