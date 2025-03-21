@@ -6102,7 +6102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"livekit-client@npm:^2.9.0":
+"livekit-client@npm:^2.9.8":
   version: 2.9.8
   resolution: "livekit-client@npm:2.9.8"
   dependencies:
@@ -6138,7 +6138,7 @@ __metadata:
     "@types/fastestsmallesttextencoderdecoder": ^1.0.0
     "@types/react": ^18.2.6
     babel-plugin-module-resolver: ^4.1.0
-    livekit-client: ^2.9.0
+    livekit-client: ^2.9.8
     patch-package: ^8.0.0
     react: 18.2.0
     react-native: 0.74.2
