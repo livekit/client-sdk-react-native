@@ -29,8 +29,8 @@ export function useTrackVolume(
 
   const mediaStreamTrack = track?.mediaStreamTrack;
   const hasMediaStreamTrack = mediaStreamTrack != null;
-  const peerConnectionId = mediaStreamTrack.peerConnectionId ?? -1;
-  const mediaStreamTrackId = mediaStreamTrack.id;
+  const peerConnectionId = mediaStreamTrack?.peerConnectionId ?? -1;
+  const mediaStreamTrackId = mediaStreamTrack?.id;
 
   let [volume, setVolume] = useState(0.0);
   useEffect(() => {
