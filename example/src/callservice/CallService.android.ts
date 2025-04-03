@@ -1,7 +1,7 @@
 import ReactNativeForegroundService from '@supersami/rn-foreground-service';
 
 // Start a foreground notification on Android.
-// A foreground notification is required for video/audio calls on Android.
+// A foreground notification is required for screenshare on Android.
 export async function startCallService() {
   await ReactNativeForegroundService.start({
     id: 3456,
