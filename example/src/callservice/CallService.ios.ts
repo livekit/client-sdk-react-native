@@ -14,6 +14,13 @@ export async function startCallService() {
   let handle = '1234567';
   let contactIdentifier = 'Caller Contact';
   RNCallKeep.startCall(uuid, handle, contactIdentifier, 'number', true);
+
+  RNCallKeep.reportConnectingOutgoingCallWithUUID(uuid);
+
+  // Small delay to ensure proper state transition
+  setTimeout(() => {
+    RNCallKeep.reportConnectedOutgoingCallWithUUID(uuid);
+  }, 100);
 }
 
 export async function stopCallService() {

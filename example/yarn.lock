@@ -2807,12 +2807,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supersami/rn-foreground-service@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@supersami/rn-foreground-service@npm:2.1.1"
+"@supersami/rn-foreground-service@npm:^2.2.5":
+  version: 2.2.5
+  resolution: "@supersami/rn-foreground-service@npm:2.2.5"
   peerDependencies:
     react-native: ">=0.59.0"
-  checksum: 733d9449e0e95566449306656a8465207bb45d6ecbc5cce9694a64779e4128677de06a5aa7a55e6cc7a929ad32de751cbf0e465ad8f663229705780cd1b7c161
+  checksum: a817ad18d722b977fd9e51f86af9ebae321c3533c8957ad9017562ab946ce1e6f6bbafe5b3cf5e0b4e0be01ffc0d191104b9013b892013a791b51a32c36f5210
   languageName: node
   linkType: hard
 
@@ -6134,7 +6134,7 @@ __metadata:
     "@react-native/typescript-config": 0.74.84
     "@react-navigation/native": ^6.0.8
     "@react-navigation/native-stack": ^6.5.0
-    "@supersami/rn-foreground-service": ^2.1.1
+    "@supersami/rn-foreground-service": ^2.2.5
     "@types/fastestsmallesttextencoderdecoder": ^1.0.0
     "@types/react": ^18.2.6
     babel-plugin-module-resolver: ^4.1.0
