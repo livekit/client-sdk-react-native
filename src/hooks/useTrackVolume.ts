@@ -29,6 +29,7 @@ export function useTrackVolume(
 
   const mediaStreamTrack = track?.mediaStreamTrack;
   const hasMediaStreamTrack = mediaStreamTrack != null;
+  // @ts-ignore - Accessing private property
   const peerConnectionId = mediaStreamTrack._peerConnectionId ?? -1;
   const mediaStreamTrackId = mediaStreamTrack.id;
 
