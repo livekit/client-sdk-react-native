@@ -216,6 +216,8 @@ export const VideoTrack = forwardRef<Component, VideoTrackProps>(
           objectFit={objectFit}
           zOrder={zOrder}
           mirror={mirror}
+          // TODO: fix this up in react-native-webrtc side.
+          // @ts-expect-error
           iosPIP={iosPIP}
           ref={ref}
         />
