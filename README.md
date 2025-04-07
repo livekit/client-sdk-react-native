@@ -89,6 +89,7 @@ In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/
 
 ```objc
 #import "LivekitReactNative.h"
+#import "WebRTCModuleOptions.h"
 
 @implementation AppDelegate
 
@@ -96,6 +97,12 @@ In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/
 {
   // Place this above any other RN related initialization
   [LivekitReactNative setup];
+
+  // Uncomment the following lines if you want to use the camera in the background
+  // Requires voip background mode and iOS 18+.
+
+  // WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
+  // options.enableMultitaskingCameraAccess = YES;
 
   //...
 }

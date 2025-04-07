@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { Image, StyleSheet, ViewStyle } from 'react-native';
+import { Image, StyleSheet, type ViewStyle } from 'react-native';
 import {
   isTrackReference,
-  TrackReferenceOrPlaceholder,
+  type TrackReferenceOrPlaceholder,
   useEnsureTrackRef,
   useIsMuted,
   useIsSpeaking,
@@ -14,63 +14,71 @@ import { View } from 'react-native';
 import { Text } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { Track } from 'livekit-client';
+import { Component, forwardRef } from 'react';
 export type Props = {
   trackRef: TrackReferenceOrPlaceholder;
   style?: ViewStyle;
   zOrder?: number;
   mirror?: boolean;
+  useIOSPIP?: boolean;
 };
-export const ParticipantView = ({
-  style = {},
-  trackRef,
-  zOrder,
-  mirror,
-}: Props) => {
-  const trackReference = useEnsureTrackRef(trackRef);
-  const { identity, name } = useParticipantInfo({
-    participant: trackReference.participant,
-  });
-  const isSpeaking = useIsSpeaking(trackRef.participant);
-  const isVideoMuted = useIsMuted(trackRef);
-  const { colors } = useTheme();
-  let videoView;
-  if (isTrackReference(trackRef) && !isVideoMuted) {
-    videoView = (
-      <VideoTrack
-        style={styles.videoView}
-        trackRef={trackRef}
-        zOrder={zOrder}
-        mirror={mirror}
-      />
-    );
-  } else {
-    videoView = (
-      <View style={styles.videoView}>
-        <View style={styles.spacer} />
-        <Image
-          style={styles.icon}
-          source={require('./icons/baseline_videocam_off_white_24dp.png')}
+export const ParticipantView = forwardRef<Component, Props>(
+  ({ style = {}, trackRef, zOrder, mirror, useIOSPIP = false }: Props, ref) => {
+    const trackReference = useEnsureTrackRef(trackRef);
+    const { identity, name } = useParticipantInfo({
+      participant: trackReference.participant,
+    });
+    const isSpeaking = useIsSpeaking(trackRef.participant);
+    const isVideoMuted = useIsMuted(trackRef);
+    const { colors } = useTheme();
+    let videoView;
+    if (isTrackReference(trackRef) && !isVideoMuted) {
+      videoView = (
+        <VideoTrack
+          style={styles.videoView}
+          trackRef={trackRef}
+          zOrder={zOrder}
+          mirror={mirror}
+          ref={ref}
+          iosPIP={{
+            enabled: useIOSPIP,
+            startAutomatically: true,
+            preferredSize: {
+              width: 800,
+              height: 800,
+            },
+          }}
         />
-        <View style={styles.spacer} />
+      );
+    } else {
+      videoView = (
+        <View style={styles.videoView}>
+          <View style={styles.spacer} />
+          <Image
+            style={styles.icon}
+            source={require('./icons/baseline_videocam_off_white_24dp.png')}
+          />
+          <View style={styles.spacer} />
+        </View>
+      );
+    }
+
+    let displayName = name ? name : identity;
+    if (trackRef.source === Track.Source.ScreenShare) {
+      displayName = displayName + "'s screen";
+    }
+
+    return (
+      <View style={[styles.container, style]}>
+        {videoView}
+        <View style={styles.identityBar}>
+          <Text style={{ color: colors.text }}>{displayName}</Text>
+        </View>
+        {isSpeaking && <View style={styles.speakingIndicator} />}
       </View>
     );
   }
-
-  let displayName = name ? name : identity;
-  if (trackRef.source === Track.Source.ScreenShare) {
-    displayName = displayName + "'s screen";
-  }
-
-  return (
-    <View style={[styles.container, style]}>
-      {videoView}
-      <View style={styles.identityBar}>
-        <Text style={{ color: colors.text }}>{displayName}</Text>
-      </View>
-      {isSpeaking && <View style={styles.speakingIndicator} />}
-    </View>
-  );
-};
+);
 
 const styles = StyleSheet.create({
   container: {

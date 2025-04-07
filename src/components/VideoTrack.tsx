@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import {
   type LayoutChangeEvent,
+  Platform,
   StyleSheet,
   View,
   type ViewStyle,
@@ -12,8 +13,20 @@ import {
   Track,
   TrackEvent,
 } from 'livekit-client';
-import { RTCView } from '@livekit/react-native-webrtc';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  RTCView,
+  RTCPIPView,
+  type RTCIOSPIPOptions,
+} from '@livekit/react-native-webrtc';
+import {
+  Component,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 import { RemoteVideoTrack } from 'livekit-client';
 import ViewPortDetector from './ViewPortDetector';
 import type { TrackReference } from '@livekit/components-react';
@@ -62,6 +75,50 @@ export type VideoTrackProps = {
    * video(s) which appear above the remote video(s).
    */
   zOrder?: number;
+
+  /**
+   * Picture in picture options for this view. Disabled if not supplied.
+   *
+   * iOS only. Requires iOS 15.0 or above, and the PIP background mode capability.
+   *
+   * If `iosPIP.enabled` is true, startIOSPIP and stopIOSPIP can be used to manually
+   * trigger the PIP mode. `iosPIP.startAutomatically` can be used to automatically
+   * enter PIP when backgrounding the app.
+   *
+   * @example
+   * ```tsx
+   * import { startIOSPIP, stopIOSPIP } from '@livekit/react-native-webrtc';
+   *
+   * // Obtain a ref to the view
+   * const videoRef = useRef<Component>(null);
+   * const videoView = (
+   *   <VideoTrack
+   *      ref={videoRef}
+   *      iosPIP={{
+   *        enabled: true,
+   *        startAutomatically: true,
+   *        preferredSize: {
+   *          width: 800,
+   *          height: 800,
+   *        },
+   *      }}
+   *      ...
+   *   />
+   * );
+   *
+   * // Start/stop manually
+   * startIOSPIP(videoRef);
+   * stopIOSPIP(videoRef);
+   * ```
+   *
+   */
+  iosPIP?: RTCIOSPIPOptions & {
+    preferredSize: {
+      width: number;
+      height: number;
+    };
+    fallbackView?: ReactNode;
+  };
 };
 
 /**
@@ -72,83 +129,112 @@ export type VideoTrackProps = {
  * @returns A React component that renders the given video track.
  * @public
  */
-export const VideoTrack = ({
-  style = {},
-  trackRef,
-  objectFit = 'cover',
-  zOrder,
-  mirror,
-}: VideoTrackProps) => {
-  const [elementInfo] = useState(() => {
-    let info = new VideoTrackElementInfo();
-    info.id = trackRef?.publication?.trackSid;
-    return info;
-  });
+export const VideoTrack = forwardRef<Component, VideoTrackProps>(
+  (
+    {
+      style = {},
+      trackRef,
+      objectFit = 'cover',
+      zOrder,
+      mirror,
+      iosPIP,
+    }: VideoTrackProps,
+    ref
+  ) => {
+    const [elementInfo] = useState(() => {
+      let info = new VideoTrackElementInfo();
+      info.id = trackRef?.publication?.trackSid;
+      return info;
+    });
 
-  const layoutOnChange = useCallback(
-    (event: LayoutChangeEvent) => elementInfo.onLayout(event),
-    [elementInfo]
-  );
-  const visibilityOnChange = useCallback(
-    (isVisible: boolean) => elementInfo.onVisibility(isVisible),
-    [elementInfo]
-  );
-
-  const videoTrack = trackRef?.publication.track;
-
-  const shouldObserveVisibility = useMemo(() => {
-    return (
-      videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream
+    const layoutOnChange = useCallback(
+      (event: LayoutChangeEvent) => elementInfo.onLayout(event),
+      [elementInfo]
     );
-  }, [videoTrack]);
+    const visibilityOnChange = useCallback(
+      (isVisible: boolean) => elementInfo.onVisibility(isVisible),
+      [elementInfo]
+    );
 
-  const [mediaStream, setMediaStream] = useState(videoTrack?.mediaStream);
-  useEffect(() => {
-    setMediaStream(videoTrack?.mediaStream);
-    if (videoTrack instanceof LocalVideoTrack) {
-      const onRestarted = (track: Track | null) => {
-        setMediaStream(track?.mediaStream);
-      };
-      videoTrack.on(TrackEvent.Restarted, onRestarted);
+    const videoTrack = trackRef?.publication.track;
 
-      return () => {
-        videoTrack.off(TrackEvent.Restarted, onRestarted);
-      };
-    } else {
-      return () => {};
-    }
-  }, [videoTrack]);
+    const shouldObserveVisibility = useMemo(() => {
+      return (
+        videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream
+      );
+    }, [videoTrack]);
 
-  useEffect(() => {
-    if (videoTrack instanceof RemoteVideoTrack && videoTrack.isAdaptiveStream) {
-      videoTrack?.observeElementInfo(elementInfo);
-      return () => {
-        videoTrack?.stopObservingElementInfo(elementInfo);
-      };
-    } else {
-      return () => {};
-    }
-  }, [videoTrack, elementInfo]);
+    const [mediaStream, setMediaStream] = useState(videoTrack?.mediaStream);
+    useEffect(() => {
+      setMediaStream(videoTrack?.mediaStream);
+      if (videoTrack instanceof LocalVideoTrack) {
+        const onRestarted = (track: Track | null) => {
+          setMediaStream(track?.mediaStream);
+        };
+        videoTrack.on(TrackEvent.Restarted, onRestarted);
 
-  return (
-    <View style={{ ...style, ...styles.container }} onLayout={layoutOnChange}>
-      <ViewPortDetector
-        onChange={visibilityOnChange}
-        style={styles.videoTrack}
-        disabled={!shouldObserveVisibility}
-        propKey={videoTrack}
-      >
+        return () => {
+          videoTrack.off(TrackEvent.Restarted, onRestarted);
+        };
+      } else {
+        return () => {};
+      }
+    }, [videoTrack]);
+
+    useEffect(() => {
+      if (
+        videoTrack instanceof RemoteVideoTrack &&
+        videoTrack.isAdaptiveStream
+      ) {
+        videoTrack?.observeElementInfo(elementInfo);
+        return () => {
+          videoTrack?.stopObservingElementInfo(elementInfo);
+        };
+      } else {
+        return () => {};
+      }
+    }, [videoTrack, elementInfo]);
+
+    let videoView;
+    if (!iosPIP || Platform.OS !== 'ios') {
+      videoView = (
         <RTCView
           style={styles.videoTrack}
           streamURL={mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
           zOrder={zOrder}
           mirror={mirror}
+          // @ts-ignore
+          ref={ref}
         />
-      </ViewPortDetector>
-    </View>
-  );
-};
+      );
+    } else {
+      videoView = (
+        <RTCPIPView
+          style={styles.videoTrack}
+          streamURL={mediaStream?.toURL() ?? ''}
+          objectFit={objectFit}
+          zOrder={zOrder}
+          mirror={mirror}
+          iosPIP={iosPIP}
+          ref={ref}
+        />
+      );
+    }
+    return (
+      <View style={{ ...style, ...styles.container }} onLayout={layoutOnChange}>
+        <ViewPortDetector
+          onChange={visibilityOnChange}
+          style={styles.videoTrack}
+          disabled={!shouldObserveVisibility}
+          propKey={videoTrack}
+        >
+          {videoView}
+        </ViewPortDetector>
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {},
