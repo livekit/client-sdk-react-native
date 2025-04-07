@@ -12,7 +12,8 @@
   [LivekitReactNative setup];
   WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
   // Optional for debugging WebRTC issues.
-  options.loggingSeverity = RTCLoggingSeverityInfo;
+  // options.loggingSeverity = RTCLoggingSeverityInfo;
+  options.enableMultitaskingCameraAccess = YES;
   self.moduleName = @"LivekitReactNativeExample";
   
   // You can add your custom initial props in the dictionary below.
