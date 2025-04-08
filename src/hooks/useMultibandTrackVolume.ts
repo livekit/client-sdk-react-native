@@ -7,6 +7,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { addListener, removeListener } from '../events/EventEmitter';
 import LiveKitModule from '../LKNativeModule';
+import type { MediaStreamTrack } from '@livekit/react-native-webrtc';
 
 /**
  * Interface for configuring options for the useMultibandTrackVolume hook.
@@ -63,9 +64,12 @@ export function useMultibandTrackVolume(
     // disabled due to use of JSON.stringify, dependencies are reference equality
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(options)]);
-  const mediaStreamTrack = track?.mediaStreamTrack;
+
+  const mediaStreamTrack = track?.mediaStreamTrack as
+    | MediaStreamTrack
+    | undefined;
   const hasMediaStreamTrack = mediaStreamTrack != null;
-  const peerConnectionId = mediaStreamTrack?.peerConnectionId ?? -1;
+  const peerConnectionId = mediaStreamTrack?._peerConnectionId ?? -1;
   const mediaStreamTrackId = mediaStreamTrack?.id;
 
   let [magnitudes, setMagnitudes] = useState<number[]>([]);
