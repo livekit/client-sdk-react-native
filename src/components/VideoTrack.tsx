@@ -81,9 +81,13 @@ export type VideoTrackProps = {
    *
    * iOS only. Requires iOS 15.0 or above, and the PIP background mode capability.
    *
-   * If `iosPIP.enabled` is true, startIOSPIP and stopIOSPIP can be used to manually
-   * trigger the PIP mode. `iosPIP.startAutomatically` can be used to automatically
+   * If `iosPIP.enabled` is true, the methods `startIOSPIP` and `stopIOSPIP`
+   * can be used to manually trigger the PIP mode.
+   *
+   * `iosPIP.startAutomatically` can be used to automatically
    * enter PIP when backgrounding the app.
+   *
+   * `iosPIP.preferredSize` is used to provide a suggested aspect ratio.
    *
    * @example
    * ```tsx
@@ -98,8 +102,8 @@ export type VideoTrackProps = {
    *        enabled: true,
    *        startAutomatically: true,
    *        preferredSize: {
-   *          width: 800,
-   *          height: 800,
+   *          width: 9,
+   *          height: 16,
    *        },
    *      }}
    *      ...
@@ -151,9 +155,12 @@ export const VideoTrack = forwardRef<Component, VideoTrackProps>(
       (event: LayoutChangeEvent) => elementInfo.onLayout(event),
       [elementInfo]
     );
+
+    const iosPIPEnabled = iosPIP?.enabled ?? false;
     const visibilityOnChange = useCallback(
-      (isVisible: boolean) => elementInfo.onVisibility(isVisible),
-      [elementInfo]
+      (isVisible: boolean) =>
+        elementInfo.onVisibility(isVisible || iosPIPEnabled),
+      [elementInfo, iosPIPEnabled]
     );
 
     const videoTrack = trackRef?.publication.track;
