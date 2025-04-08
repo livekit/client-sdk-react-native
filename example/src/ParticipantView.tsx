@@ -44,8 +44,8 @@ export const ParticipantView = forwardRef<Component, Props>(
             enabled: useIOSPIP,
             startAutomatically: true,
             preferredSize: {
-              width: 800,
-              height: 800,
+              width: 1,
+              height: 1,
             },
           }}
         />
