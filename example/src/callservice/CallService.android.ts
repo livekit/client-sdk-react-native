@@ -10,12 +10,22 @@ export async function startCallService() {
     importance: 'none',
     vibration: false,
     icon: 'ic_launcher',
+    // @ts-ignore
+    ServiceType: 'microphone',
   });
 }
+
 export async function stopCallService() {
   await ReactNativeForegroundService.stop();
 }
 
 export function setupCallService() {
-  ReactNativeForegroundService.register();
+  ReactNativeForegroundService.register({
+    config: {
+      alert: false,
+      onServiceErrorCallBack: () => {
+        console.error('Foreground service error occurred');
+      },
+    },
+  });
 }

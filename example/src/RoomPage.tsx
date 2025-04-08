@@ -95,6 +95,7 @@ interface RoomViewProps {
 const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
   const [isCameraFrontFacing, setCameraFrontFacing] = useState(true);
   const room = useRoomContext();
+
   useEffect(() => {
     let setup = async () => {
       if (e2ee) {

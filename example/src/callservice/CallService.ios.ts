@@ -3,6 +3,7 @@
 import RNCallKeep, {
   AudioSessionCategoryOption,
   AudioSessionMode,
+  CONSTANTS as CK_CONSTANTS,
 } from 'react-native-callkeep';
 
 import { RTCAudioSession } from '@livekit/react-native-webrtc';
@@ -14,10 +15,21 @@ export async function startCallService() {
   let handle = '1234567';
   let contactIdentifier = 'Caller Contact';
   RNCallKeep.startCall(uuid, handle, contactIdentifier, 'number', true);
+
+  RNCallKeep.reportConnectingOutgoingCallWithUUID(uuid);
+
+  // Small delay to ensure proper state transition
+  setTimeout(() => {
+    RNCallKeep.reportConnectedOutgoingCallWithUUID(uuid);
+  }, 100);
 }
 
 export async function stopCallService() {
   RNCallKeep.endCall(uuid);
+  RNCallKeep.reportEndCallWithUUID(
+    uuid,
+    CK_CONSTANTS.END_CALL_REASONS.REMOTE_ENDED
+  );
 }
 
 export function setupCallService() {
