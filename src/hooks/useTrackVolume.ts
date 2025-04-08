@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from 'react';
 import { addListener, removeListener } from '../events/EventEmitter';
 import LiveKitModule from '../LKNativeModule';
+import type { MediaStreamTrack } from '@livekit/react-native-webrtc';
 
 /**
  * A hook for tracking the volume of an audio track.
@@ -27,10 +28,12 @@ export function useTrackVolume(
           trackOrTrackReference?.publication?.track
         );
 
-  const mediaStreamTrack = track?.mediaStreamTrack;
+  const mediaStreamTrack = track?.mediaStreamTrack as
+    | MediaStreamTrack
+    | undefined;
   const hasMediaStreamTrack = mediaStreamTrack != null;
-  const peerConnectionId = mediaStreamTrack.peerConnectionId ?? -1;
-  const mediaStreamTrackId = mediaStreamTrack.id;
+  const peerConnectionId = mediaStreamTrack?._peerConnectionId ?? -1;
+  const mediaStreamTrackId = mediaStreamTrack?.id;
 
   let [volume, setVolume] = useState(0.0);
   useEffect(() => {
