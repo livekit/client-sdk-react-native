@@ -25,10 +25,14 @@ export {
   useTracks,
   isTrackReference,
   useEnsureTrackRef,
+  useMaybeTrackRefContext,
   useTrackMutedIndicator,
   useVisualStableUpdate,
+  useVoiceAssistant,
+  useTrackTranscription,
 } from '@livekit/components-react';
 export type {
+  AgentState,
   UseLocalParticipantOptions,
   UseParticipantInfoOptions,
   UseParticipantsOptions,
@@ -38,6 +42,7 @@ export type {
   TrackReference,
   TrackReferenceOrPlaceholder,
   UseVisualStableUpdateOptions,
+  TrackTranscriptionOptions
 } from '@livekit/components-react';
 
 export type { ReceivedDataMessage } from '@livekit/components-core';
