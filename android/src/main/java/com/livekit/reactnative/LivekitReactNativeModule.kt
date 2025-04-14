@@ -124,7 +124,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
         promise.resolve(Arguments.makeNativeArray(deviceIds))
     }
 
-    @ReactMethod(isBlockingSynchronousMethod = true)
+    @ReactMethod
     fun selectAudioOutput(deviceId: String, promise: Promise) {
         audioManager.selectAudioOutput(AudioDeviceKind.fromTypeName(deviceId))
         promise.resolve(null)
