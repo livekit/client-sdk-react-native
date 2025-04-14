@@ -42,7 +42,7 @@ export type {
   TrackReference,
   TrackReferenceOrPlaceholder,
   UseVisualStableUpdateOptions,
-  TrackTranscriptionOptions
+  TrackTranscriptionOptions,
 } from '@livekit/components-react';
 
 export type { ReceivedDataMessage } from '@livekit/components-core';
