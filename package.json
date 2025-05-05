@@ -83,7 +83,7 @@
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "@livekit/react-native-webrtc": "^125.0.8",
+    "@livekit/react-native-webrtc": "^125.0.9",
     "livekit-client": "^2.9.0",
     "react": "*",
     "react-native": "*"
