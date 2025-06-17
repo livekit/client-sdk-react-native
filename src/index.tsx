@@ -1,3 +1,5 @@
+import 'well-known-symbols/Symbol.asyncIterator/auto';
+import 'well-known-symbols/Symbol.iterator/auto';
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
@@ -33,8 +35,6 @@ export function registerGlobals() {
   fixWebrtcAdapter();
   shimPromiseAllSettled();
   shimArrayAt();
-  shimAsyncIterator();
-  shimIterator();
   shimCryptoUuid();
   shimWebstreams();
   setupNativeEvents();
@@ -92,16 +92,6 @@ function shimArrayAt() {
     var at = require('array.prototype.at');
     at.shim();
   }
-}
-
-function shimAsyncIterator() {
-  var shim = require('well-known-symbols/Symbol.asyncIterator/shim');
-  shim();
-}
-
-function shimIterator() {
-  var shim = require('well-known-symbols/Symbol.iterator/shim');
-  shim();
 }
 
 function shimCryptoUuid() {
