@@ -2486,6 +2486,7 @@ __metadata:
     typed-emitter: ^2.1.0
     typedoc: ^0.25.13
     typescript: 5.0.4
+    web-streams-polyfill: ^4.1.0
     well-known-symbols: ^4.0.0
   peerDependencies:
     "@livekit/react-native-webrtc": ^125.0.9
@@ -12736,6 +12737,13 @@ __metadata:
   dependencies:
     defaults: ^1.0.3
   checksum: 814e9d1ddcc9798f7377ffa448a5a3892232b9275ebb30a41b529607691c0491de47cba426e917a4d08ded3ee7e9ba2f3fe32e62ee3cd9c7d3bafb7754bd553c
+  languageName: node
+  linkType: hard
+
+"web-streams-polyfill@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "web-streams-polyfill@npm:4.1.0"
+  checksum: bce16f6bcca895439131fb21e4df15659a34d6f31fedd34b1680ab4fe9c438e02aabd336e4641eb1821e04a8da38dd03c6219fa8ca149ee9a002858a0d32f90d
   languageName: node
   linkType: hard
 
