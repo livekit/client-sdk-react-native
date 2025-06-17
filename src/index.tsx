@@ -1,3 +1,5 @@
+import 'well-known-symbols/Symbol.asyncIterator/auto';
+import 'well-known-symbols/Symbol.iterator/auto';
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
@@ -18,6 +20,7 @@ import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
 import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 import { setupNativeEvents } from './events/EventEmitter';
+import { ReadableStream, WritableStream } from 'web-streams-polyfill';
 
 /**
  * Registers the required globals needed for LiveKit to work.
@@ -32,8 +35,8 @@ export function registerGlobals() {
   fixWebrtcAdapter();
   shimPromiseAllSettled();
   shimArrayAt();
-  shimAsyncIterator();
-  shimIterator();
+  shimCryptoUuid();
+  shimWebstreams();
   setupNativeEvents();
 }
 
@@ -91,15 +94,43 @@ function shimArrayAt() {
   }
 }
 
-function shimAsyncIterator() {
-  var shim = require('well-known-symbols/Symbol.asyncIterator/shim');
-  shim();
+function shimCryptoUuid() {
+  let crypto = global.crypto;
+  if (typeof global.crypto?.randomUUID !== 'function') {
+    let createRandomUUID = () => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+        /[xy]/g,
+        function (c) {
+          /* eslint-disable no-bitwise */
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }
+      ) as `${string}-${string}-${string}-${string}-${string}`;
+    };
+
+    if (!crypto) {
+      crypto = {} as typeof global.crypto;
+      global.crypto = crypto;
+    }
+    crypto.randomUUID = createRandomUUID;
+  }
 }
 
-function shimIterator() {
-  var shim = require('well-known-symbols/Symbol.iterator/shim');
-  shim();
+function shimWebstreams() {
+  // @ts-expect-error: global.WritableStream isn't typed here.
+  if (typeof global.WritableStream === 'undefined') {
+    // @ts-expect-error
+    global.WritableStream = WritableStream;
+  }
+
+  // @ts-expect-error: global.ReadableStream isn't typed here.
+  if (typeof global.ReadableStream === 'undefined') {
+    // @ts-expect-error
+    global.ReadableStream = ReadableStream;
+  }
 }
+
 export * from './hooks';
 export * from './components/BarVisualizer';
 export * from './components/LiveKitRoom';
