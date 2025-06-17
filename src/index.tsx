@@ -105,14 +105,25 @@ function shimIterator() {
 }
 
 function shimCryptoUuid() {
+  let crypto = global.crypto;
   if (typeof global.crypto?.randomUUID !== 'function') {
-    global.crypto.randomUUID = () =>
-      'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        /* eslint-disable no-bitwise */
-        const r = (Math.random() * 16) | 0;
-        const v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      }) as `${string}-${string}-${string}-${string}-${string}`;
+    let createRandomUUID = () => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+        /[xy]/g,
+        function (c) {
+          /* eslint-disable no-bitwise */
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }
+      ) as `${string}-${string}-${string}-${string}-${string}`;
+    };
+
+    if (!crypto) {
+      crypto = {} as typeof global.crypto;
+      global.crypto = crypto;
+    }
+    crypto.randomUUID = createRandomUUID;
   }
 }
 
@@ -126,7 +137,7 @@ function shimWebstreams() {
   // @ts-expect-error: global.ReadableStream isn't typed here.
   if (typeof global.ReadableStream === 'undefined') {
     // @ts-expect-error
-    global.WritableStream = ReadableStream;
+    global.ReadableStream = ReadableStream;
   }
 }
 
