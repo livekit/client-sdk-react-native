@@ -14,6 +14,7 @@ import com.livekit.reactnative.audio.AudioSwitchManager
 import com.livekit.reactnative.audio.processing.AudioSinkManager
 import com.livekit.reactnative.audio.processing.MultibandVolumeProcessor
 import com.livekit.reactnative.audio.processing.VolumeProcessor
+import com.oney.WebRTCModule.WebRTCModuleOptions
 import org.webrtc.audio.WebRtcAudioTrackHelper
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -192,6 +193,11 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     @ReactMethod
     fun removeListeners(count: Int?) {
         // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
+    fun setDefaultAudioTrackVolume(volume: Double) {
+        WebRTCModuleOptions.getInstance().defaultTrackVolume = volume
     }
 
     override fun invalidate() {

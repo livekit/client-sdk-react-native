@@ -255,6 +255,17 @@ export default class AudioSession {
   };
 
   /**
+   * Set default audio track volume when new tracks are subscribed.
+   * Does **not** affect any existing tracks.
+   *
+   * @param volume A number between 0.0 and 1.0, where 0.0 represents 0% volume and
+   * 1.0 represents full volume.
+   */
+  static setDefaultRemoteAudioTrackVolume = async (volume: number) => {
+    await LiveKitModule.setDefaultAudioTrackVolume(volume);
+  };
+
+  /**
    * Gets the available audio outputs for use with {@link selectAudioOutput}.
    *
    * {@link startAudioSession} must be called prior to using this method.

@@ -7,10 +7,29 @@ PODS:
   - hermes-engine (0.74.2):
     - hermes-engine/Pre-built (= 0.74.2)
   - hermes-engine/Pre-built (0.74.2)
-  - livekit-react-native (2.5.1):
+  - livekit-react-native (2.7.5):
+    - DoubleConversion
+    - glog
+    - hermes-engine
     - livekit-react-native-webrtc
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
-  - livekit-react-native-webrtc (125.0.8):
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - livekit-react-native-webrtc (125.0.10):
     - React-Core
     - WebRTC-SDK (~> 125.6422.07)
   - RCT-Folly (2024.01.01.00):
@@ -1361,8 +1380,8 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 01d3e052018c2a13937aca1860fbedbccd4a41b7
-  livekit-react-native: 08264d81497fe9d18eb513e1db05d0539ddb9417
-  livekit-react-native-webrtc: c456181c7c6f9f2b0a79ea14d0d3c97215266ba0
+  livekit-react-native: dddab6768c9f3a823299c2a041676d966ad737b5
+  livekit-react-native-webrtc: eadea4c155d858c41ee25a44ef91b5788d074b4b
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: b03c35057846b685b3ccadc9bfe43e349989cdb2
   RCTRequired: 194626909cfa8d39ca6663138c417bc6c431648c
@@ -1416,4 +1435,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7e787510e5e3fbe259a5a7507ea2e7e1b1ff65ef
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.16.2

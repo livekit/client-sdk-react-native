@@ -8,6 +8,8 @@ RCT_EXTERN_METHOD(configureAudio:(NSDictionary *) config)
 RCT_EXTERN_METHOD(startAudioSession)
 RCT_EXTERN_METHOD(stopAudioSession)
 
+RCT_EXTERN_METHOD(setDefaultAudioTrackVolume:(nonnull NSNumber *) volume)
+
 RCT_EXTERN_METHOD(showAudioRoutePicker)
 RCT_EXTERN_METHOD(getAudioOutputsWithResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)

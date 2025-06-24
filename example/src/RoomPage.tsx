@@ -39,7 +39,7 @@ import {
 import { startCallService, stopCallService } from './callservice/CallService';
 import Toast from 'react-native-toast-message';
 
-import { LocalVideoTrack, Track } from 'livekit-client';
+import { Track } from 'livekit-client';
 
 export const RoomPage = ({
   navigation,
@@ -219,13 +219,7 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
             return;
           }
 
-          const localCameraTrack = cameraTrack.videoTrack;
-          if (localCameraTrack instanceof LocalVideoTrack) {
-            localCameraTrack.restartTrack({
-              deviceId: newDevice.deviceId,
-              facingMode: facingModeStr,
-            });
-          }
+          await room.switchActiveDevice('videoinput', newDevice.deviceId);
         }}
         screenShareEnabled={isScreenShareEnabled}
         setScreenShareEnabled={(enabled: boolean) => {
