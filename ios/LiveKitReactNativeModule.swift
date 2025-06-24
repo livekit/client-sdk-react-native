@@ -225,6 +225,14 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         return nil
     }
     
+    @objc(setDefaultAudioTrackVolume:)
+    public func setDefaultAudioTrackVolume(_ volume: NSNumber) -> Any? {
+        let options = WebRTCModuleOptions.sharedInstance()
+        options.defaultTrackVolume = volume.doubleValue
+
+        return nil
+    }
+    
     override public func supportedEvents() -> [String]! {
         return [
             LKEvents.kEventVolumeProcessed,
