@@ -1,5 +1,7 @@
 import 'well-known-symbols/Symbol.asyncIterator/auto';
 import 'well-known-symbols/Symbol.iterator/auto';
+import './polyfills/MediaRecorderShim';
+import 'react-native-quick-base64';
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
@@ -140,6 +142,7 @@ export * from './useParticipant'; // deprecated
 export * from './useRoom'; // deprecated
 export * from './logger';
 export * from './audio/AudioManager';
+export * from './events/EventEmitter';
 
 export {
   AudioSession,
