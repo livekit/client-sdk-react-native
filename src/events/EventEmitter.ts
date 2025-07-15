@@ -7,7 +7,11 @@ import LiveKitModule from '../LKNativeModule';
 // re-emit them on a JS-only emitter.
 const nativeEmitter = new NativeEventEmitter(LiveKitModule);
 
-const NATIVE_EVENTS = ['LK_VOLUME_PROCESSED', 'LK_MULTIBAND_PROCESSED'];
+const NATIVE_EVENTS = [
+  'LK_VOLUME_PROCESSED',
+  'LK_MULTIBAND_PROCESSED',
+  'LK_AUDIO_DATA',
+];
 
 const eventEmitter = new EventEmitter();
 
