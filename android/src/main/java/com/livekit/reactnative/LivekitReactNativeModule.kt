@@ -147,9 +147,10 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    fun deleteAudioSinkListener(reactTag: String, pcId: Int, trackId: String) {
+    fun deleteAudioSinkListener(reactTag: String, pcId: Int, trackId: String): Boolean {
         audioSinkManager.detachSinkFromTrack(reactTag, pcId, trackId)
         audioSinkManager.unregisterSink(reactTag)
+        return true
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
