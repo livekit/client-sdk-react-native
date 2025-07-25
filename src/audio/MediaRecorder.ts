@@ -1,6 +1,4 @@
-import type {
-  MediaStream,
-} from '@livekit/react-native-webrtc';
+import type { MediaStream } from '@livekit/react-native-webrtc';
 import { addListener } from '../events/EventEmitter';
 import {
   EventTarget,
@@ -48,7 +46,7 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
 
   registerListener() {
     let audioTracks = this.stream.getAudioTracks();
-    if (audioTracks.length != 1) {
+    if (audioTracks.length !== 1) {
       return;
     }
     const mediaStreamTrack = audioTracks[0];
@@ -62,7 +60,7 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
       if (
         this._reactTag &&
         event.id === this._reactTag &&
-        this.state == 'recording'
+        this.state === 'recording'
       ) {
         let str = event.data as string;
         this._parts.push(str);
@@ -73,8 +71,8 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
   unregisterListener() {
     if (this._reactTag) {
       let audioTracks = this.stream.getAudioTracks();
-      if (audioTracks.length != 1) {
-        log.error("couldn't find any audio tracks to record from!")
+      if (audioTracks.length !== 1) {
+        log.error("couldn't find any audio tracks to record from!");
         return;
       }
       const mediaStreamTrack = audioTracks[0];
@@ -118,7 +116,6 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
     this.dispatchData();
   }
   dispatchData() {
-
     let combinedStr = this._parts.reduce((sum, cur) => sum + cur, '');
     let data = toByteArray(combinedStr);
     this._parts = [];
