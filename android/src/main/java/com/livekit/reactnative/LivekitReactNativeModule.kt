@@ -18,6 +18,9 @@ import com.oney.WebRTCModule.WebRTCModuleOptions
 import org.webrtc.audio.WebRtcAudioTrackHelper
 import kotlin.time.Duration.Companion.milliseconds
 
+// NOTE: As of 0.80 react-native new architecture requires all
+// @ReactMethod(isBlockingSynchronousMethod = true)
+// annotated methods to be non-void.
 
 class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -142,9 +145,10 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    fun deleteVolumeProcessor(reactTag: String, pcId: Int, trackId: String) {
+    fun deleteVolumeProcessor(reactTag: String, pcId: Int, trackId: String): Boolean {
         audioSinkManager.detachSinkFromTrack(reactTag, pcId, trackId)
         audioSinkManager.unregisterSink(reactTag)
+        return true
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
@@ -171,7 +175,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    fun deleteMultibandVolumeProcessor(reactTag: String, pcId: Int, trackId: String) {
+    fun deleteMultibandVolumeProcessor(reactTag: String, pcId: Int, trackId: String): Boolean {
         val volumeProcessor =
             audioSinkManager.getSink(reactTag) ?: throw IllegalArgumentException("Can't find volume processor for $reactTag")
         audioSinkManager.detachSinkFromTrack(volumeProcessor, pcId, trackId)
@@ -182,7 +186,10 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
             multibandVolumeProcessor.release()
         } else {
             Log.w(name, "deleteMultibandVolumeProcessor called, but non-MultibandVolumeProcessor found?!")
+            return false
         }
+
+        return true
     }
 
     @ReactMethod
