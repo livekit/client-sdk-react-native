@@ -2165,12 +2165,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/protocol@npm:1.34.0":
-  version: 1.34.0
-  resolution: "@livekit/protocol@npm:1.34.0"
+"@livekit/protocol@npm:1.39.3":
+  version: 1.39.3
+  resolution: "@livekit/protocol@npm:1.39.3"
   dependencies:
     "@bufbuild/protobuf": ^1.10.0
-  checksum: e08d0ceb20e5434b352e0c42f89d13f29edbf853a968924aea9792660d79edc13a535288d05a47da97843e1e3a66917adb79ee51b8652442d42123e5f75f649c
+  checksum: 72aa3b9e82203ccec039047518d841d65b10dcc11ab9d661f269eab8a8672aed7b2d072f4f09cc6fb94a2579542b0a9216d7f66476d34cd1675c13e1ebcc119f
   languageName: node
   linkType: hard
 
@@ -3883,7 +3883,7 @@ __metadata:
     eslint: ^8.19.0
     install-local: ^3.0.1
     jest: ^29.6.3
-    livekit-client: ^2.9.8
+    livekit-client: ^2.15.4
     prettier: 2.8.8
     react: 18.2.0
     react-native: 0.74.2
@@ -6956,12 +6956,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"livekit-client@npm:^2.9.8":
-  version: 2.9.8
-  resolution: "livekit-client@npm:2.9.8"
+"livekit-client@npm:^2.15.4":
+  version: 2.15.4
+  resolution: "livekit-client@npm:2.15.4"
   dependencies:
     "@livekit/mutex": 1.1.1
-    "@livekit/protocol": 1.34.0
+    "@livekit/protocol": 1.39.3
     events: ^3.3.0
     loglevel: ^1.9.2
     sdp-transform: ^2.15.0
@@ -6969,7 +6969,9 @@ __metadata:
     tslib: 2.8.1
     typed-emitter: ^2.1.0
     webrtc-adapter: ^9.0.1
-  checksum: cc01e43fbf5fa298c6696a3a084852d04cd818c554e9b3b9469ad22e85b8d29a975d96072d8432aff79651337f2950881c266117d0490c8ab94112dfda789ca4
+  peerDependencies:
+    "@types/dom-mediacapture-record": ^1
+  checksum: 7ae2e2f5326c8f7925b359277fd12ddeefb0bc5069b0563a9e184f2b860351bf91733c1fa5fd7b65467b643776368058d485af888e2771fd68c61c409b950e05
   languageName: node
   linkType: hard
 

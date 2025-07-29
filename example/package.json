@@ -15,7 +15,7 @@
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "@supersami/rn-foreground-service": "^2.2.5",
-    "livekit-client": "^2.9.8",
+    "livekit-client": "^2.15.4",
     "react": "18.2.0",
     "react-native": "0.74.2",
     "react-native-callkeep": "^4.3.14",
