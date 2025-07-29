@@ -1,6 +1,6 @@
 {
   "name": "@livekit/react-native",
-  "version": "2.7.6",
+  "version": "2.8.0",
   "description": "LiveKit for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -59,7 +59,7 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@commitlint/config-conventional": "^16.2.1",
-    "@livekit/react-native-webrtc": "^125.0.10",
+    "@livekit/react-native-webrtc": "^125.0.12",
     "@react-native/babel-preset": "0.74.84",
     "@react-native/eslint-config": "0.74.84",
     "@react-native/metro-config": "0.74.84",
@@ -86,7 +86,7 @@
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "@livekit/react-native-webrtc": "^125.0.10",
+    "@livekit/react-native-webrtc": "^125.0.12",
     "livekit-client": "^2.15.4",
     "react": "*",
     "react-native": "*"

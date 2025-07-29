@@ -19,7 +19,6 @@ import {
   type RTCIOSPIPOptions,
 } from '@livekit/react-native-webrtc';
 import {
-  Component,
   forwardRef,
   useCallback,
   useEffect,
@@ -125,6 +124,8 @@ export type VideoTrackProps = {
   };
 };
 
+type RTCViewInstance = InstanceType<typeof RTCView>;
+
 /**
  * VideoTrack component for displaying video tracks in a React Native application.
  * It supports both local and remote video tracks from LiveKit, and handles adaptive streaming for remote tracks.
@@ -133,7 +134,7 @@ export type VideoTrackProps = {
  * @returns A React component that renders the given video track.
  * @public
  */
-export const VideoTrack = forwardRef<Component, VideoTrackProps>(
+export const VideoTrack = forwardRef<RTCViewInstance, VideoTrackProps>(
   (
     {
       style = {},
