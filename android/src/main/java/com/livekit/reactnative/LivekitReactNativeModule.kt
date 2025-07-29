@@ -8,14 +8,19 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.livekit.reactnative.audio.AudioDeviceKind
 import com.livekit.reactnative.audio.AudioManagerUtils
 import com.livekit.reactnative.audio.AudioSwitchManager
+import com.livekit.reactnative.audio.events.Events
 import com.livekit.reactnative.audio.processing.AudioSinkManager
+import com.livekit.reactnative.audio.processing.AudioSinkProcessor
 import com.livekit.reactnative.audio.processing.MultibandVolumeProcessor
 import com.livekit.reactnative.audio.processing.VolumeProcessor
 import com.oney.WebRTCModule.WebRTCModuleOptions
 import org.webrtc.audio.WebRtcAudioTrackHelper
+import java.lang.Thread.sleep
+import kotlin.concurrent.thread
 import kotlin.time.Duration.Companion.milliseconds
 
 // NOTE: As of 0.80 react-native new architecture requires all
@@ -132,6 +137,23 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     fun selectAudioOutput(deviceId: String, promise: Promise) {
         audioManager.selectAudioOutput(AudioDeviceKind.fromTypeName(deviceId))
         promise.resolve(null)
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun createAudioSinkListener(pcId: Int, trackId: String): String {
+        val processor = AudioSinkProcessor(reactApplicationContext)
+        val reactTag = audioSinkManager.registerSink(processor)
+        audioSinkManager.attachSinkToTrack(processor, pcId, trackId)
+        processor.reactTag = reactTag
+
+        return reactTag
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun deleteAudioSinkListener(reactTag: String, pcId: Int, trackId: String): Boolean {
+        audioSinkManager.detachSinkFromTrack(reactTag, pcId, trackId)
+        audioSinkManager.unregisterSink(reactTag)
+        return true
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)

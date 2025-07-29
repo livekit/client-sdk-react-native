@@ -21,6 +21,12 @@ RCT_EXTERN_METHOD(selectAudioOutput:(NSString *)deviceId
 /// Configure audio config for WebRTC
 RCT_EXTERN_METHOD(setAppleAudioConfiguration:(NSDictionary *) configuration)
 
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(createAudioSinkListener:(nonnull NSNumber *)pcId
+                                        trackId:(nonnull NSString *)trackId)
+
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(deleteAudioSinkListener:(nonnull NSString *)reactTag
+                                        pcId:(nonnull NSNumber *)pcId
+                                        trackId:(nonnull NSString *)trackId)
 
 RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(createVolumeProcessor:(nonnull NSNumber *)pcId
                                         trackId:(nonnull NSString *)trackId)

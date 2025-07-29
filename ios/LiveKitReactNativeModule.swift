@@ -6,6 +6,7 @@ import React
 struct LKEvents {
     static let kEventVolumeProcessed = "LK_VOLUME_PROCESSED";
     static let kEventMultibandProcessed = "LK_MULTIBAND_PROCESSED";
+    static let kEventAudioData = "LK_AUDIO_DATA";
 }
 
 @objc(LivekitReactNativeModule)
@@ -178,6 +179,24 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         session.unlockForConfiguration()
     }
     
+    @objc(createAudioSinkListener:trackId:)
+    public func createAudioSinkListener(_ pcId: NSNumber, trackId: String) -> String {
+        let renderer = AudioSinkRenderer(eventEmitter: self)
+        let reactTag = self.audioRendererManager.registerRenderer(renderer)
+        renderer.reactTag = reactTag
+        self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
+        
+        return reactTag
+    }
+
+    @objc(deleteAudioSinkListener:pcId:trackId:)
+    public func deleteAudioSinkListener(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
+        self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
+        self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
+        
+        return nil
+    }
+
     @objc(createVolumeProcessor:trackId:)
     public func createVolumeProcessor(_ pcId: NSNumber, trackId: String) -> String {
         let renderer = VolumeAudioRenderer(intervalMs: 40.0, eventEmitter: self)
@@ -195,7 +214,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         
         return nil
     }
-    
+
     @objc(createMultibandVolumeProcessor:pcId:trackId:)
     public func createMultibandVolumeProcessor(_ options: NSDictionary, pcId: NSNumber, trackId: String) -> String {
         let bands = (options["bands"] as? NSNumber)?.intValue ?? 5
@@ -237,6 +256,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         return [
             LKEvents.kEventVolumeProcessed,
             LKEvents.kEventMultibandProcessed,
+            LKEvents.kEventAudioData,
         ]
     }
 }
