@@ -50,7 +50,7 @@ export interface LiveKitRoomProps {
   screen?: ScreenShareCaptureOptions | boolean;
   /**
    * If set to true a connection to LiveKit room is initiated.
-   * @defaultValue `false`
+   * @defaultValue `true`
    */
   connect?: boolean;
   /**
