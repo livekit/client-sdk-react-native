@@ -149,7 +149,7 @@ export const BarVisualizer = ({
   let bars: React.ReactNode[] = [];
   magnitudes.forEach((value, index) => {
     let coerced = Math.min(opts.maxHeight, Math.max(opts.minHeight, value));
-    let coercedPercent = Math.min(100, Math.max(0, coerced * 100 + 5));
+    let coercedPercent = Math.min(100, Math.max(0, coerced * 100));
     let opacity = opacityAnimations[index] ?? new Animated.Value(0.3);
     let barStyle = {
       opacity: opacity,
