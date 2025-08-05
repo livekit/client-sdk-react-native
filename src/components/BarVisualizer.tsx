@@ -160,11 +160,7 @@ export const BarVisualizer = ({
     bars.push(
       <Animated.View
         key={index}
-        style={[
-          { height: `${coercedPercent}%` },
-          barStyle,
-          styles.volumeIndicator,
-        ]}
+        style={[{ height: `${coercedPercent}%` }, barStyle]}
       />
     );
   });
@@ -176,9 +172,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-  },
-  volumeIndicator: {
-    borderRadius: 12,
   },
 });
 
