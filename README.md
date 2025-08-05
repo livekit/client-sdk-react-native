@@ -8,7 +8,7 @@
 
 <!--END_BANNER_IMAGE-->
 
-# livekit-react-native
+# React Native client SDK for LiveKit
 
 <!--BEGIN_DESCRIPTION-->
 Use this SDK to add realtime video, audio and data features to your React Native app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build applications such as multi-modal AI, live streaming, or video calls with just a few lines of code.
@@ -43,9 +43,12 @@ Once the `@livekit/react-native-webrtc` dependency is installed, one last step i
 
 ### Android
 
+<details>
+
+<summary>Java</summary>
+
 In your [MainApplication.java](https://github.com/livekit/client-sdk-react-native/blob/main/example/android/app/src/main/java/com/example/livekitreactnative/MainApplication.java) file:
 
-#### Java
 ```java
 import com.livekit.reactnative.LiveKitReactNative;
 import com.livekit.reactnative.audio.AudioType;
@@ -64,8 +67,14 @@ public class MainApplication extends Application implements ReactApplication {
 }
 ```
 
-Or in your **MainApplication.kt** if you are using RN 0.73+
-#### Kotlin
+</details>
+
+<details>
+
+<summary>Kotlin</summary>
+
+In your **MainApplication.kt** file:
+
 ```kotlin
 import com.livekit.reactnative.LiveKitReactNative
 import com.livekit.reactnative.audio.AudioType
@@ -81,9 +90,14 @@ class MainApplication : Application, ReactApplication() {
   }
 }
 ```
-----
+
+</details>
 
 ### iOS
+
+<details>
+
+<summary>Objective-C</summary>
 
 In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/main/example/ios/LivekitReactNativeExample/AppDelegate.mm) file:
 
@@ -107,6 +121,41 @@ In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/
   //...
 }
 ```
+
+</details>
+
+<details>
+
+<summary>Swift</summary>
+
+In your **AppDelegate.swift** file:
+```swift
+import livekit_react_native
+import livekit_react_native_webrtc
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+
+    // Place this above any other RN related initialization
+    LivekitReactNative.setup()
+
+    // Uncomment the following lines if you want to use the camera in the background
+    // Requires voip background mode and iOS 18+.
+
+    // let options = WebRTCModuleOptions.sharedInstance()
+    // options.enableMultitaskingCameraAccess = true
+
+    // ...
+  }
+}
+
+```
+
+</details>
 
 ### Expo
 
