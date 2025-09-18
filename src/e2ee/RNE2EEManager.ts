@@ -21,6 +21,7 @@ import {
   EncryptionEvent,
   type DecryptDataResponseMessage,
   type EncryptDataResponseMessage,
+  Mutex,
 } from 'livekit-client';
 import type RNKeyProvider from './RNKeyProvider';
 import type RTCEngine from 'livekit-client/dist/src/room/RTCEngine';
@@ -37,13 +38,14 @@ export default class RNE2EEManager
   private room?: Room;
   private frameCryptors: Map<string, RTCFrameCryptor> = new Map();
   private keyProvider: RNKeyProvider;
-  private dataPacketCryptor: RTCDataPacketCryptor;
   private algorithm: RTCFrameCryptorAlgorithm =
     RTCFrameCryptorAlgorithm.kAesGcm;
 
   private encryptionEnabled: boolean = false;
   private dataChannelEncryptionEnabled: boolean = false;
 
+  private dataPacketCryptorLock = new Mutex();
+  private dataPacketCryptor: RTCDataPacketCryptor | undefined = undefined;
   constructor(
     keyProvider: RNKeyProvider,
     dcEncryptionEnabled: boolean = false
@@ -52,17 +54,19 @@ export default class RNE2EEManager
     this.keyProvider = keyProvider;
     this.encryptionEnabled = false;
     this.dataChannelEncryptionEnabled = dcEncryptionEnabled;
-    this.dataPacketCryptor =
-      RTCDataPacketCryptorFactory.createDataPacketCryptor(
-        this.algorithm,
-        this.keyProvider.rtcKeyProvider
-      );
   }
 
   get isEnabled(): boolean {
     return this.encryptionEnabled;
   }
   get isDataChannelEncryptionEnabled(): boolean {
+    console.log(
+      'isDataChannelEncryptionEnabled?',
+      this.isEnabled,
+      this.encryptionEnabled,
+      this.dataChannelEncryptionEnabled,
+      this.isEnabled && this.dataChannelEncryptionEnabled
+    );
     return this.isEnabled && this.dataChannelEncryptionEnabled;
   }
 
@@ -101,7 +105,16 @@ export default class RNE2EEManager
             await frameCryptor.dispose();
           }
         }
-      );
+      )
+      .on(RoomEvent.SignalConnected, () => {
+        if (!this.room) {
+          throw new TypeError(`expected room to be present on signal connect`);
+        }
+        this.setParticipantCryptorEnabled(
+          this.room.localParticipant.isE2EEEnabled,
+          this.room.localParticipant.identity
+        );
+      });
   }
 
   private async setupE2EESender(
@@ -156,6 +169,32 @@ export default class RNE2EEManager
     this.keyProvider.setSifTrailer(trailer);
   }
 
+  private async getDataPacketCryptor(): Promise<RTCDataPacketCryptor> {
+    let dataPacketCryptor = this.dataPacketCryptor;
+    if (dataPacketCryptor) {
+      return dataPacketCryptor;
+    }
+
+    let unlock = await this.dataPacketCryptorLock.lock();
+
+    try {
+      dataPacketCryptor = this.dataPacketCryptor;
+      if (dataPacketCryptor) {
+        return dataPacketCryptor;
+      }
+
+      dataPacketCryptor =
+        await RTCDataPacketCryptorFactory.createDataPacketCryptor(
+          this.algorithm,
+          this.keyProvider.rtcKeyProvider
+        );
+
+      this.dataPacketCryptor = dataPacketCryptor;
+      return dataPacketCryptor;
+    } finally {
+      unlock();
+    }
+  }
   async encryptData(
     data: Uint8Array
   ): Promise<EncryptDataResponseMessage['data']> {
@@ -165,7 +204,10 @@ export default class RNE2EEManager
     }
 
     let participantId = room.localParticipant.identity;
-    let encryptedPacket = await this.dataPacketCryptor.encrypt(
+
+    let dataPacketCryptor = await this.getDataPacketCryptor();
+
+    let encryptedPacket = await dataPacketCryptor.encrypt(
       participantId,
       this.keyProvider.getLatestKeyIndex(participantId),
       data
@@ -196,7 +238,8 @@ export default class RNE2EEManager
       keyIndex,
     } satisfies RTCEncryptedPacket;
 
-    let decryptedData = await this.dataPacketCryptor.decrypt(
+    let dataPacketCryptor = await this.getDataPacketCryptor();
+    let decryptedData = await dataPacketCryptor.decrypt(
       participantIdentity,
       packet
     );
@@ -249,11 +292,13 @@ export default class RNE2EEManager
     enabled: boolean,
     participantIdentity: string
   ): void {
+    console.log('setParticipantCryptorEnabled', enabled, participantIdentity);
     if (
       this.encryptionEnabled !== enabled &&
       participantIdentity === this.room?.localParticipant.identity
     ) {
       this.encryptionEnabled = enabled;
+      console.log('setting encryption enabled to ', enabled);
       this.emit(
         EncryptionEvent.ParticipantEncryptionStatusChanged,
         enabled,

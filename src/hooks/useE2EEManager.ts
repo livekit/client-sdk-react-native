@@ -6,6 +6,7 @@ import type { RNKeyProviderOptions } from '../e2ee/RNKeyProvider';
 export type UseRNE2EEManagerOptions = {
   keyProviderOptions?: RNKeyProviderOptions;
   sharedKey: string | Uint8Array;
+  dataChannelEncryption?: boolean;
 };
 
 export interface RNE2EEManagerState {
@@ -22,7 +23,9 @@ export function useRNE2EEManager(
   let [keyProvider] = useState(
     () => new RNKeyProvider(options.keyProviderOptions ?? {})
   );
-  let [e2eeManager] = useState(() => new RNE2EEManager(keyProvider));
+  let [e2eeManager] = useState(
+    () => new RNE2EEManager(keyProvider, options.dataChannelEncryption ?? false)
+  );
 
   useEffect(() => {
     let setup = async () => {
