@@ -1,7 +1,10 @@
 import {
+  RTCDataPacketCryptor,
+  RTCDataPacketCryptorFactory,
   RTCFrameCryptorAlgorithm,
   RTCFrameCryptorFactory,
   RTCRtpReceiver,
+  type RTCEncryptedPacket,
   type RTCFrameCryptor,
   type RTCRtpSender,
 } from '@livekit/react-native-webrtc';
@@ -16,6 +19,8 @@ import {
   type BaseE2EEManager,
   type E2EEManagerCallbacks,
   EncryptionEvent,
+  type DecryptDataResponseMessage,
+  type EncryptDataResponseMessage,
 } from 'livekit-client';
 import type RNKeyProvider from './RNKeyProvider';
 import type RTCEngine from 'livekit-client/dist/src/room/RTCEngine';
@@ -32,15 +37,33 @@ export default class RNE2EEManager
   private room?: Room;
   private frameCryptors: Map<string, RTCFrameCryptor> = new Map();
   private keyProvider: RNKeyProvider;
+  private dataPacketCryptor: RTCDataPacketCryptor;
   private algorithm: RTCFrameCryptorAlgorithm =
     RTCFrameCryptorAlgorithm.kAesGcm;
 
   private encryptionEnabled: boolean = false;
+  private dataChannelEncryptionEnabled: boolean = false;
 
-  constructor(keyProvider: RNKeyProvider) {
+  constructor(
+    keyProvider: RNKeyProvider,
+    dcEncryptionEnabled: boolean = false
+  ) {
     super();
     this.keyProvider = keyProvider;
     this.encryptionEnabled = false;
+    this.dataChannelEncryptionEnabled = dcEncryptionEnabled;
+    this.dataPacketCryptor =
+      RTCDataPacketCryptorFactory.createDataPacketCryptor(
+        this.algorithm,
+        this.keyProvider.rtcKeyProvider
+      );
+  }
+
+  get isEnabled(): boolean {
+    return this.encryptionEnabled;
+  }
+  get isDataChannelEncryptionEnabled(): boolean {
+    return this.isEnabled && this.dataChannelEncryptionEnabled;
   }
 
   setup(room: Room) {
@@ -131,6 +154,61 @@ export default class RNE2EEManager
 
   setSifTrailer(trailer: Uint8Array): void {
     this.keyProvider.setSifTrailer(trailer);
+  }
+
+  async encryptData(
+    data: Uint8Array
+  ): Promise<EncryptDataResponseMessage['data']> {
+    let room = this.room;
+    if (!room) {
+      throw new Error("e2eemanager isn't setup with room!");
+    }
+
+    let participantId = room.localParticipant.identity;
+    let encryptedPacket = await this.dataPacketCryptor.encrypt(
+      participantId,
+      this.keyProvider.getLatestKeyIndex(participantId),
+      data
+    );
+
+    if (!encryptedPacket) {
+      throw new Error('encryption for packet failed');
+    }
+    return {
+      uuid: '', //not used
+      payload: encryptedPacket.payload,
+      iv: encryptedPacket.iv,
+      keyIndex: encryptedPacket.keyIndex,
+    };
+  }
+
+  async handleEncryptedData(
+    payload: Uint8Array,
+    iv: Uint8Array,
+    participantIdentity: string,
+    keyIndex: number
+  ): Promise<
+    DecryptDataResponseMessage['data'] | EncryptDataResponseMessage['data']
+  > {
+    let packet = {
+      payload,
+      iv,
+      keyIndex,
+    } satisfies RTCEncryptedPacket;
+
+    let decryptedData = await this.dataPacketCryptor.decrypt(
+      participantIdentity,
+      packet
+    );
+
+    if (!decryptedData) {
+      throw new Error('decryption for packet failed');
+    }
+
+    return {
+      uuid: '', //not used
+      payload: decryptedData,
+    } satisfies DecryptDataResponseMessage['data'];
   }
 
   // Utility methods
