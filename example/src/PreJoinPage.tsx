@@ -14,8 +14,9 @@ import type { RootStackParamList } from './App';
 import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DEFAULT_URL = 'wss://example.livekit.cloud';
-const DEFAULT_TOKEN = 'your-token-here';
+const DEFAULT_URL = 'ws://192.168.11.3:7880';
+const DEFAULT_TOKEN =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA1MjM4NTksImlkZW50aXR5IjoicGhvbmUiLCJpc3MiOiJBUElUTFdySzh0YndyNDciLCJuYmYiOjE3NTc5MzE4NTksInN1YiI6InBob25lIiwidmlkZW8iOnsicm9vbSI6Im15cm9vbSIsInJvb21Kb2luIjp0cnVlfX0.jpvzL9Mcqu1tS3dpITO-ffAyjzZtEvnq_p9ehD5B7RM';
 const DEFAULT_E2EE = false;
 const DEFAULT_E2EE_KEY = '';
 
