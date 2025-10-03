@@ -229,9 +229,7 @@ export default class RNE2EEManager
     iv: Uint8Array,
     participantIdentity: string,
     keyIndex: number
-  ): Promise<
-    DecryptDataResponseMessage['data'] | EncryptDataResponseMessage['data']
-  > {
+  ): Promise<DecryptDataResponseMessage['data']> {
     let packet = {
       payload,
       iv,
