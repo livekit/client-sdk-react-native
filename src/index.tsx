@@ -181,5 +181,4 @@ export type {
   LogLevel,
   SetLogLevelOptions,
   RNKeyProviderOptions,
-  RegisterGlobalsOptions,
 };
