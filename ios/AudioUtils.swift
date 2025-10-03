@@ -6,7 +6,11 @@ public class AudioUtils {
         case "default_":
             .default
         case "voicePrompt":
-            .voicePrompt
+            if #available(iOS 12.0, *) {
+                .voicePrompt
+            } else {
+                .default
+            }
         case "videoRecording":
             .videoRecording
         case "videoChat":

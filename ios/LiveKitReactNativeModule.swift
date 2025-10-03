@@ -117,23 +117,26 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         
         resolve(nil)
     }
-    
-    @objc(setAppleAudioConfiguration:)
-    public func setAppleAudioConfiguration(_ configuration: NSDictionary) {
+
+    @objc(setAppleAudioConfiguration:withResolver:withRejecter:)
+    public func setAppleAudioConfiguration(_ configuration: NSDictionary, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         let session = RTCAudioSession.sharedInstance()
         let config = RTCAudioSessionConfiguration.webRTC()
-        
+
         let appleAudioCategory = configuration["audioCategory"] as? String
         let appleAudioCategoryOptions = configuration["audioCategoryOptions"] as? [String]
         let appleAudioMode = configuration["audioMode"] as? String
-        
+
         session.lockForConfiguration()
-        
+        defer {
+            session.unlockForConfiguration()
+        }
+
         var categoryChanged = false
-        
+
         if let appleAudioCategoryOptions = appleAudioCategoryOptions {
             categoryChanged = true
-            
+
             var newOptions: AVAudioSession.CategoryOptions = []
             for option in appleAudioCategoryOptions {
                 if option == "mixWithOthers" {
@@ -152,33 +155,43 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             }
             config.categoryOptions = newOptions
         }
-        
+
         if let appleAudioCategory = appleAudioCategory {
             categoryChanged = true
             config.category = AudioUtils.audioSessionCategoryFromString(appleAudioCategory).rawValue
         }
-        
+
         if categoryChanged {
             do {
                 try session.setCategory(AVAudioSession.Category(rawValue: config.category), with: config.categoryOptions)
             } catch {
-                NSLog("Error setting category: %@", error.localizedDescription)
+                reject("setAppleAudioConfiguration", "Error setting category: \(error.localizedDescription)", error)
+                return
             }
         }
-        
+
         if let appleAudioMode = appleAudioMode {
             let mode = AudioUtils.audioSessionModeFromString(appleAudioMode)
             config.mode = mode.rawValue
             do {
                 try session.setMode(mode)
             } catch {
-                NSLog("Error setting mode: %@", error.localizedDescription)
+                reject("setAppleAudioConfiguration", "Error setting mode: \(error.localizedDescription)", error)
+                return
             }
         }
-        
-        session.unlockForConfiguration()
+
+        // Activate the audio session
+        do {
+            try session.setActive(true)
+        } catch {
+            reject("setAppleAudioConfiguration", "Error activating audio session: \(error.localizedDescription)", error)
+            return
+        }
+
+        resolve(nil)
     }
-    
+
     @objc(createAudioSinkListener:trackId:)
     public func createAudioSinkListener(_ pcId: NSNumber, trackId: String) -> String {
         let renderer = AudioSinkRenderer(eventEmitter: self)
