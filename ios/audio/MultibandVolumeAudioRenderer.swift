@@ -1,12 +1,28 @@
+/*
+ * Copyright 2025 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import livekit_react_native_webrtc
 import React
 
 @objc
 public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
     private let eventEmitter: RCTEventEmitter
-    
+
     @objc
-    public var reactTag: String? = nil
+    public var reactTag: String?
 
     @objc
     public init(
@@ -22,39 +38,38 @@ public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
                    maxFrequency: maxFrequency,
                    intervalMs: intervalMs)
     }
-    
+
     override func onMagnitudesCalculated(_ magnitudes: [Float]) {
-        guard !magnitudes.isEmpty, let reactTag = self.reactTag
+        guard !magnitudes.isEmpty, let reactTag
         else { return }
         eventEmitter.sendEvent(withName: LKEvents.kEventMultibandProcessed, body: [
             "magnitudes": magnitudes,
-            "id": reactTag
+            "id": reactTag,
         ])
     }
-    
 }
 
 public class BaseMultibandVolumeAudioRenderer: NSObject, RTCAudioRenderer {
     private let frameInterval: Int
     private var skippedFrames = 0
     private let audioProcessor: AudioVisualizeProcessor
-    
+
     init(
         bands: Int,
         minFrequency: Float,
         maxFrequency: Float,
         intervalMs: Float
     ) {
-        self.frameInterval = Int((intervalMs / 10.0).rounded())
-        self.audioProcessor = AudioVisualizeProcessor(minFrequency: minFrequency, maxFrequency: maxFrequency, bandsCount: bands)
+        frameInterval = Int((intervalMs / 10.0).rounded())
+        audioProcessor = AudioVisualizeProcessor(minFrequency: minFrequency, maxFrequency: maxFrequency, bandsCount: bands)
     }
-    
+
     public func render(pcmBuffer: AVAudioPCMBuffer) {
-        if(skippedFrames < frameInterval - 1) {
+        if skippedFrames < frameInterval - 1 {
             skippedFrames += 1
             return
         }
-        
+
         skippedFrames = 0
         guard let magnitudes = audioProcessor.process(pcmBuffer: pcmBuffer)
         else {
@@ -62,6 +77,6 @@ public class BaseMultibandVolumeAudioRenderer: NSObject, RTCAudioRenderer {
         }
         onMagnitudesCalculated(magnitudes)
     }
-    
-    func onMagnitudesCalculated(_ magnitudes: [Float]) { }
+
+    func onMagnitudesCalculated(_: [Float]) {}
 }
