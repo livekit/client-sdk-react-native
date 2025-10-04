@@ -5,8 +5,10 @@
 @interface RCT_EXTERN_MODULE(LivekitReactNativeModule, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(configureAudio:(NSDictionary *) config)
-RCT_EXTERN_METHOD(startAudioSession)
-RCT_EXTERN_METHOD(stopAudioSession)
+RCT_EXTERN_METHOD(startAudioSession:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(stopAudioSession:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(setDefaultAudioTrackVolume:(nonnull NSNumber *) volume)
 
