@@ -197,6 +197,37 @@ export type AppleAudioConfiguration = {
   audioMode?: AppleAudioMode;
 };
 
+export type AudioTrackState =
+  | 'none'
+  | 'remoteOnly'
+  | 'localOnly'
+  | 'localAndRemote';
+
+export function getDefaultAppleAudioConfigurationForMode(
+  mode: AudioTrackState,
+  preferSpeakerOutput: boolean = true
+): AppleAudioConfiguration {
+  if (mode === 'remoteOnly') {
+    return {
+      audioCategory: 'playback',
+      audioCategoryOptions: ['mixWithOthers'],
+      audioMode: 'spokenAudio',
+    };
+  } else if (mode === 'localAndRemote' || mode === 'localOnly') {
+    return {
+      audioCategory: 'playAndRecord',
+      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+      audioMode: preferSpeakerOutput ? 'videoChat' : 'voiceChat',
+    };
+  }
+
+  return {
+    audioCategory: 'soloAmbient',
+    audioCategoryOptions: [],
+    audioMode: 'default',
+  };
+}
+
 export default class AudioSession {
   /**
    * Applies the provided audio configuration to the underlying AudioSession.
