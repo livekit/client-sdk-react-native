@@ -2,16 +2,16 @@ import RNE2EEManager from '../e2ee/RNE2EEManager';
 import { log, RNKeyProvider } from '..';
 import { useEffect, useState } from 'react';
 import type { RNKeyProviderOptions } from '../e2ee/RNKeyProvider';
+import type { BaseE2EEManager } from 'livekit-client';
 
 export type UseRNE2EEManagerOptions = {
   keyProviderOptions?: RNKeyProviderOptions;
   sharedKey: string | Uint8Array;
-  dataChannelEncryption?: boolean;
 };
 
 export interface RNE2EEManagerState {
   keyProvider: RNKeyProvider;
-  e2eeManager: RNE2EEManager;
+  e2eeManager: BaseE2EEManager;
 }
 
 /**
@@ -24,7 +24,7 @@ export function useRNE2EEManager(
     () => new RNKeyProvider(options.keyProviderOptions ?? {})
   );
   let [e2eeManager] = useState(
-    () => new RNE2EEManager(keyProvider, options.dataChannelEncryption ?? false)
+    () => new RNE2EEManager(keyProvider, false)
   );
 
   useEffect(() => {

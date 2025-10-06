@@ -62,6 +62,9 @@ export default class RNE2EEManager
   get isDataChannelEncryptionEnabled(): boolean {
     return this.isEnabled && this.dataChannelEncryptionEnabled;
   }
+  set isDataChannelEncryptionEnabled(value: boolean) {
+    this.dataChannelEncryptionEnabled = value;
+  }
 
   setup(room: Room) {
     if (this.room !== room) {
