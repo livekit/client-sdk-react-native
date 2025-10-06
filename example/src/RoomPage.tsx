@@ -106,7 +106,6 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
     return () => {};
   }, [room, e2ee]);
 
-  useIOSAudioManagement(room, true);
   // Setup room listeners
   const { send } = useDataChannel(
     (dataMessage: ReceivedDataMessage<string>) => {
