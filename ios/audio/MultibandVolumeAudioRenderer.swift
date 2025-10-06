@@ -14,69 +14,72 @@
  * limitations under the License.
  */
 
-import livekit_react_native_webrtc
 import React
+import livekit_react_native_webrtc
 
 @objc
 public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
-    private let eventEmitter: RCTEventEmitter
+  private let eventEmitter: RCTEventEmitter
 
-    @objc
-    public var reactTag: String?
+  @objc
+  public var reactTag: String?
 
-    @objc
-    public init(
-        bands: Int,
-        minFrequency: Float,
-        maxFrequency: Float,
-        intervalMs: Float,
-        eventEmitter: RCTEventEmitter
-    ) {
-        self.eventEmitter = eventEmitter
-        super.init(bands: bands,
-                   minFrequency: minFrequency,
-                   maxFrequency: maxFrequency,
-                   intervalMs: intervalMs)
-    }
+  @objc
+  public init(
+    bands: Int,
+    minFrequency: Float,
+    maxFrequency: Float,
+    intervalMs: Float,
+    eventEmitter: RCTEventEmitter
+  ) {
+    self.eventEmitter = eventEmitter
+    super.init(
+      bands: bands,
+      minFrequency: minFrequency,
+      maxFrequency: maxFrequency,
+      intervalMs: intervalMs)
+  }
 
-    override func onMagnitudesCalculated(_ magnitudes: [Float]) {
-        guard !magnitudes.isEmpty, let reactTag
-        else { return }
-        eventEmitter.sendEvent(withName: LKEvents.kEventMultibandProcessed, body: [
-            "magnitudes": magnitudes,
-            "id": reactTag,
-        ])
-    }
+  override func onMagnitudesCalculated(_ magnitudes: [Float]) {
+    guard !magnitudes.isEmpty, let reactTag
+    else { return }
+    eventEmitter.sendEvent(
+      withName: LKEvents.kEventMultibandProcessed,
+      body: [
+        "magnitudes": magnitudes,
+        "id": reactTag,
+      ])
+  }
 }
 
 public class BaseMultibandVolumeAudioRenderer: NSObject, RTCAudioRenderer {
-    private let frameInterval: Int
-    private var skippedFrames = 0
-    private let audioProcessor: AudioVisualizeProcessor
+  private let frameInterval: Int
+  private var skippedFrames = 0
+  private let audioProcessor: AudioVisualizeProcessor
 
-    init(
-        bands: Int,
-        minFrequency: Float,
-        maxFrequency: Float,
-        intervalMs: Float
-    ) {
-        frameInterval = Int((intervalMs / 10.0).rounded())
-        audioProcessor = AudioVisualizeProcessor(minFrequency: minFrequency, maxFrequency: maxFrequency, bandsCount: bands)
+  init(
+    bands: Int,
+    minFrequency: Float,
+    maxFrequency: Float,
+    intervalMs: Float
+  ) {
+    frameInterval = Int((intervalMs / 10.0).rounded())
+    audioProcessor = AudioVisualizeProcessor(minFrequency: minFrequency, maxFrequency: maxFrequency, bandsCount: bands)
+  }
+
+  public func render(pcmBuffer: AVAudioPCMBuffer) {
+    if skippedFrames < frameInterval - 1 {
+      skippedFrames += 1
+      return
     }
 
-    public func render(pcmBuffer: AVAudioPCMBuffer) {
-        if skippedFrames < frameInterval - 1 {
-            skippedFrames += 1
-            return
-        }
-
-        skippedFrames = 0
-        guard let magnitudes = audioProcessor.process(pcmBuffer: pcmBuffer)
-        else {
-            return
-        }
-        onMagnitudesCalculated(magnitudes)
+    skippedFrames = 0
+    guard let magnitudes = audioProcessor.process(pcmBuffer: pcmBuffer)
+    else {
+      return
     }
+    onMagnitudesCalculated(magnitudes)
+  }
 
-    func onMagnitudesCalculated(_: [Float]) {}
+  func onMagnitudesCalculated(_: [Float]) {}
 }

@@ -18,70 +18,70 @@ import livekit_react_native_webrtc
 
 @objc
 public class AudioRendererManager: NSObject {
-    private let bridge: RCTBridge
-    public private(set) var renderers: [String: RTCAudioRenderer] = [:]
+  private let bridge: RCTBridge
+  public private(set) var renderers: [String: RTCAudioRenderer] = [:]
 
-    init(bridge: RCTBridge) {
-        self.bridge = bridge
+  init(bridge: RCTBridge) {
+    self.bridge = bridge
+  }
+
+  @objc
+  public func registerRenderer(_ audioRenderer: RTCAudioRenderer) -> String {
+    let reactTag = NSUUID().uuidString
+    renderers[reactTag] = audioRenderer
+    return reactTag
+  }
+
+  @objc
+  public func unregisterRenderer(forReactTag: String) {
+    renderers.removeValue(forKey: forReactTag)
+  }
+
+  @objc
+  public func unregisterRenderer(_ audioRenderer: RTCAudioRenderer) {
+    renderers = renderers.filter { $0.value !== audioRenderer }
+  }
+
+  @objc
+  public func attach(renderer: RTCAudioRenderer, pcId: NSNumber, trackId: String) {
+    let webrtcModule = bridge.module(for: WebRTCModule.self) as! WebRTCModule
+    guard let track = webrtcModule.track(forId: trackId, pcId: pcId) as? RTCAudioTrack
+    else {
+      lklog("couldn't find audio track: pcId: \(pcId), trackId: \(trackId)")
+      return
     }
 
-    @objc
-    public func registerRenderer(_ audioRenderer: RTCAudioRenderer) -> String {
-        let reactTag = NSUUID().uuidString
-        renderers[reactTag] = audioRenderer
-        return reactTag
+    if pcId == -1 {
+      LKAudioProcessingManager.sharedInstance().addLocalAudioRenderer(renderer)
+    } else {
+      track.add(renderer)
+    }
+  }
+
+  @objc
+  public func detach(rendererByTag reactTag: String, pcId: NSNumber, trackId: String) {
+    guard let renderer = renderers[reactTag]
+    else {
+      lklog("couldn't find renderer: tag: \(reactTag)")
+      return
     }
 
-    @objc
-    public func unregisterRenderer(forReactTag: String) {
-        renderers.removeValue(forKey: forReactTag)
+    detach(renderer: renderer, pcId: pcId, trackId: trackId)
+  }
+
+  @objc
+  public func detach(renderer: RTCAudioRenderer, pcId: NSNumber, trackId: String) {
+    let webrtcModule = bridge.module(for: WebRTCModule.self) as! WebRTCModule
+    guard let track = webrtcModule.track(forId: trackId, pcId: pcId) as? RTCAudioTrack
+    else {
+      lklog("couldn't find audio track: pcId: \(pcId), trackId: \(trackId)")
+      return
     }
 
-    @objc
-    public func unregisterRenderer(_ audioRenderer: RTCAudioRenderer) {
-        renderers = renderers.filter { $0.value !== audioRenderer }
+    if pcId == -1 {
+      LKAudioProcessingManager.sharedInstance().removeLocalAudioRenderer(renderer)
+    } else {
+      track.remove(renderer)
     }
-
-    @objc
-    public func attach(renderer: RTCAudioRenderer, pcId: NSNumber, trackId: String) {
-        let webrtcModule = bridge.module(for: WebRTCModule.self) as! WebRTCModule
-        guard let track = webrtcModule.track(forId: trackId, pcId: pcId) as? RTCAudioTrack
-        else {
-            lklog("couldn't find audio track: pcId: \(pcId), trackId: \(trackId)")
-            return
-        }
-
-        if pcId == -1 {
-            LKAudioProcessingManager.sharedInstance().addLocalAudioRenderer(renderer)
-        } else {
-            track.add(renderer)
-        }
-    }
-
-    @objc
-    public func detach(rendererByTag reactTag: String, pcId: NSNumber, trackId: String) {
-        guard let renderer = renderers[reactTag]
-        else {
-            lklog("couldn't find renderer: tag: \(reactTag)")
-            return
-        }
-
-        detach(renderer: renderer, pcId: pcId, trackId: trackId)
-    }
-
-    @objc
-    public func detach(renderer: RTCAudioRenderer, pcId: NSNumber, trackId: String) {
-        let webrtcModule = bridge.module(for: WebRTCModule.self) as! WebRTCModule
-        guard let track = webrtcModule.track(forId: trackId, pcId: pcId) as? RTCAudioTrack
-        else {
-            lklog("couldn't find audio track: pcId: \(pcId), trackId: \(trackId)")
-            return
-        }
-
-        if pcId == -1 {
-            LKAudioProcessingManager.sharedInstance().removeLocalAudioRenderer(renderer)
-        } else {
-            track.remove(renderer)
-        }
-    }
+  }
 }
