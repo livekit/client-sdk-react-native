@@ -60,13 +60,6 @@ export default class RNE2EEManager
     return this.encryptionEnabled;
   }
   get isDataChannelEncryptionEnabled(): boolean {
-    console.log(
-      'isDataChannelEncryptionEnabled?',
-      this.isEnabled,
-      this.encryptionEnabled,
-      this.dataChannelEncryptionEnabled,
-      this.isEnabled && this.dataChannelEncryptionEnabled
-    );
     return this.isEnabled && this.dataChannelEncryptionEnabled;
   }
 
@@ -290,13 +283,11 @@ export default class RNE2EEManager
     enabled: boolean,
     participantIdentity: string
   ): void {
-    console.log('setParticipantCryptorEnabled', enabled, participantIdentity);
     if (
       this.encryptionEnabled !== enabled &&
       participantIdentity === this.room?.localParticipant.identity
     ) {
       this.encryptionEnabled = enabled;
-      console.log('setting encryption enabled to ', enabled);
       this.emit(
         EncryptionEvent.ParticipantEncryptionStatusChanged,
         enabled,
