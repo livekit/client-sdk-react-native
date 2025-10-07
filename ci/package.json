@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@livekit/react-native": "*",
-    "@livekit/react-native-webrtc": "^137.0.1",
-    "livekit-client": "^2.15.4",
+    "@livekit/react-native-webrtc": "^137.0.2",
+    "livekit-client": "^2.15.8",
     "react": "18.2.0",
     "react-native": "0.74.2"
   },

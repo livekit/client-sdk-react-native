@@ -2163,25 +2163,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/protocol@npm:1.39.3":
-  version: 1.39.3
-  resolution: "@livekit/protocol@npm:1.39.3"
+"@livekit/protocol@npm:1.42.0":
+  version: 1.42.0
+  resolution: "@livekit/protocol@npm:1.42.0"
   dependencies:
     "@bufbuild/protobuf": ^1.10.0
-  checksum: 72aa3b9e82203ccec039047518d841d65b10dcc11ab9d661f269eab8a8672aed7b2d072f4f09cc6fb94a2579542b0a9216d7f66476d34cd1675c13e1ebcc119f
+  checksum: 6b1b194c69aa85c1d86b94eacc6ef163a85c56e66532c39737c2f9d1c6a2037c7fe499e474a823f4a332c7e87f4631be04e67bab57e12cdbba00bdcea202b7e9
   languageName: node
   linkType: hard
 
-"@livekit/react-native-webrtc@npm:^137.0.1":
-  version: 137.0.1
-  resolution: "@livekit/react-native-webrtc@npm:137.0.1"
+"@livekit/react-native-webrtc@npm:^137.0.2":
+  version: 137.0.2
+  resolution: "@livekit/react-native-webrtc@npm:137.0.2"
   dependencies:
     base64-js: 1.5.1
     debug: 4.3.4
     event-target-shim: 6.0.2
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 3341aafe7d9d1deb345e47247faa020b2cb5f1adbded135a244f0f9285eed720c9f62325bbce0e21c1da755ae24ae6c69eb07728cece709560f615908bde43a9
+  checksum: c23467701c7dfb74e3b223dd955b20ba1586c2186383f5b2595fff9b65a36b2db0b660de9935e009b69bc5e0bbff047d0f598495f8464daae8db5f8d9f9b7c24
   languageName: node
   linkType: hard
 
@@ -5892,6 +5892,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jose@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "jose@npm:6.1.0"
+  checksum: f9596a3161b5dabfdd0b7d490f2710f2cc8d460b0a2e1f3262fd2f90652abbb535e4f80e80d3854e7264c9526dcdac5e28693b4d4b1803f622728d7dcde02010
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -6102,13 +6109,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"livekit-client@npm:^2.15.4":
-  version: 2.15.4
-  resolution: "livekit-client@npm:2.15.4"
+"livekit-client@npm:^2.15.8":
+  version: 2.15.8
+  resolution: "livekit-client@npm:2.15.8"
   dependencies:
     "@livekit/mutex": 1.1.1
-    "@livekit/protocol": 1.39.3
+    "@livekit/protocol": 1.42.0
     events: ^3.3.0
+    jose: ^6.1.0
     loglevel: ^1.9.2
     sdp-transform: ^2.15.0
     ts-debounce: ^4.0.0
@@ -6117,7 +6125,7 @@ __metadata:
     webrtc-adapter: ^9.0.1
   peerDependencies:
     "@types/dom-mediacapture-record": ^1
-  checksum: 7ae2e2f5326c8f7925b359277fd12ddeefb0bc5069b0563a9e184f2b860351bf91733c1fa5fd7b65467b643776368058d485af888e2771fd68c61c409b950e05
+  checksum: d12b81ad5640dc383ab3eca241d0b064387e15df0e8cda616fa4a6aa3c0af46ac202f8cb8a4fd19bd3980531a852784f87d21d27062b95b8581ae110f933c744
   languageName: node
   linkType: hard
 
@@ -6128,7 +6136,7 @@ __metadata:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
-    "@livekit/react-native-webrtc": ^137.0.1
+    "@livekit/react-native-webrtc": ^137.0.2
     "@react-native-async-storage/async-storage": ^1.17.10
     "@react-native/babel-preset": 0.74.84
     "@react-native/eslint-config": 0.74.84
@@ -6140,7 +6148,7 @@ __metadata:
     "@types/fastestsmallesttextencoderdecoder": ^1.0.0
     "@types/react": ^18.2.6
     babel-plugin-module-resolver: ^4.1.0
-    livekit-client: ^2.15.4
+    livekit-client: ^2.15.8
     patch-package: ^8.0.0
     react: 18.2.0
     react-native: 0.74.2
