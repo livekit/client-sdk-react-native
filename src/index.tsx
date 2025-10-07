@@ -24,14 +24,34 @@ import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 import { setupNativeEvents } from './events/EventEmitter';
 import { ReadableStream, WritableStream } from 'web-streams-polyfill';
 
+export interface RegisterGlobalsOptions {
+  /**
+   * Automatically configure audio session before accessing microphone.
+   * When enabled, sets the iOS audio category to 'playAndRecord' before getUserMedia.
+   *
+   * @default true
+   * @platform ios
+   */
+  autoConfigureAudioSession?: boolean;
+}
+
 /**
  * Registers the required globals needed for LiveKit to work.
  *
  * Must be called before using LiveKit.
+ *
+ * @param options Optional configuration for global registration
  */
-export function registerGlobals() {
+export function registerGlobals(options?: RegisterGlobalsOptions) {
+  const opts = {
+    autoConfigureAudioSession: true,
+    ...options,
+  };
+
   webrtcRegisterGlobals();
-  iosCategoryEnforce();
+  if (opts.autoConfigureAudioSession) {
+    iosCategoryEnforce();
+  }
   livekitRegisterGlobals();
   setupURLPolyfill();
   fixWebrtcAdapter();
