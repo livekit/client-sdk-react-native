@@ -23,9 +23,7 @@ export function useRNE2EEManager(
   let [keyProvider] = useState(
     () => new RNKeyProvider(options.keyProviderOptions ?? {})
   );
-  let [e2eeManager] = useState(
-    () => new RNE2EEManager(keyProvider, false)
-  );
+  let [e2eeManager] = useState(() => new RNE2EEManager(keyProvider, false));
 
   useEffect(() => {
     let setup = async () => {

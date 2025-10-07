@@ -67,7 +67,6 @@ export const RoomPage = ({
 
   let { e2eeManager } = useRNE2EEManager({
     sharedKey: e2eeKey,
-    dataChannelEncryption: true,
   });
   let e2eeOptions = e2ee ? { e2eeManager } : undefined;
 
