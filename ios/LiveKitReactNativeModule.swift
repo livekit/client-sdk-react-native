@@ -1,25 +1,9 @@
-/*
- * Copyright 2025 LiveKit
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import AVFAudio
 import AVFoundation
 import React
 import livekit_react_native_webrtc
 
-enum LKEvents {
+struct LKEvents {
   static let kEventVolumeProcessed = "LK_VOLUME_PROCESSED"
   static let kEventMultibandProcessed = "LK_MULTIBAND_PROCESSED"
   static let kEventAudioData = "LK_AUDIO_DATA"
@@ -27,18 +11,19 @@ enum LKEvents {
 
 @objc(LivekitReactNativeModule)
 public class LivekitReactNativeModule: RCTEventEmitter {
+
   // This cannot be initialized in init as self.bridge is given afterwards.
-  private var _audioRendererManager: AudioRendererManager?
+  private var _audioRendererManager: AudioRendererManager? = nil
   public var audioRendererManager: AudioRendererManager {
     if _audioRendererManager == nil {
-      _audioRendererManager = AudioRendererManager(bridge: bridge)
+      _audioRendererManager = AudioRendererManager(bridge: self.bridge)
     }
 
     return _audioRendererManager!
   }
 
   @objc
-  override public init() {
+  public override init() {
     super.init()
     let config = RTCAudioSessionConfiguration()
     config.category = AVAudioSession.Category.playAndRecord.rawValue
@@ -50,7 +35,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
   @objc
   override public static func requiresMainQueueSetup() -> Bool {
-    false
+    return false
   }
 
   @objc
@@ -133,7 +118,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
   }
 
   @objc(getAudioOutputsWithResolver:withRejecter:)
-  public func getAudioOutputs(resolve: RCTPromiseResolveBlock, reject _: RCTPromiseRejectBlock) {
+  public func getAudioOutputs(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     resolve(["default", "force_speaker"])
   }
 
@@ -170,15 +155,15 @@ public class LivekitReactNativeModule: RCTEventEmitter {
       session.unlockForConfiguration()
     }
 
-    if let appleAudioCategory {
+    if let appleAudioCategory = appleAudioCategory {
       config.category = AudioUtils.audioSessionCategoryFromString(appleAudioCategory).rawValue
     }
 
-    if let appleAudioCategoryOptions {
+    if let appleAudioCategoryOptions = appleAudioCategoryOptions {
       config.categoryOptions = AudioUtils.audioSessionCategoryOptionsFromStrings(appleAudioCategoryOptions)
     }
 
-    if let appleAudioMode {
+    if let appleAudioMode = appleAudioMode {
       config.mode = AudioUtils.audioSessionModeFromString(appleAudioMode).rawValue
     }
 
@@ -189,22 +174,23 @@ public class LivekitReactNativeModule: RCTEventEmitter {
       reject("setAppleAudioConfiguration", "Error setting category: \(error.localizedDescription)", error)
       return
     }
+
   }
 
   @objc(createAudioSinkListener:trackId:)
   public func createAudioSinkListener(_ pcId: NSNumber, trackId: String) -> String {
     let renderer = AudioSinkRenderer(eventEmitter: self)
-    let reactTag = audioRendererManager.registerRenderer(renderer)
+    let reactTag = self.audioRendererManager.registerRenderer(renderer)
     renderer.reactTag = reactTag
-    audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
+    self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
 
     return reactTag
   }
 
   @objc(deleteAudioSinkListener:pcId:trackId:)
   public func deleteAudioSinkListener(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
-    audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
-    audioRendererManager.unregisterRenderer(forReactTag: reactTag)
+    self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
+    self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
 
     return nil
   }
@@ -212,17 +198,17 @@ public class LivekitReactNativeModule: RCTEventEmitter {
   @objc(createVolumeProcessor:trackId:)
   public func createVolumeProcessor(_ pcId: NSNumber, trackId: String) -> String {
     let renderer = VolumeAudioRenderer(intervalMs: 40.0, eventEmitter: self)
-    let reactTag = audioRendererManager.registerRenderer(renderer)
+    let reactTag = self.audioRendererManager.registerRenderer(renderer)
     renderer.reactTag = reactTag
-    audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
+    self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
 
     return reactTag
   }
 
   @objc(deleteVolumeProcessor:pcId:trackId:)
   public func deleteVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
-    audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
-    audioRendererManager.unregisterRenderer(forReactTag: reactTag)
+    self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
+    self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
 
     return nil
   }
@@ -241,17 +227,17 @@ public class LivekitReactNativeModule: RCTEventEmitter {
       intervalMs: intervalMs,
       eventEmitter: self
     )
-    let reactTag = audioRendererManager.registerRenderer(renderer)
+    let reactTag = self.audioRendererManager.registerRenderer(renderer)
     renderer.reactTag = reactTag
-    audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
+    self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
 
     return reactTag
   }
 
   @objc(deleteMultibandVolumeProcessor:pcId:trackId:)
   public func deleteMultibandVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
-    audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
-    audioRendererManager.unregisterRenderer(forReactTag: reactTag)
+    self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
+    self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
 
     return nil
   }
@@ -265,7 +251,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
   }
 
   override public func supportedEvents() -> [String]! {
-    [
+    return [
       LKEvents.kEventVolumeProcessed,
       LKEvents.kEventMultibandProcessed,
       LKEvents.kEventAudioData,
