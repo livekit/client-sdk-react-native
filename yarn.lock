@@ -12517,16 +12517,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-base64@npm:^2.2.1":
-  version: 2.2.2
-  resolution: "react-native-quick-base64@npm:2.2.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 51cd8df0b7f78d4c10996f157927cc075b8a9e85f7d0e48790a4247a033ca335e440c96572969fb6f6b49135d51dbf87c6d659fba509b51b9237957d41a6c580
-  languageName: node
-  linkType: hard
-
 "react-native-safe-area-context@npm:^5.5.2":
   version: 5.6.1
   resolution: "react-native-safe-area-context@npm:5.6.1"
