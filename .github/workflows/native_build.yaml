@@ -92,8 +92,11 @@ jobs:
           yarn install
           cd ci/
           yarn
-          cd ios/
-          pod install
+      - name: Pods
+        run: |
+          cd ci/ios/
+          bundle install
+          bundle exec pod install
 
       - name: Compile iOS
         working-directory: ./ci/ios/
