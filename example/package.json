@@ -42,7 +42,7 @@
     "patch-package": "^8.0.0",
     "react-native-builder-bob": "^0.40.13",
     "react-native-monorepo-config": "^0.1.9",
-    "typescript": "^5.8.3"
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=20"

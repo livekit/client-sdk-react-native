@@ -87,8 +87,8 @@
     "react-native": "0.82.0",
     "react-native-builder-bob": "^0.18.2",
     "release-it": "^14.2.2",
-    "typedoc": "^0.25.13",
-    "typescript": "^5.8.3"
+    "typedoc": "^0.28.14",
+    "typescript": "^5.4.5"
   },
   "peerDependencies": {
     "@livekit/react-native-webrtc": "^137.0.2",
