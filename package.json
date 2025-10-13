@@ -56,18 +56,22 @@
     "well-known-symbols": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
-    "@babel/runtime": "^7.20.0",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/runtime": "^7.25.0",
     "@commitlint/config-conventional": "^16.2.1",
     "@livekit/react-native-webrtc": "^137.0.2",
-    "@react-native/babel-preset": "0.74.84",
-    "@react-native/eslint-config": "0.74.84",
-    "@react-native/metro-config": "0.74.84",
-    "@react-native/typescript-config": "0.74.84",
+    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli-platform-android": "20.0.0",
+    "@react-native-community/cli-platform-ios": "20.0.0",
+    "@react-native/babel-preset": "0.82.0",
+    "@react-native/eslint-config": "0.82.0",
+    "@react-native/metro-config": "0.82.0",
+    "@react-native/typescript-config": "0.82.0",
     "@release-it/conventional-changelog": "^4.2.0",
     "@types/fastestsmallesttextencoderdecoder": "^1.0.0",
-    "@types/react": "^18.2.6",
+    "@types/react": "^19.1.1",
+    "@types/react-test-renderer": "^19.1.0",
     "babel-jest": "^29.6.3",
     "commitlint": "^16.2.1",
     "eslint": "^8.23.0",
@@ -79,12 +83,12 @@
     "livekit-client": "^2.15.8",
     "pod-install": "^0.2.2",
     "prettier": "2.8.8",
-    "react": "18.2.0",
-    "react-native": "0.74.2",
+    "react": "19.1.1",
+    "react-native": "0.82.0",
     "react-native-builder-bob": "^0.18.2",
     "release-it": "^14.2.2",
     "typedoc": "^0.25.13",
-    "typescript": "5.0.4"
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "@livekit/react-native-webrtc": "^137.0.2",
@@ -104,8 +108,11 @@
     "bootstrap": "yarn example && yarn && yarn pods"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
+  "workspaces": [
+    "example"
+  ],
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
@@ -173,7 +180,10 @@
     "root": true,
     "extends": [
       "@react-native",
-      "prettier"
+      "eslint-config-prettier"
+    ],
+    "plugins": [
+      "eslint-plugin-prettier"
     ],
     "rules": {
       "prettier/prettier": [

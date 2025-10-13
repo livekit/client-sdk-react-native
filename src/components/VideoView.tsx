@@ -98,6 +98,7 @@ export const VideoView = ({
       >
         <RTCView
           style={styles.videoView}
+          // @ts-expect-error
           streamURL={mediaStream?.toURL() ?? ''}
           objectFit={objectFit}
           zOrder={zOrder}

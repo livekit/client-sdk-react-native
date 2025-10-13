@@ -44,6 +44,7 @@ android.iml
 .cxx/
 *.keystore
 !debug.keystore
+.kotlin/
 
 # Cocoapods
 #
