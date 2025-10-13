@@ -5,7 +5,7 @@ import {
   Event,
   defineEventAttribute,
 } from 'event-target-shim/index';
-import { toByteArray } from 'react-native-quick-base64';
+import { toByteArray } from 'base64-js';
 import LiveKitModule from '../LKNativeModule';
 import { log } from '../logger';
 
