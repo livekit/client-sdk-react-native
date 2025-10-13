@@ -74,6 +74,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Cache gem bundle
+        uses: actions/cache@v4
+        with:
+          path: ./ci/vendor
+          key: ${{ runner.os }}-gembundle-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gembundle-
+
       - name: Cache cocoapods
         uses: actions/cache@v4
         with:
@@ -96,6 +104,7 @@ jobs:
         run: |
           cd ci/ios/
           bundle install
+          bundle exec pod repo update --verbose
           bundle exec pod install --verbose
 
       - name: Compile iOS
