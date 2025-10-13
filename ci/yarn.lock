@@ -3607,7 +3607,7 @@ __metadata:
     react-native: 0.82.0
     react-native-safe-area-context: ^5.5.2
     react-test-renderer: 19.1.1
-    typescript: ^5.8.3
+    typescript: ^5.4.5
   languageName: unknown
   linkType: soft
 
@@ -8989,7 +8989,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.8.3":
+"typescript@npm:^5.4.5":
   version: 5.9.3
   resolution: "typescript@npm:5.9.3"
   bin:
@@ -8999,7 +8999,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.8.3#~builtin<compat/typescript>":
+"typescript@patch:typescript@^5.4.5#~builtin<compat/typescript>":
   version: 5.9.3
   resolution: "typescript@patch:typescript@npm%3A5.9.3#~builtin<compat/typescript>::version=5.9.3&hash=29ae49"
   bin:
