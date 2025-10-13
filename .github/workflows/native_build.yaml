@@ -104,7 +104,7 @@ jobs:
         run: |
           cd ci/ios/
           bundle install
-          bundle exec pod repo update --verbose
+          bundle exec pod update hermes-engine --no-repo-update
           bundle exec pod install --verbose
 
       - name: Compile iOS
