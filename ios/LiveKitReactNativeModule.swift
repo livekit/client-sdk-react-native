@@ -11,7 +11,7 @@ struct LKEvents {
 
 @objc(LivekitReactNativeModule)
 public class LivekitReactNativeModule: RCTEventEmitter {
-    
+
     // This cannot be initialized in init as self.bridge is given afterwards.
     private var _audioRendererManager: AudioRendererManager? = nil
     public var audioRendererManager: AudioRendererManager {
@@ -19,11 +19,11 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             if _audioRendererManager == nil {
                 _audioRendererManager = AudioRendererManager(bridge: self.bridge)
             }
-            
+
             return _audioRendererManager!
         }
     }
-    
+
     @objc
     public override init() {
         super.init()
@@ -31,10 +31,10 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         config.category = AVAudioSession.Category.playAndRecord.rawValue
         config.categoryOptions = [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker]
         config.mode = AVAudioSession.Mode.videoChat.rawValue
-        
+
         RTCAudioSessionConfiguration.setWebRTC(config)
     }
-    
+
     @objc
     override public static func requiresMainQueueSetup() -> Bool {
         return false
@@ -48,19 +48,19 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         options.videoEncoderFactory = simulcastVideoEncoderFactory
         options.audioProcessingModule = LKAudioProcessingManager.sharedInstance().audioProcessingModule
     }
-    
+
     @objc(configureAudio:)
     public func configureAudio(_ config: NSDictionary) {
         guard let iOSConfig = config["ios"] as? NSDictionary
         else {
             return
         }
-        
+
         let defaultOutput = iOSConfig["defaultOutput"] as? String ?? "speaker"
-        
+
         let rtcConfig = RTCAudioSessionConfiguration()
         rtcConfig.category = AVAudioSession.Category.playAndRecord.rawValue
-        
+
         if (defaultOutput == "earpiece") {
             rtcConfig.categoryOptions = [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP];
             rtcConfig.mode = AVAudioSession.Mode.voiceChat.rawValue
@@ -70,17 +70,39 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         }
         RTCAudioSessionConfiguration.setWebRTC(rtcConfig)
     }
-    
-    @objc(startAudioSession)
-    public func startAudioSession() {
-        // intentionally left empty
+
+    @objc(startAudioSession:withRejecter:)
+    public func startAudioSession(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        let session = RTCAudioSession.sharedInstance()
+        session.lockForConfiguration()
+        defer {
+            session.unlockForConfiguration()
+        }
+
+        do {
+            try session.setActive(true)
+            resolve(nil)
+        } catch {
+            reject("startAudioSession", "Error activating audio session: \(error.localizedDescription)", error)
+        }
     }
-    
-    @objc(stopAudioSession)
-    public func stopAudioSession() {
-        // intentionally left empty
+
+    @objc(stopAudioSession:withRejecter:)
+    public func stopAudioSession(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        let session = RTCAudioSession.sharedInstance()
+        session.lockForConfiguration()
+        defer {
+            session.unlockForConfiguration()
+        }
+
+        do {
+            try session.setActive(false)
+            resolve(nil)
+        } catch {
+            reject("stopAudioSession", "Error deactivating audio session: \(error.localizedDescription)", error)
+        }
     }
-    
+
     @objc(showAudioRoutePicker)
     public func showAudioRoutePicker() {
         if #available(iOS 11.0, *) {
@@ -95,12 +117,12 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             }
         }
     }
-    
+
     @objc(getAudioOutputsWithResolver:withRejecter:)
     public func getAudioOutputs(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock){
         resolve(["default", "force_speaker"])
     }
-    
+
     @objc(selectAudioOutput:withResolver:withRejecter:)
     public func selectAudioOutput(_ deviceId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         let session = AVAudioSession.sharedInstance()
@@ -114,78 +136,53 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             reject("selectAudioOutput error", error.localizedDescription, error)
             return
         }
-        
+
         resolve(nil)
     }
-    
-    @objc(setAppleAudioConfiguration:)
-    public func setAppleAudioConfiguration(_ configuration: NSDictionary) {
+
+    @objc(setAppleAudioConfiguration:withResolver:withRejecter:)
+    public func setAppleAudioConfiguration(_ configuration: NSDictionary, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         let session = RTCAudioSession.sharedInstance()
         let config = RTCAudioSessionConfiguration.webRTC()
-        
+
         let appleAudioCategory = configuration["audioCategory"] as? String
         let appleAudioCategoryOptions = configuration["audioCategoryOptions"] as? [String]
         let appleAudioMode = configuration["audioMode"] as? String
-        
+
         session.lockForConfiguration()
-        
-        var categoryChanged = false
-        
-        if let appleAudioCategoryOptions = appleAudioCategoryOptions {
-            categoryChanged = true
-            
-            var newOptions: AVAudioSession.CategoryOptions = []
-            for option in appleAudioCategoryOptions {
-                if option == "mixWithOthers" {
-                    newOptions.insert(.mixWithOthers)
-                } else if option == "duckOthers" {
-                    newOptions.insert(.duckOthers)
-                } else if option == "allowBluetooth" {
-                    newOptions.insert(.allowBluetooth)
-                } else if option == "allowBluetoothA2DP" {
-                    newOptions.insert(.allowBluetoothA2DP)
-                } else if option == "allowAirPlay" {
-                    newOptions.insert(.allowAirPlay)
-                } else if option == "defaultToSpeaker" {
-                    newOptions.insert(.defaultToSpeaker)
-                }
-            }
-            config.categoryOptions = newOptions
+        defer {
+            session.unlockForConfiguration()
         }
-        
+
         if let appleAudioCategory = appleAudioCategory {
-            categoryChanged = true
             config.category = AudioUtils.audioSessionCategoryFromString(appleAudioCategory).rawValue
         }
-        
-        if categoryChanged {
-            do {
-                try session.setCategory(AVAudioSession.Category(rawValue: config.category), with: config.categoryOptions)
-            } catch {
-                NSLog("Error setting category: %@", error.localizedDescription)
-            }
+
+        if let appleAudioCategoryOptions = appleAudioCategoryOptions {
+            config.categoryOptions = AudioUtils.audioSessionCategoryOptionsFromStrings(appleAudioCategoryOptions)
         }
-        
+
         if let appleAudioMode = appleAudioMode {
-            let mode = AudioUtils.audioSessionModeFromString(appleAudioMode)
-            config.mode = mode.rawValue
-            do {
-                try session.setMode(mode)
-            } catch {
-                NSLog("Error setting mode: %@", error.localizedDescription)
-            }
+            config.mode = AudioUtils.audioSessionModeFromString(appleAudioMode).rawValue
         }
-        
-        session.unlockForConfiguration()
+
+        do {
+            try session.setConfiguration(config)
+            resolve(nil)
+        } catch {
+            reject("setAppleAudioConfiguration", "Error setting category: \(error.localizedDescription)", error)
+            return
+        }
+
     }
-    
+
     @objc(createAudioSinkListener:trackId:)
     public func createAudioSinkListener(_ pcId: NSNumber, trackId: String) -> String {
         let renderer = AudioSinkRenderer(eventEmitter: self)
         let reactTag = self.audioRendererManager.registerRenderer(renderer)
         renderer.reactTag = reactTag
         self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
-        
+
         return reactTag
     }
 
@@ -193,7 +190,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
     public func deleteAudioSinkListener(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
         self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
         self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
-        
+
         return nil
     }
 
@@ -203,7 +200,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         let reactTag = self.audioRendererManager.registerRenderer(renderer)
         renderer.reactTag = reactTag
         self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
-        
+
         return reactTag
     }
 
@@ -211,7 +208,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
     public func deleteVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
         self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
         self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
-        
+
         return nil
     }
 
@@ -221,7 +218,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         let minFrequency = (options["minFrequency"] as? NSNumber)?.floatValue ?? 1000
         let maxFrequency = (options["maxFrequency"] as? NSNumber)?.floatValue ?? 8000
         let intervalMs = (options["updateInterval"] as? NSNumber)?.floatValue ?? 40
-        
+
         let renderer = MultibandVolumeAudioRenderer(
             bands: bands,
             minFrequency: minFrequency,
@@ -232,18 +229,18 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         let reactTag = self.audioRendererManager.registerRenderer(renderer)
         renderer.reactTag = reactTag
         self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
-        
+
         return reactTag
     }
-    
+
     @objc(deleteMultibandVolumeProcessor:pcId:trackId:)
     public func deleteMultibandVolumeProcessor(_ reactTag: String, pcId: NSNumber, trackId: String) -> Any? {
         self.audioRendererManager.detach(rendererByTag: reactTag, pcId: pcId, trackId: trackId)
         self.audioRendererManager.unregisterRenderer(forReactTag: reactTag)
-        
+
         return nil
     }
-    
+
     @objc(setDefaultAudioTrackVolume:)
     public func setDefaultAudioTrackVolume(_ volume: NSNumber) -> Any? {
         let options = WebRTCModuleOptions.sharedInstance()
@@ -251,7 +248,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
         return nil
     }
-    
+
     override public func supportedEvents() -> [String]! {
         return [
             LKEvents.kEventVolumeProcessed,
