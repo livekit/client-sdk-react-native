@@ -20,12 +20,10 @@ import {
   AudioSession,
   useLocalParticipant,
   LiveKitRoom,
-  useDataChannel,
   useRoomContext,
   useVisualStableUpdate,
   useTracks,
   type TrackReferenceOrPlaceholder,
-  type ReceivedDataMessage,
   AndroidAudioTypePresets,
   useIOSAudioManagement,
   useRNE2EEManager,
@@ -67,7 +65,9 @@ export const RoomPage = ({
     };
   }, []);
 
-  let { e2eeManager } = useRNE2EEManager({ sharedKey: e2eeKey });
+  let { e2eeManager } = useRNE2EEManager({
+    sharedKey: e2eeKey,
+  });
   let e2eeOptions = e2ee ? { e2eeManager } : undefined;
 
   return (
@@ -79,7 +79,7 @@ export const RoomPage = ({
         adaptiveStream: { pixelDensity: 'screen' },
         e2ee: e2eeOptions,
       }}
-      audio={true}
+      audio={false}
       video={true}
     >
       <RoomView navigation={navigation} e2ee={e2ee} />
@@ -107,24 +107,22 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
   }, [room, e2ee]);
 
   useIOSAudioManagement(room, true);
-  // Setup room listeners
-  const { send } = useDataChannel(
-    (dataMessage: ReceivedDataMessage<string>) => {
-      //@ts-ignore
-      let decoder = new TextDecoder('utf-8');
-      let message = decoder.decode(dataMessage.payload);
 
+  // Setup room listeners
+  useEffect(() => {
+    room.registerTextStreamHandler('lk.chat', async (reader, participant) => {
+      let message = await reader.readAll();
       let title = 'Received Message';
-      if (dataMessage.from != null) {
-        title = 'Received Message from ' + dataMessage.from?.identity;
+      if (participant != null) {
+        title = 'Received Message from ' + participant.identity;
       }
       Toast.show({
         type: 'success',
         text1: title,
         text2: message,
       });
-    }
-  );
+    });
+  }, [room]);
 
   const tracks = useTracks(
     [
@@ -229,17 +227,14 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
             localParticipant.setScreenShareEnabled(enabled);
           }
         }}
-        sendData={(message: string) => {
+        sendData={async (message: string) => {
           Toast.show({
             type: 'success',
             text1: 'Sending Message',
             text2: message,
           });
 
-          //@ts-ignore
-          let encoder = new TextEncoder();
-          let encodedData = encoder.encode(message);
-          send(encodedData, { reliable: true });
+          room.localParticipant.sendText(message, { topic: 'lk.chat' });
         }}
         onSimulate={(scenario) => {
           room.simulateScenario(scenario);

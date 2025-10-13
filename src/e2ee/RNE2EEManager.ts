@@ -1,7 +1,10 @@
 import {
+  RTCDataPacketCryptor,
+  RTCDataPacketCryptorFactory,
   RTCFrameCryptorAlgorithm,
   RTCFrameCryptorFactory,
   RTCRtpReceiver,
+  type RTCEncryptedPacket,
   type RTCFrameCryptor,
   type RTCRtpSender,
 } from '@livekit/react-native-webrtc';
@@ -16,6 +19,9 @@ import {
   type BaseE2EEManager,
   type E2EEManagerCallbacks,
   EncryptionEvent,
+  type DecryptDataResponseMessage,
+  type EncryptDataResponseMessage,
+  Mutex,
 } from 'livekit-client';
 import type RNKeyProvider from './RNKeyProvider';
 import type RTCEngine from 'livekit-client/dist/src/room/RTCEngine';
@@ -36,11 +42,28 @@ export default class RNE2EEManager
     RTCFrameCryptorAlgorithm.kAesGcm;
 
   private encryptionEnabled: boolean = false;
+  private dataChannelEncryptionEnabled: boolean = false;
 
-  constructor(keyProvider: RNKeyProvider) {
+  private dataPacketCryptorLock = new Mutex();
+  private dataPacketCryptor: RTCDataPacketCryptor | undefined = undefined;
+  constructor(
+    keyProvider: RNKeyProvider,
+    dcEncryptionEnabled: boolean = false
+  ) {
     super();
     this.keyProvider = keyProvider;
     this.encryptionEnabled = false;
+    this.dataChannelEncryptionEnabled = dcEncryptionEnabled;
+  }
+
+  get isEnabled(): boolean {
+    return this.encryptionEnabled;
+  }
+  get isDataChannelEncryptionEnabled(): boolean {
+    return this.isEnabled && this.dataChannelEncryptionEnabled;
+  }
+  set isDataChannelEncryptionEnabled(value: boolean) {
+    this.dataChannelEncryptionEnabled = value;
   }
 
   setup(room: Room) {
@@ -78,7 +101,16 @@ export default class RNE2EEManager
             await frameCryptor.dispose();
           }
         }
-      );
+      )
+      .on(RoomEvent.SignalConnected, () => {
+        if (!this.room) {
+          throw new TypeError(`expected room to be present on signal connect`);
+        }
+        this.setParticipantCryptorEnabled(
+          this.room.localParticipant.isE2EEEnabled,
+          this.room.localParticipant.identity
+        );
+      });
   }
 
   private async setupE2EESender(
@@ -131,6 +163,89 @@ export default class RNE2EEManager
 
   setSifTrailer(trailer: Uint8Array): void {
     this.keyProvider.setSifTrailer(trailer);
+  }
+
+  private async getDataPacketCryptor(): Promise<RTCDataPacketCryptor> {
+    let dataPacketCryptor = this.dataPacketCryptor;
+    if (dataPacketCryptor) {
+      return dataPacketCryptor;
+    }
+
+    let unlock = await this.dataPacketCryptorLock.lock();
+
+    try {
+      dataPacketCryptor = this.dataPacketCryptor;
+      if (dataPacketCryptor) {
+        return dataPacketCryptor;
+      }
+
+      dataPacketCryptor =
+        await RTCDataPacketCryptorFactory.createDataPacketCryptor(
+          this.algorithm,
+          this.keyProvider.rtcKeyProvider
+        );
+
+      this.dataPacketCryptor = dataPacketCryptor;
+      return dataPacketCryptor;
+    } finally {
+      unlock();
+    }
+  }
+  async encryptData(
+    data: Uint8Array
+  ): Promise<EncryptDataResponseMessage['data']> {
+    let room = this.room;
+    if (!room) {
+      throw new Error("e2eemanager isn't setup with room!");
+    }
+
+    let participantId = room.localParticipant.identity;
+
+    let dataPacketCryptor = await this.getDataPacketCryptor();
+
+    let encryptedPacket = await dataPacketCryptor.encrypt(
+      participantId,
+      this.keyProvider.getLatestKeyIndex(participantId),
+      data
+    );
+
+    if (!encryptedPacket) {
+      throw new Error('encryption for packet failed');
+    }
+    return {
+      uuid: '', //not used
+      payload: encryptedPacket.payload,
+      iv: encryptedPacket.iv,
+      keyIndex: encryptedPacket.keyIndex,
+    };
+  }
+
+  async handleEncryptedData(
+    payload: Uint8Array,
+    iv: Uint8Array,
+    participantIdentity: string,
+    keyIndex: number
+  ): Promise<DecryptDataResponseMessage['data']> {
+    let packet = {
+      payload,
+      iv,
+      keyIndex,
+    } satisfies RTCEncryptedPacket;
+
+    let dataPacketCryptor = await this.getDataPacketCryptor();
+    let decryptedData = await dataPacketCryptor.decrypt(
+      participantIdentity,
+      packet
+    );
+
+    if (!decryptedData) {
+      throw new Error('decryption for packet failed');
+    }
+
+    return {
+      uuid: '', //not used
+      payload: decryptedData,
+    } satisfies DecryptDataResponseMessage['data'];
   }
 
   // Utility methods
