@@ -96,7 +96,7 @@ jobs:
         run: |
           cd ci/ios/
           bundle install
-          bundle exec pod install
+          bundle exec pod install --verbose
 
       - name: Compile iOS
         working-directory: ./ci/ios/
