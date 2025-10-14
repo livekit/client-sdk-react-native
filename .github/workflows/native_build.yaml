@@ -63,16 +63,16 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            ~/node_modules
-            ~/ci/node_modules
-            ~/.config/yarn/global
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.npm
+      #       ~/node_modules
+      #       ~/ci/node_modules
+      #       ~/.config/yarn/global
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
       - name: Cache gem bundle
         uses: actions/cache@v4
