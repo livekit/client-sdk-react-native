@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.82.0):
     - hermes-engine/Pre-built (= 0.82.0)
   - hermes-engine/Pre-built (0.82.0)
-  - livekit-react-native (2.9.2):
+  - livekit-react-native (2.9.3):
     - boost
     - DoubleConversion
     - fast_float
@@ -2764,7 +2764,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  livekit-react-native: 28be568f7811f4e6d20a6f8b0a8c8b158adcbd57
+  livekit-react-native: 358861143b3c4eeaf2939187065b0d0053bb6167
   livekit-react-native-webrtc: 3bb1be767c4e489f69bca662eba1c5e7b1e1be0d
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 22bf66112da540a7d40e536366ddd8557934fca1
