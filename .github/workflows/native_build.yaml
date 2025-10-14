@@ -74,21 +74,21 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-node-
 
-      - name: Cache gem bundle
-        uses: actions/cache@v4
-        with:
-          path: ./ci/vendor
-          key: ${{ runner.os }}-gembundle-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gembundle-
+      # - name: Cache gem bundle
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ./ci/vendor
+      #     key: ${{ runner.os }}-gembundle-${{ hashFiles('**/Gemfile.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gembundle-
 
-      - name: Cache cocoapods
-        uses: actions/cache@v4
-        with:
-          path: ./ci/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
+      # - name: Cache cocoapods
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ./ci/ios/Pods
+      #     key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-pods-
 
       - name: Install Yarn
         run: |
