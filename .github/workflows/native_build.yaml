@@ -21,9 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: 22
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
@@ -57,9 +57,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: 22
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
