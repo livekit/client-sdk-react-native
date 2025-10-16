@@ -120,4 +120,4 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_ENTITLEMENTS="" \
             CODE_SIGNING_ALLOWED="NO" \
-            clean build | bundle exec xcpretty
+            clean build 2>&1
