@@ -1,4 +1,22 @@
 {
     "entryPoints": ["src/index.tsx"],
-    "out": "docs"
+    "out": "docs",
+    "highlightLanguages": [
+        "bash",
+        "console",
+        "css",
+        "html",
+        "javascript",
+        "json",
+        "jsonc",
+        "json5",
+        "yaml",
+        "tsx",
+        "typescript",
+        "java",
+        "kotlin",
+        "objc",
+        "swift",
+        "xml"
+    ]
 }

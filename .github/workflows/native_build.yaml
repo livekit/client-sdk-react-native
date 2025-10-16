@@ -21,9 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: 22
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
@@ -57,9 +57,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: 22
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
@@ -73,6 +73,14 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Cache gem bundle
+        uses: actions/cache@v4
+        with:
+          path: ./ci/vendor
+          key: ${{ runner.os }}-gembundle-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gembundle-
 
       - name: Cache cocoapods
         uses: actions/cache@v4
@@ -92,8 +100,12 @@ jobs:
           yarn install
           cd ci/
           yarn
-          cd ios/
-          pod install
+      - name: Pods
+        run: |
+          cd ci/ios/
+          bundle install
+          bundle exec pod update hermes-engine --no-repo-update
+          bundle exec pod install --verbose
 
       - name: Compile iOS
         working-directory: ./ci/ios/
@@ -103,6 +115,7 @@ jobs:
             -scheme ci \
             -destination generic/platform=iOS \
             -configuration Debug \
+            -verbose \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_ENTITLEMENTS="" \

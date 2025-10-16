@@ -27,9 +27,9 @@ export interface RegisterGlobalsOptions {
   /**
    * Automatically configure audio session before accessing microphone.
    * When enabled, sets the iOS audio category to 'playAndRecord' before getUserMedia.
+   * Has no effect on non-iOS platforms.
    *
    * @default true
-   * @platform ios
    */
   autoConfigureAudioSession?: boolean;
 }

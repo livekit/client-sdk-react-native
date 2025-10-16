@@ -1,4 +1,3 @@
-import { setJSExceptionHandler } from 'react-native-exception-handler';
 // @ts-ignore
 import {
   observe as observeLogBoxLogs,
@@ -8,10 +7,6 @@ import {
 // Log errors
 
 export function setupErrorLogHandler() {
-  setJSExceptionHandler((error) => {
-    console.log('error:', error, error.stack);
-  }, true);
-
   // LogBox keeps all logs that you have not viewed yet.
   // When a new log comes in, we only want to print out the new ones.
   let lastCount = 0;
