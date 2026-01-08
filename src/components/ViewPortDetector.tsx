@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component, type PropsWithChildren } from 'react';
+import { Component, type PropsWithChildren } from 'react';
 import {
   AppState,
   type AppStateStatus,
