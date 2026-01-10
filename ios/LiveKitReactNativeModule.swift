@@ -29,7 +29,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         super.init()
         let config = RTCAudioSessionConfiguration()
         config.category = AVAudioSession.Category.playAndRecord.rawValue
-        config.categoryOptions = [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker]
+        config.categoryOptions = [.allowAirPlay, .allowBluetoothHFP, .allowBluetoothA2DP, .defaultToSpeaker]
         config.mode = AVAudioSession.Mode.videoChat.rawValue
 
         RTCAudioSessionConfiguration.setWebRTC(config)
