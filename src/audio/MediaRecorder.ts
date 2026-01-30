@@ -49,7 +49,7 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
     if (audioTracks.length !== 1) {
       return;
     }
-    const mediaStreamTrack = audioTracks[0];
+    const mediaStreamTrack = audioTracks[0]!!;
     const peerConnectionId = mediaStreamTrack._peerConnectionId ?? -1;
     const mediaStreamTrackId = mediaStreamTrack?.id;
     this._reactTag = LiveKitModule.createAudioSinkListener(
@@ -75,7 +75,7 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
         log.error("couldn't find any audio tracks to record from!");
         return;
       }
-      const mediaStreamTrack = audioTracks[0];
+      const mediaStreamTrack = audioTracks[0]!!;
       const peerConnectionId = mediaStreamTrack._peerConnectionId ?? -1;
       const mediaStreamTrackId = mediaStreamTrack?.id;
 

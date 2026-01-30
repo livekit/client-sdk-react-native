@@ -131,7 +131,7 @@ export const BarVisualizer = ({
         targetOpacity = 1;
       }
       animations.push(
-        Animated.timing(opacityAnimations[i], {
+        Animated.timing(opacityAnimations[i]!!, {
           toValue: targetOpacity,
           duration: 250,
           useNativeDriver: true,
@@ -224,7 +224,7 @@ export const useBarAnimator = (
     };
   }, [interval, columns, state, sequence.length]);
 
-  return sequence[index % sequence.length];
+  return sequence[index % sequence.length]!!;
 };
 
 const generateListeningSequenceBar = (columns: number): number[][] => {
