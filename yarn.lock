@@ -3308,6 +3308,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@livekit/react-native-webrtc@link:../react-native-webrtc::locator=%40livekit%2Freact-native%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@livekit/react-native-webrtc@link:../react-native-webrtc::locator=%40livekit%2Freact-native%40workspace%3A."
+  languageName: node
+  linkType: soft
+
 "@livekit/react-native-webrtc@npm:^137.0.2":
   version: 137.0.2
   resolution: "@livekit/react-native-webrtc@npm:137.0.2"
@@ -3331,7 +3337,7 @@ __metadata:
     "@eslint/js": ^9.35.0
     "@livekit/components-react": ^2.9.17
     "@livekit/mutex": ^1.1.1
-    "@livekit/react-native-webrtc": ^137.0.2
+    "@livekit/react-native-webrtc": "link:../react-native-webrtc"
     "@react-native/babel-preset": 0.83.0
     "@react-native/eslint-config": 0.83.0
     "@release-it/conventional-changelog": 10.0.1
