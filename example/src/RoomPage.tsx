@@ -106,8 +106,6 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
     return () => {};
   }, [room, e2ee]);
 
-  useIOSAudioManagement(room, true);
-
   // Setup room listeners
   useEffect(() => {
     room.registerTextStreamHandler('lk.chat', async (reader, participant) => {
