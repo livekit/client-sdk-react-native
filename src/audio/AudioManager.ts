@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import AudioSession, {
   type AppleAudioConfiguration,
 } from './AudioSession';
@@ -10,65 +11,97 @@ export type AudioEngineConfigurationState = {
   preferSpeakerOutput: boolean;
 };
 
+type CleanupFn = () => void;
+
 /**
- * Handles setting the appropriate AVAudioSession options automatically
- * depending on the audio track states of the Room.
+ * Sets up automatic iOS audio session management based on audio engine state.
  *
- * @param preferSpeakerOutput
- * @param onConfigureNativeAudio A custom method for determining options used.
+ * Call this once at app startup (e.g. in index.js). For usage inside React
+ * components, use {@link useIOSAudioManagement} instead.
+ *
+ * @param preferSpeakerOutput - Whether to prefer speaker output. Defaults to true.
+ * @param onConfigureNativeAudio - Optional custom callback for determining audio configuration.
+ * @returns A cleanup function that removes the event handlers.
  */
-export function useIOSAudioManagement(
+export function setupIOSAudioManagement(
   preferSpeakerOutput = true,
-  onConfigureNativeAudio?: (configurationState: AudioEngineConfigurationState) => AppleAudioConfiguration
-) {
+  onConfigureNativeAudio?: (
+    configurationState: AudioEngineConfigurationState
+  ) => AppleAudioConfiguration
+): CleanupFn {
+  if (Platform.OS !== 'ios') {
+    return () => {};
+  }
+
   let audioEngineState: AudioEngineConfigurationState = {
     isPlayoutEnabled: false,
     isRecordingEnabled: false,
-    preferSpeakerOutput: preferSpeakerOutput,
+    preferSpeakerOutput,
   };
 
-  const tryConfigure = async (newState: AudioEngineConfigurationState, oldState: AudioEngineConfigurationState) => {
-    if ((!newState.isPlayoutEnabled && !newState.isRecordingEnabled) && (oldState.isPlayoutEnabled || oldState.isRecordingEnabled)) {
-      log.info("AudioSession deactivating...")
-      await AudioSession.stopAudioSession()
+  const tryConfigure = async (
+    newState: AudioEngineConfigurationState,
+    oldState: AudioEngineConfigurationState
+  ) => {
+    if (
+      !newState.isPlayoutEnabled &&
+      !newState.isRecordingEnabled &&
+      (oldState.isPlayoutEnabled || oldState.isRecordingEnabled)
+    ) {
+      log.info('AudioSession deactivating...');
+      await AudioSession.stopAudioSession();
     } else if (newState.isRecordingEnabled || newState.isPlayoutEnabled) {
-      const config = onConfigureNativeAudio ? onConfigureNativeAudio(newState) : getDefaultAppleAudioConfigurationForAudioState(newState);
-      log.info("AudioSession configuring category:", config.audioCategory)
-      await AudioSession.setAppleAudioConfiguration(config)
+      const config = onConfigureNativeAudio
+        ? onConfigureNativeAudio(newState)
+        : getDefaultAppleAudioConfigurationForAudioState(newState);
+      log.info('AudioSession configuring category:', config.audioCategory);
+      await AudioSession.setAppleAudioConfiguration(config);
       if (!oldState.isPlayoutEnabled && !oldState.isRecordingEnabled) {
-        log.info("AudioSession activating...")
-        await AudioSession.startAudioSession()
+        log.info('AudioSession activating...');
+        await AudioSession.startAudioSession();
       }
     }
   };
 
-  const handleEngineStateUpdate = async ({ isPlayoutEnabled, isRecordingEnabled }: { isPlayoutEnabled: boolean, isRecordingEnabled: boolean }) => {
+  const handleEngineStateUpdate = async ({
+    isPlayoutEnabled,
+    isRecordingEnabled,
+  }: {
+    isPlayoutEnabled: boolean;
+    isRecordingEnabled: boolean;
+  }) => {
     const oldState = audioEngineState;
-    const newState = {
+    const newState: AudioEngineConfigurationState = {
       isPlayoutEnabled,
       isRecordingEnabled,
       preferSpeakerOutput: audioEngineState.preferSpeakerOutput,
     };
 
-    // If this throws, the audio engine will not continue it's operation
+    // If this throws, the audio engine will not continue its operation
     await tryConfigure(newState, oldState);
     // Update the audio state only if configure succeeds
     audioEngineState = newState;
   };
 
-  // Attach audio engine events
   audioDeviceModuleEvents.setWillEnableEngineHandler(handleEngineStateUpdate);
   audioDeviceModuleEvents.setDidDisableEngineHandler(handleEngineStateUpdate);
+
+  return () => {
+    audioDeviceModuleEvents.setWillEnableEngineHandler(null);
+    audioDeviceModuleEvents.setDidDisableEngineHandler(null);
+  };
 }
 
 function getDefaultAppleAudioConfigurationForAudioState(
-  configurationState: AudioEngineConfigurationState,
+  configurationState: AudioEngineConfigurationState
 ): AppleAudioConfiguration {
   if (configurationState.isRecordingEnabled) {
     return {
       audioCategory: 'playAndRecord',
       audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
-      audioMode: configurationState.preferSpeakerOutput ? 'videoChat' : 'voiceChat',
+      audioMode: configurationState.preferSpeakerOutput
+        ? 'videoChat'
+        : 'voiceChat',
     };
   } else if (configurationState.isPlayoutEnabled) {
     return {

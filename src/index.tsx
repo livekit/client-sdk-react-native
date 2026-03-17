@@ -17,6 +17,7 @@ import AudioSession, {
   type AppleAudioCategoryOption,
   type AppleAudioConfiguration,
   type AppleAudioMode,
+  type AudioTrackState,
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
@@ -165,6 +166,7 @@ export * from './useParticipant'; // deprecated
 export * from './useRoom'; // deprecated
 export * from './logger';
 export * from './audio/AudioManager';
+export * from './audio/AudioManagerLegacy';
 
 export {
   AudioSession,
@@ -183,6 +185,7 @@ export type {
   AppleAudioCategoryOption,
   AppleAudioConfiguration,
   AppleAudioMode,
+  AudioTrackState,
   LogLevel,
   SetLogLevelOptions,
   RNKeyProviderOptions,

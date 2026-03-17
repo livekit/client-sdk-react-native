@@ -197,6 +197,15 @@ export type AppleAudioConfiguration = {
   audioMode?: AppleAudioMode;
 };
 
+/**
+ * @deprecated Use `AudioEngineConfigurationState` from `AudioManager` instead.
+ */
+export type AudioTrackState =
+  | 'none'
+  | 'remoteOnly'
+  | 'localOnly'
+  | 'localAndRemote';
+
 export default class AudioSession {
   /**
    * Applies the provided audio configuration to the underlying AudioSession.
