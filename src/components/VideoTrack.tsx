@@ -22,7 +22,9 @@ import {
   useEffect,
   useMemo,
   useState,
+  type ForwardRefExoticComponent,
   type ReactNode,
+  type RefAttributes,
 } from 'react';
 import { RemoteVideoTrack } from 'livekit-client';
 import ViewPortDetector from './ViewPortDetector';
@@ -132,7 +134,9 @@ type RTCViewInstance = InstanceType<typeof RTCView>;
  * @returns A React component that renders the given video track.
  * @public
  */
-export const VideoTrack = forwardRef<RTCViewInstance, VideoTrackProps>(
+export const VideoTrack: ForwardRefExoticComponent<
+  VideoTrackProps & RefAttributes<RTCViewInstance>
+> = forwardRef<RTCViewInstance, VideoTrackProps>(
   (
     {
       style = {},
@@ -224,7 +228,6 @@ export const VideoTrack = forwardRef<RTCViewInstance, VideoTrackProps>(
           objectFit={objectFit}
           zOrder={zOrder}
           mirror={mirror}
-          // TODO: fix this up in react-native-webrtc side.
           // @ts-expect-error
           iosPIP={iosPIP}
           ref={ref}
