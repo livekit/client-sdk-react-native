@@ -11,6 +11,8 @@ export type AudioEngineConfigurationState = {
   preferSpeakerOutput: boolean;
 };
 
+const kAudioEngineErrorFailedToConfigureAudioSession = -4100;
+
 type CleanupFn = () => void;
 
 /**
@@ -84,7 +86,10 @@ export function setupIOSAudioManagement(
       await tryConfigure(newState, oldState);
     } catch (error) {
       log.error('AudioSession configuration failed, stopping audio engine:', error);
-      throw error;
+      // Throw the error code so the native AudioDeviceModuleObserver returns it
+      // to the WebRTC engine, which will stop/rollback the operation.
+      // eslint-disable-next-line no-throw-literal
+      throw kAudioEngineErrorFailedToConfigureAudioSession;
     }
     // Update the audio state only if configure succeeds
     audioEngineState = newState;
