@@ -77,8 +77,15 @@ export function setupIOSAudioManagement(
       preferSpeakerOutput: audioEngineState.preferSpeakerOutput,
     };
 
-    // If this throws, the audio engine will not continue its operation
-    await tryConfigure(newState, oldState);
+    // If tryConfigure throws, the error propagates to the native audio engine
+    // observer which converts it to a non-zero error code, causing the engine
+    // to stop/rollback (matching the Swift SDK's error propagation pattern).
+    try {
+      await tryConfigure(newState, oldState);
+    } catch (error) {
+      log.error('AudioSession configuration failed, stopping audio engine:', error);
+      throw error;
+    }
     // Update the audio state only if configure succeeds
     audioEngineState = newState;
   };
