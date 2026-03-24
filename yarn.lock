@@ -11952,13 +11952,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-monorepo-config@npm:^0.3.1":
+"react-native-monorepo-config@npm:0.3.1":
   version: 0.3.1
   resolution: "react-native-monorepo-config@npm:0.3.1"
   dependencies:
     escape-string-regexp: ^5.0.0
     fast-glob: ^3.3.3
   checksum: 078649d64d1c212c520f5be77943d70b8f7d1fde409a4ca534f837c34d7a4feb9e10ca5f4ddfdfe3155f5d32845f5cce2a8cd8a39c5c498552162f9957606d5f
+  languageName: node
+  linkType: hard
+
+"react-native-monorepo-config@patch:react-native-monorepo-config@npm%3A0.3.1#./.yarn/patches/react-native-monorepo-config-npm-0.3.1-2343b725c3.patch::locator=%40livekit%2Freact-native%40workspace%3A.":
+  version: 0.3.1
+  resolution: "react-native-monorepo-config@patch:react-native-monorepo-config@npm%3A0.3.1#./.yarn/patches/react-native-monorepo-config-npm-0.3.1-2343b725c3.patch::version=0.3.1&hash=3eeab5&locator=%40livekit%2Freact-native%40workspace%3A."
+  dependencies:
+    escape-string-regexp: ^5.0.0
+    fast-glob: ^3.3.3
+  checksum: b08994dbe97f4a33f1ff317df7bc0415e9779678d751662633ebb6f3a6fb8675802596c82b87635f0f37b8584648ed7d3faaba47a12d851d6a6009123672c02e
   languageName: node
   linkType: hard
 

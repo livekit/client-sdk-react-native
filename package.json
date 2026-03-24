@@ -199,5 +199,8 @@
         }
       ]
     ]
+  },
+  "resolutions": {
+    "react-native-monorepo-config@^0.3.1": "patch:react-native-monorepo-config@npm%3A0.3.1#./.yarn/patches/react-native-monorepo-config-npm-0.3.1-2343b725c3.patch"
   }
 }
