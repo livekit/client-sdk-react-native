@@ -1,7 +1,13 @@
 import 'well-known-symbols/Symbol.asyncIterator/auto';
 import 'well-known-symbols/Symbol.iterator/auto';
 import './polyfills/MediaRecorderShim';
-import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
+import {
+  registerGlobals as webrtcRegisterGlobals,
+  AudioDeviceModule,
+  AudioEngineMuteMode,
+  AudioEngineAvailability,
+  audioDeviceModuleEvents,
+} from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
 import AudioSession, {
@@ -12,7 +18,6 @@ import AudioSession, {
   type AppleAudioConfiguration,
   type AppleAudioMode,
   type AudioTrackState,
-  getDefaultAppleAudioConfigurationForMode,
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
@@ -161,13 +166,17 @@ export * from './useParticipant'; // deprecated
 export * from './useRoom'; // deprecated
 export * from './logger';
 export * from './audio/AudioManager';
+export * from './audio/AudioManagerLegacy';
 
 export {
   AudioSession,
+  AudioDeviceModule,
+  AudioEngineMuteMode,
+  AudioEngineAvailability,
+  audioDeviceModuleEvents,
   RNE2EEManager,
   RNKeyProvider,
   AndroidAudioTypePresets,
-  getDefaultAppleAudioConfigurationForMode,
 };
 export type {
   AudioConfiguration,
