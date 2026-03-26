@@ -57,7 +57,6 @@
     "@livekit/mutex": "^1.1.1",
     "array.prototype.at": "^1.1.1",
     "base64-js": "1.5.1",
-    "event-target-shim": "6.0.2",
     "events": "^3.3.0",
     "loglevel": "^1.8.0",
     "promise.allsettled": "^1.0.5",
