@@ -161,6 +161,7 @@ export * from './useParticipant'; // deprecated
 export * from './useRoom'; // deprecated
 export * from './logger';
 export * from './audio/AudioManager';
+export * from './audio/MediaRecorder';
 
 export {
   AudioSession,
