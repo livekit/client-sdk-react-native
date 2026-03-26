@@ -1953,16 +1953,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/react-native-webrtc@npm:^137.0.2":
-  version: 137.0.2
-  resolution: "@livekit/react-native-webrtc@npm:137.0.2"
+"@livekit/react-native-webrtc@npm:^137.0.3":
+  version: 137.0.3
+  resolution: "@livekit/react-native-webrtc@npm:137.0.3"
   dependencies:
     base64-js: 1.5.1
     debug: 4.3.4
-    event-target-shim: 6.0.2
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: c23467701c7dfb74e3b223dd955b20ba1586c2186383f5b2595fff9b65a36b2db0b660de9935e009b69bc5e0bbff047d0f598495f8464daae8db5f8d9f9b7c24
+  checksum: 2c29690b0646637c8afd786d6831507728ac5d324e1a27bf165369483e33fcd8b3079dbcf6b6a44c26f56ff1d32f9918f17df218c8242cbedffc71955a727b94
   languageName: node
   linkType: hard
 
@@ -3588,7 +3587,7 @@ __metadata:
     "@babel/preset-env": ^7.25.3
     "@babel/runtime": ^7.25.0
     "@livekit/react-native": "*"
-    "@livekit/react-native-webrtc": ^137.0.2
+    "@livekit/react-native-webrtc": ^137.0.3
     "@react-native-community/cli": 20.0.0
     "@react-native-community/cli-platform-android": 20.0.0
     "@react-native-community/cli-platform-ios": 20.0.0
