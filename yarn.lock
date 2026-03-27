@@ -3578,15 +3578,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/react-native-webrtc@npm:^137.0.3":
-  version: 137.0.3
-  resolution: "@livekit/react-native-webrtc@npm:137.0.3"
+"@livekit/react-native-webrtc@npm:^144.0.0":
+  version: 144.0.0
+  resolution: "@livekit/react-native-webrtc@npm:144.0.0"
   dependencies:
     base64-js: "npm:1.5.1"
     debug: "npm:4.3.4"
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 10/30ba367e9b598b34d8585c5b717e9e656bfdd68b7911304a8324d23fb46f4ebfcb6b9437bd8fed73869156518a6865a108276ff09ba845c58a50e9ee79bb2832
+  checksum: 10/d97454e8bcb5ab0ae98e8a9d134f8486276b12bdf993052b5b01ac3e8da375e63bb66c84061201bd4499266afbe383a9a065c85c19b0734d659bc21fcf156508
   languageName: node
   linkType: hard
 
@@ -3602,7 +3602,7 @@ __metadata:
     "@livekit/changesets-changelog-github": "npm:^0.0.4"
     "@livekit/components-react": "npm:^2.9.17"
     "@livekit/mutex": "npm:^1.1.1"
-    "@livekit/react-native-webrtc": "npm:^137.0.3"
+    "@livekit/react-native-webrtc": "npm:^144.0.0"
     "@react-native/babel-preset": "npm:0.83.0"
     "@react-native/eslint-config": "npm:0.83.0"
     "@release-it/conventional-changelog": "npm:10.0.1"
@@ -3632,7 +3632,7 @@ __metadata:
     web-streams-polyfill: "npm:^4.1.0"
     well-known-symbols: "npm:^4.1.0"
   peerDependencies:
-    "@livekit/react-native-webrtc": ^137.0.3
+    "@livekit/react-native-webrtc": ^144.0.0
     livekit-client: ^2.15.8
     react: "*"
     react-native: "*"
@@ -10344,7 +10344,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
-    "@livekit/react-native-webrtc": "npm:^137.0.3"
+    "@livekit/react-native-webrtc": "npm:^144.0.0"
     "@react-native-async-storage/async-storage": "npm:^1.17.10"
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"
