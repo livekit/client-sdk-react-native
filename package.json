@@ -116,6 +116,7 @@
     "node": ">=20"
   },
   "workspaces": [
+    ".",
     "example"
   ],
   "packageManager": "yarn@4.11.0",
