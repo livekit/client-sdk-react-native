@@ -108,7 +108,8 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --verbose",
-    "ci:publish": "changeset version && changeset publish",
+    "ci:version": "changeset version && yarn build-docs",
+    "ci:publish": "changeset publish",
     "bootstrap": "yarn example && yarn && yarn pods"
   },
   "engines": {
