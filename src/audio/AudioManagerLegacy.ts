@@ -21,7 +21,7 @@ import {
  *   via audio engine events, not room track counts.
  */
 export function useIOSAudioManagement(
-  room: Room,
+  _room: Room,
   preferSpeakerOutput: boolean = true,
   onConfigureNativeAudio?: (
     trackState: AudioTrackState,
