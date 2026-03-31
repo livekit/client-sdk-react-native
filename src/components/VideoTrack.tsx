@@ -124,6 +124,9 @@ export type VideoTrackProps = {
   };
 };
 
+/**
+ * @inline
+ */
 type RTCViewInstance = InstanceType<typeof RTCView>;
 
 /**

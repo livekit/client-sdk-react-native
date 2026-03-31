@@ -11,6 +11,9 @@ export type AudioEngineConfigurationState = {
 
 const kAudioEngineErrorFailedToConfigureAudioSession = -4100;
 
+/**
+ * @inline
+ */
 type CleanupFn = () => void;
 
 /**
