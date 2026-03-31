@@ -1,10 +1,11 @@
 import type { MediaStream } from '@livekit/react-native-webrtc';
-import { addListener } from '../events/EventEmitter';
 import {
   EventTarget,
   Event,
-  defineEventAttribute,
-} from 'event-target-shim/index';
+  getEventAttributeValue,
+  setEventAttributeValue,
+} from '@livekit/react-native-webrtc';
+import { addListener } from '../events/EventEmitter';
 import { toByteArray } from 'base64-js';
 import LiveKitModule from '../LKNativeModule';
 import { log } from '../logger';
@@ -123,6 +124,54 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
       new BlobEvent('dataavailable', { data: { byteArray: data } })
     );
   }
+
+  get ondataavailable() {
+    return getEventAttributeValue(this, 'dataavailable');
+  }
+
+  set ondataavailable(value) {
+    setEventAttributeValue(this, 'dataavailable', value);
+  }
+
+  get onerror() {
+    return getEventAttributeValue(this, 'error');
+  }
+
+  set onerror(value) {
+    setEventAttributeValue(this, 'error', value);
+  }
+
+  get onpause() {
+    return getEventAttributeValue(this, 'pause');
+  }
+
+  set onpause(value) {
+    setEventAttributeValue(this, 'pause', value);
+  }
+
+  get onresume() {
+    return getEventAttributeValue(this, 'resume');
+  }
+
+  set onresume(value) {
+    setEventAttributeValue(this, 'resume', value);
+  }
+
+  get onstart() {
+    return getEventAttributeValue(this, 'start');
+  }
+
+  set onstart(value) {
+    setEventAttributeValue(this, 'start', value);
+  }
+
+  get onstop() {
+    return getEventAttributeValue(this, 'stop');
+  }
+
+  set onstop(value) {
+    setEventAttributeValue(this, 'stop', value);
+  }
 }
 
 /**
@@ -144,15 +193,3 @@ class BlobEvent<TEventType extends string> extends Event<TEventType> {
     this.data = eventInitDict.data;
   }
 }
-
-/**
- * Define the `onxxx` event handlers.
- */
-const proto = MediaRecorder.prototype;
-
-defineEventAttribute(proto, 'dataavailable');
-defineEventAttribute(proto, 'error');
-defineEventAttribute(proto, 'pause');
-defineEventAttribute(proto, 'resume');
-defineEventAttribute(proto, 'start');
-defineEventAttribute(proto, 'stop');
