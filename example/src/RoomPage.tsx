@@ -25,7 +25,6 @@ import {
   useTracks,
   type TrackReferenceOrPlaceholder,
   AndroidAudioTypePresets,
-  useIOSAudioManagement,
   useRNE2EEManager,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';

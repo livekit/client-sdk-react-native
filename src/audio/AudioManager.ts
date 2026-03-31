@@ -1,7 +1,5 @@
 import { Platform } from 'react-native';
-import AudioSession, {
-  type AppleAudioConfiguration,
-} from './AudioSession';
+import AudioSession, { type AppleAudioConfiguration } from './AudioSession';
 import { log } from '..';
 import { audioDeviceModuleEvents } from '@livekit/react-native-webrtc';
 
@@ -85,10 +83,13 @@ export function setupIOSAudioManagement(
     try {
       await tryConfigure(newState, oldState);
     } catch (error) {
-      log.error('AudioSession configuration failed, stopping audio engine:', error);
+      log.error(
+        'AudioSession configuration failed, stopping audio engine:',
+        error
+      );
       // Throw the error code so the native AudioDeviceModuleObserver returns it
       // to the WebRTC engine, which will stop/rollback the operation.
-      // eslint-disable-next-line no-throw-literal
+
       throw kAudioEngineErrorFailedToConfigureAudioSession;
     }
     // Update the audio state only if configure succeeds
