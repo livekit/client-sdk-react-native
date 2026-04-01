@@ -21,6 +21,7 @@ import AudioSession, {
 } from './audio/AudioSession';
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
+import { setupIOSAudioManagement } from './audio/AudioManager';
 import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
@@ -30,9 +31,9 @@ import { ReadableStream, WritableStream } from 'web-streams-polyfill';
 
 export interface RegisterGlobalsOptions {
   /**
-   * Automatically configure audio session before accessing microphone.
-   * When enabled, sets the iOS audio category to 'playAndRecord' before getUserMedia.
-   * Has no effect on non-iOS platforms.
+   * Automatically configure and activate the iOS audio session
+   * based on audio engine lifecycle events.
+   * Has no effect on non-Apple platforms.
    *
    * @default true
    */
@@ -54,7 +55,7 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
 
   webrtcRegisterGlobals();
   if (opts.autoConfigureAudioSession) {
-    iosCategoryEnforce();
+    setupIOSAudioManagement();
   }
   livekitRegisterGlobals();
   setupURLPolyfill();
@@ -64,26 +65,6 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
   shimCryptoUuid();
   shimWebstreams();
   setupNativeEvents();
-}
-
-/**
- * Enforces changing to playAndRecord category prior to obtaining microphone.
- */
-function iosCategoryEnforce() {
-  if (Platform.OS === 'ios') {
-    // @ts-ignore
-    let getUserMediaFunc = global.navigator.mediaDevices.getUserMedia;
-    // @ts-ignore
-    global.navigator.mediaDevices.getUserMedia = async (constraints: any) => {
-      if (constraints.audio) {
-        await AudioSession.setAppleAudioConfiguration({
-          audioCategory: 'playAndRecord',
-        });
-      }
-
-      return await getUserMediaFunc(constraints);
-    };
-  }
 }
 
 function livekitRegisterGlobals() {
