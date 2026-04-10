@@ -22,6 +22,7 @@ import AudioSession, {
 import type { AudioConfiguration } from './audio/AudioSession';
 import { PixelRatio, Platform } from 'react-native';
 import { setupIOSAudioManagement } from './audio/AudioManager';
+import { installAppleAudioConstraintDefaults } from './audio/appleAudioConstraintsShim';
 import { type LiveKitReactNativeInfo } from 'livekit-client';
 import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
@@ -54,6 +55,7 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
   };
 
   webrtcRegisterGlobals();
+  installAppleAudioConstraintDefaults();
   if (opts.autoConfigureAudioSession) {
     setupIOSAudioManagement();
   }

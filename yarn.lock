@@ -3624,6 +3624,7 @@ __metadata:
     react: "npm:19.2.0"
     react-native: "npm:0.83.0"
     react-native-builder-bob: "npm:^0.40.17"
+    react-native-device-info: "npm:^15.0.2"
     react-native-url-polyfill: "npm:^1.3.0"
     release-it: "npm:^19.0.4"
     typed-emitter: "npm:^2.1.0"
@@ -12397,6 +12398,15 @@ __metadata:
   peerDependencies:
     react-native: ">=0.40.0"
   checksum: 10/db1ece74c2272b72625fc6240464452aca6d8541a3682e051f72de1f1c52ee5b8295b247e30fe9a325f9ecc60d728b18ae4b46e6ac590151b4b33c351b67f4e7
+  languageName: node
+  linkType: hard
+
+"react-native-device-info@npm:^15.0.2":
+  version: 15.0.2
+  resolution: "react-native-device-info@npm:15.0.2"
+  peerDependencies:
+    react-native: "*"
+  checksum: 10/9f945a16bd1aebefc60868e22552375bc630eb98d5505d8cdc847d7841a226540408e7ea174cbb4eb5bfec17235eaca731d154082f64e4935e2a4d2e0244b39b
   languageName: node
   linkType: hard
 
