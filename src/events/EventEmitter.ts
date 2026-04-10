@@ -11,6 +11,7 @@ const NATIVE_EVENTS = [
   'LK_VOLUME_PROCESSED',
   'LK_MULTIBAND_PROCESSED',
   'LK_AUDIO_DATA',
+  'LK_PRECONNECT_DEBUG',
 ];
 
 const eventEmitter = new EventEmitter();
