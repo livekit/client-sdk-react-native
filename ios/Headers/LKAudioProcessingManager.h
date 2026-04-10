@@ -6,6 +6,8 @@
 
 @property(nonatomic, strong) RTCDefaultAudioProcessingModule* _Nonnull audioProcessingModule;
 
+@property(nonatomic, strong, nullable) RTCAudioDeviceModule* audioDeviceModule;
+
 @property(nonatomic, strong) LKAudioProcessingAdapter* _Nonnull capturePostProcessingAdapter;
 
 @property(nonatomic, strong) LKAudioProcessingAdapter* _Nonnull renderPreProcessingAdapter;
@@ -30,5 +32,11 @@
 - (void)removeRenderPreProcessor:(nonnull id<LKExternalAudioProcessingDelegate>)renderer;
 
 - (void)clearProcessors;
+
+- (BOOL)startLocalRecording:(NSError * _Nullable * _Nullable)error
+    NS_SWIFT_NAME(startLocalRecording());
+
+- (BOOL)stopLocalRecording:(NSError * _Nullable * _Nullable)error
+    NS_SWIFT_NAME(stopLocalRecording());
 
 @end

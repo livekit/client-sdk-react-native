@@ -1,6 +1,8 @@
 #import "LKAudioProcessingManager.h"
 #import "LKAudioProcessingAdapter.h"
 
+static NSString *const LKAudioProcessingManagerErrorDomain = @"LKAudioProcessingManagerErrorDomain";
+
 @implementation LKAudioProcessingManager
 
 + (instancetype)sharedInstance {
@@ -59,5 +61,72 @@
     // TODO
 }
 
+- (BOOL)startLocalRecording:(NSError * _Nullable * _Nullable)error {
+    if (self.audioDeviceModule == nil) {
+        if (error != nil) {
+            *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
+                                         code:-1
+                                     userInfo:@{
+                                         NSLocalizedDescriptionKey : @"Audio device module is unavailable",
+                                     }];
+        }
+        return NO;
+    }
+
+    if (self.audioDeviceModule.isRecording) {
+        return YES;
+    }
+
+    NSInteger status = self.audioDeviceModule.isRecordingInitialized
+        ? [self.audioDeviceModule startRecording]
+        : [self.audioDeviceModule initAndStartRecording];
+    if (status != 0) {
+        if (error != nil) {
+            *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
+                                         code:status
+                                     userInfo:@{
+                                         NSLocalizedDescriptionKey :
+                                             [NSString stringWithFormat:@"Failed to start local recording (status %ld)",
+                                                                          (long)status],
+                                     }];
+        }
+        return NO;
+    }
+
+    return YES;
+}
+
+- (BOOL)stopLocalRecording:(NSError * _Nullable * _Nullable)error {
+    if (self.audioDeviceModule == nil) {
+        if (error != nil) {
+            *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
+                                         code:-1
+                                     userInfo:@{
+                                         NSLocalizedDescriptionKey : @"Audio device module is unavailable",
+                                     }];
+        }
+        return NO;
+    }
+
+    if (!self.audioDeviceModule.isRecording) {
+        return YES;
+    }
+
+    NSInteger status = [self.audioDeviceModule stopRecording];
+    if (status != 0) {
+        if (error != nil) {
+            *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
+                                         code:status
+                                     userInfo:@{
+                                         NSLocalizedDescriptionKey :
+                                             [NSString stringWithFormat:@"Failed to stop local recording (status %ld)",
+                                                                          (long)status],
+                                     }];
+        }
+        return NO;
+    }
+
+    return YES;
+}
 
 @end

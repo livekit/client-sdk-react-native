@@ -1,5 +1,6 @@
 import { NativeEventEmitter, type EmitterSubscription } from 'react-native';
 // @ts-ignore
+// eslint-disable-next-line @react-native/no-deep-imports -- React Native does not expose this emitter at the top level.
 import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import LiveKitModule from '../LKNativeModule';
 
@@ -12,6 +13,7 @@ const NATIVE_EVENTS = [
   'LK_MULTIBAND_PROCESSED',
   'LK_AUDIO_DATA',
   'LK_PRECONNECT_DEBUG',
+  'LK_AUDIO_RECORDING_STATE',
 ];
 
 const eventEmitter = new EventEmitter();

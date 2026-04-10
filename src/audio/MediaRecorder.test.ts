@@ -9,8 +9,10 @@ jest.mock('../events/EventEmitter', () => ({
 jest.mock('../LKNativeModule', () => ({
   __esModule: true,
   default: {
+    addListener: jest.fn(),
     createAudioSinkListener: jest.fn(() => 'react-tag-1'),
     deleteAudioSinkListener: jest.fn(),
+    removeListeners: jest.fn(),
   },
 }));
 
@@ -124,5 +126,19 @@ describe('MediaRecorder shim', () => {
     );
 
     consoleLogSpy.mockRestore();
+  });
+
+  test('accepts audio recording state events from the native emitter registry', () => {
+    const actualEventEmitterModule = jest.requireActual<
+      typeof import('../events/EventEmitter')
+    >('../events/EventEmitter');
+
+    expect(() =>
+      actualEventEmitterModule.addListener(
+        {},
+        'LK_AUDIO_RECORDING_STATE',
+        jest.fn()
+      )
+    ).not.toThrow();
   });
 });
