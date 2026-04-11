@@ -61,15 +61,22 @@ static NSString *const LKAudioProcessingManagerErrorDomain = @"LKAudioProcessing
     // TODO
 }
 
+- (BOOL)requireAudioDeviceModule:(NSError * _Nullable * _Nullable)error {
+    if (self.audioDeviceModule != nil) {
+        return YES;
+    }
+    if (error != nil) {
+        *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
+                                     code:-1
+                                 userInfo:@{
+                                     NSLocalizedDescriptionKey : @"Audio device module is unavailable",
+                                 }];
+    }
+    return NO;
+}
+
 - (BOOL)startLocalRecording:(NSError * _Nullable * _Nullable)error {
-    if (self.audioDeviceModule == nil) {
-        if (error != nil) {
-            *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
-                                         code:-1
-                                     userInfo:@{
-                                         NSLocalizedDescriptionKey : @"Audio device module is unavailable",
-                                     }];
-        }
+    if (![self requireAudioDeviceModule:error]) {
         return NO;
     }
 
@@ -97,14 +104,7 @@ static NSString *const LKAudioProcessingManagerErrorDomain = @"LKAudioProcessing
 }
 
 - (BOOL)stopLocalRecording:(NSError * _Nullable * _Nullable)error {
-    if (self.audioDeviceModule == nil) {
-        if (error != nil) {
-            *error = [NSError errorWithDomain:LKAudioProcessingManagerErrorDomain
-                                         code:-1
-                                     userInfo:@{
-                                         NSLocalizedDescriptionKey : @"Audio device module is unavailable",
-                                     }];
-        }
+    if (![self requireAudioDeviceModule:error]) {
         return NO;
     }
 

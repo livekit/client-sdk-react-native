@@ -104,6 +104,8 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         }
     }
 
+    private static let kModuleErrorDomain = "LivekitReactNativeModule"
+
     private func syncAudioDeviceModule() -> Bool {
         guard let webRTCModule = self.bridge.module(for: WebRTCModule.self) as? WebRTCModule else {
             return false
@@ -114,44 +116,45 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         return true
     }
 
+    private func sendRecordingStateEvent(_ stage: String, error: Error? = nil) {
+        var body: [String: Any] = [
+            "stage": stage,
+            "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
+        ]
+        if let error = error {
+            body["error"] = error.localizedDescription
+        }
+        self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: body)
+    }
+
+    private func bridgeUnavailableError(context: String) -> NSError {
+        NSError(
+            domain: Self.kModuleErrorDomain,
+            code: -1,
+            userInfo: [
+                NSLocalizedDescriptionKey:
+                    "WebRTCModule is unavailable while \(context) local recording",
+            ]
+        )
+    }
+
     @objc(startLocalRecording:withRejecter:)
     public func startLocalRecording(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: [
-            "stage": "local_recording_start_requested",
-            "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
-        ])
+        sendRecordingStateEvent("local_recording_start_requested")
 
         guard syncAudioDeviceModule() else {
-            let bridgeError = NSError(
-                domain: "LivekitReactNativeModule",
-                code: -1,
-                userInfo: [
-                    NSLocalizedDescriptionKey:
-                        "WebRTCModule is unavailable while starting local recording",
-                ]
-            )
-            self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: [
-                "stage": "local_recording_start_failed",
-                "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
-                "error": bridgeError.localizedDescription,
-            ])
-            reject("startLocalRecording", bridgeError.localizedDescription, bridgeError)
+            let err = bridgeUnavailableError(context: "starting")
+            sendRecordingStateEvent("local_recording_start_failed", error: err)
+            reject("startLocalRecording", err.localizedDescription, err)
             return
         }
 
         do {
             try LKAudioProcessingManager.sharedInstance().startLocalRecording()
-            self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: [
-                "stage": "local_recording_started",
-                "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
-            ])
+            sendRecordingStateEvent("local_recording_started")
             resolve(nil)
         } catch {
-            self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: [
-                "stage": "local_recording_start_failed",
-                "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
-                "error": error.localizedDescription,
-            ])
+            sendRecordingStateEvent("local_recording_start_failed", error: error)
             reject(
                 "startLocalRecording",
                 "Error starting local recording: \(error.localizedDescription)",
@@ -162,27 +165,21 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
     @objc(stopLocalRecording:withRejecter:)
     public func stopLocalRecording(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        sendRecordingStateEvent("local_recording_stop_requested")
+
         guard syncAudioDeviceModule() else {
-            let bridgeError = NSError(
-                domain: "LivekitReactNativeModule",
-                code: -1,
-                userInfo: [
-                    NSLocalizedDescriptionKey:
-                        "WebRTCModule is unavailable while stopping local recording",
-                ]
-            )
-            reject("stopLocalRecording", bridgeError.localizedDescription, bridgeError)
+            let err = bridgeUnavailableError(context: "stopping")
+            sendRecordingStateEvent("local_recording_stop_failed", error: err)
+            reject("stopLocalRecording", err.localizedDescription, err)
             return
         }
 
         do {
             try LKAudioProcessingManager.sharedInstance().stopLocalRecording()
-            self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: [
-                "stage": "local_recording_stopped",
-                "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
-            ])
+            sendRecordingStateEvent("local_recording_stopped")
             resolve(nil)
         } catch {
+            sendRecordingStateEvent("local_recording_stop_failed", error: error)
             reject(
                 "stopLocalRecording",
                 "Error stopping local recording: \(error.localizedDescription)",
