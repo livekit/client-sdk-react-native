@@ -7,7 +7,6 @@ struct LKEvents {
     static let kEventVolumeProcessed = "LK_VOLUME_PROCESSED";
     static let kEventMultibandProcessed = "LK_MULTIBAND_PROCESSED";
     static let kEventAudioData = "LK_AUDIO_DATA";
-    static let kEventPreconnectDebug = "LK_PRECONNECT_DEBUG";
     static let kEventAudioRecordingState = "LK_AUDIO_RECORDING_STATE";
 }
 
@@ -271,13 +270,6 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         let reactTag = self.audioRendererManager.registerRenderer(renderer)
         renderer.reactTag = reactTag
         self.audioRendererManager.attach(renderer: renderer, pcId: pcId, trackId: trackId)
-        self.sendEvent(withName: LKEvents.kEventPreconnectDebug, body: [
-            "id": reactTag,
-            "pcId": pcId,
-            "stage": "native_audio_sink_listener_attached",
-            "trackId": trackId,
-            "timestampMs": Int(Date().timeIntervalSince1970 * 1000)
-        ])
 
         return reactTag
     }
@@ -350,7 +342,6 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             LKEvents.kEventVolumeProcessed,
             LKEvents.kEventMultibandProcessed,
             LKEvents.kEventAudioData,
-            LKEvents.kEventPreconnectDebug,
             LKEvents.kEventAudioRecordingState,
         ]
     }

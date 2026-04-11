@@ -3,7 +3,9 @@ import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 jest.mock('../LKNativeModule', () => ({
   __esModule: true,
   default: {
+    addListener: jest.fn(),
     configureAudio: jest.fn(),
+    removeListeners: jest.fn(),
     startAudioSession: jest.fn(),
     stopAudioSession: jest.fn(),
     startLocalRecording: jest.fn(),
@@ -29,5 +31,19 @@ describe('AudioSession local recording', () => {
     await AudioSession.stopLocalRecording();
 
     expect(LiveKitModule.stopLocalRecording).toHaveBeenCalledTimes(1);
+  });
+
+  test('accepts audio recording state events from the native emitter registry', () => {
+    const actualEventEmitterModule = jest.requireActual<
+      typeof import('../events/EventEmitter')
+    >('../events/EventEmitter');
+
+    expect(() =>
+      actualEventEmitterModule.addListener(
+        {},
+        'LK_AUDIO_RECORDING_STATE',
+        jest.fn()
+      )
+    ).not.toThrow();
   });
 });
