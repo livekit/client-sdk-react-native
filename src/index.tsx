@@ -155,37 +155,37 @@ function shimWebstreams() {
 
 function shimAbortSignal() {
   // @ts-expect-error: AbortSignal.any isn't defined in RN.
-  if (typeof AbortSignal.any === "undefined") {
+  if (typeof AbortSignal.any === 'undefined') {
     // @ts-expect-error: AbortSignal.any isn't defined in RN.
     AbortSignal.any = function (signals: AbortSignal[]): AbortSignal {
-      const controller = new AbortController()
-      
+      const controller = new AbortController();
+
       // If any signal is already aborted, abort immediately
       for (const signal of signals) {
         if (signal.aborted) {
-          controller.abort()
-          return controller.signal
+          controller.abort();
+          return controller.signal;
         }
       }
-      
+
       // Listen for abort events on all signals
-      const abortHandler = () => controller.abort()
+      const abortHandler = () => controller.abort();
       for (const signal of signals) {
-        signal.addEventListener("abort", abortHandler)
+        signal.addEventListener('abort', abortHandler);
       }
-      
-      return controller.signal
-    }
+
+      return controller.signal;
+    };
   }
 
   // @ts-expect-error: AbortSignal.timeout isn't defined in RN.
-  if (typeof AbortSignal.timeout === "undefined") {
+  if (typeof AbortSignal.timeout === 'undefined') {
     // @ts-expect-error: AbortSignal.timeout isn't defined in RN.
     AbortSignal.timeout = function (ms: number): AbortSignal {
-      const controller = new AbortController()
-      setTimeout(() => controller.abort(), ms)
-      return controller.signal
-    }
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(), ms);
+      return controller.signal;
+    };
   }
 }
 export * from './hooks';
