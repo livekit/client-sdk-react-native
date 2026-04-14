@@ -1,6 +1,7 @@
 import 'well-known-symbols/Symbol.asyncIterator/auto';
 import 'well-known-symbols/Symbol.iterator/auto';
 import './polyfills/MediaRecorderShim';
+import './polyfills/DOMException';
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
