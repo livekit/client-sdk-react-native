@@ -1,6 +1,7 @@
 import 'well-known-symbols/Symbol.asyncIterator/auto';
 import 'well-known-symbols/Symbol.iterator/auto';
 import './polyfills/MediaRecorderShim';
+import './polyfills/DOMException';
 import {
   registerGlobals as webrtcRegisterGlobals,
   AudioDeviceModule,

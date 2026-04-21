@@ -1,15 +1,15 @@
 {
   "name": "@livekit/react-native",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "LiveKit for React Native",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
   "types": "lib/typescript/src/index.d.ts",
   "exports": {
     ".": {
       "source": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
-      "default": "./lib/commonjs/index"
+      "default": "./lib/commonjs/index.js"
     }
   },
   "react-native": "src/index",
