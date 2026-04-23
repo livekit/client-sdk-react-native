@@ -198,7 +198,11 @@ export type AppleAudioConfiguration = {
 };
 
 /**
- * @deprecated Use `AudioEngineConfigurationState` from `AudioManager` instead.
+ * @deprecated Retained only for the legacy `useIOSAudioManagement` hook and
+ *   `getDefaultAppleAudioConfigurationForMode`. New code should pass an
+ *   `onConfigureNativeAudio` callback to `setupIOSAudioManagement`, which
+ *   receives an `AudioEngineConfigurationState` (playout/recording/speaker
+ *   booleans). That shape has no direct `AudioTrackState` equivalent.
  */
 export type AudioTrackState =
   | 'none'
@@ -212,7 +216,7 @@ export default class AudioSession {
    *
    * Must be called prior to connecting to a Room for the configuration to apply correctly.
    *
-   * See also useIOSAudioManagement for automatic configuration of iOS audio options.
+   * See also `setupIOSAudioManagement` for automatic configuration of iOS audio options.
    */
   static configureAudio = async (config: AudioConfiguration) => {
     await LiveKitModule.configureAudio(config);

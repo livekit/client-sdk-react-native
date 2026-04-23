@@ -29,6 +29,9 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         super.init()
         let config = RTCAudioSessionConfiguration()
         config.category = AVAudioSession.Category.playAndRecord.rawValue
+        // Gated on compiler version (not iOS deploy target): .allowBluetoothHFP
+        // is only declared in the Xcode 26 / Swift 6.2 SDK, which replaces the
+        // deprecated .allowBluetooth.
         #if swift(>=6.2)
         config.categoryOptions = [.allowAirPlay, .allowBluetoothHFP, .allowBluetoothA2DP, .defaultToSpeaker]
         #else

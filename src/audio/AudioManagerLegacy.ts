@@ -19,6 +19,13 @@ import {
  * @deprecated Use {@link setupIOSAudioManagement} instead.
  *   The `room` parameter is ignored — audio session is now managed
  *   via audio engine events, not room track counts.
+ *
+ *   Note: the `trackState` passed to `onConfigureNativeAudio` is now
+ *   derived from the audio engine's playout/recording state, not from
+ *   publication counts. Edge cases can differ. For example, a
+ *   published-but-muted local audio track that previously yielded
+ *   `localOnly` may now appear as `remoteOnly` or `none`. Callers with
+ *   nuanced per-state logic should migrate to `setupIOSAudioManagement`.
  */
 export function useIOSAudioManagement(
   _room: Room,
@@ -55,6 +62,10 @@ export function useIOSAudioManagement(
 
 /**
  * @deprecated Use the default behavior of `setupIOSAudioManagement` instead.
+ *
+ * Kept in sync with `getDefaultAppleAudioConfigurationForAudioState` in
+ * `./AudioManager.ts`. If you change the defaults in one place, update the
+ * other so the legacy path and the new path produce the same configuration.
  */
 export function getDefaultAppleAudioConfigurationForMode(
   mode: AudioTrackState,

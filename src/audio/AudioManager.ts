@@ -19,8 +19,9 @@ type CleanupFn = () => void;
 /**
  * Sets up automatic iOS audio session management based on audio engine state.
  *
- * Call this once at app startup (e.g. in index.js). For usage inside React
- * components, use {@link useIOSAudioManagement} instead.
+ * Call this once at app startup (e.g. in index.js). `registerGlobals()`
+ * invokes it for you by default unless `autoConfigureAudioSession: false`
+ * is passed.
  *
  * @param preferSpeakerOutput - Whether to prefer speaker output. Defaults to true.
  * @param onConfigureNativeAudio - Optional custom callback for determining audio configuration.
@@ -108,6 +109,9 @@ export function setupIOSAudioManagement(
   };
 }
 
+// Kept in sync with `getDefaultAppleAudioConfigurationForMode` in
+// `./AudioManagerLegacy.ts`. If you change the defaults in one place,
+// update the other so the legacy path and the new path stay aligned.
 function getDefaultAppleAudioConfigurationForAudioState(
   configurationState: AudioEngineConfigurationState
 ): AppleAudioConfiguration {
