@@ -7,7 +7,7 @@
  *
  * New code should use `setupIOSAudioManagement` from `./AudioManager` instead.
  */
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Room } from 'livekit-client';
 import type { AppleAudioConfiguration, AudioTrackState } from './AudioSession';
 import {
@@ -28,23 +28,29 @@ export function useIOSAudioManagement(
     preferSpeakerOutput: boolean
   ) => AppleAudioConfiguration
 ) {
+  // Hold the latest callback in a ref so its identity doesn't drive the
+  // setup effect. Inline-arrow callers would otherwise churn native handlers
+  // on every render. Assigned during render so a native event firing between
+  // commit and a passive effect still sees the current callback.
+  const callbackRef = useRef(onConfigureNativeAudio);
+  callbackRef.current = onConfigureNativeAudio;
+
   useEffect(() => {
-    let wrappedOnConfig:
-      | ((state: AudioEngineConfigurationState) => AppleAudioConfiguration)
-      | undefined;
+    const wrapped = (
+      state: AudioEngineConfigurationState
+    ): AppleAudioConfiguration => {
+      const cb = callbackRef.current;
+      const trackState = engineStateToTrackState(state);
+      return cb
+        ? cb(trackState, state.preferSpeakerOutput)
+        : getDefaultAppleAudioConfigurationForMode(
+            trackState,
+            state.preferSpeakerOutput
+          );
+    };
 
-    if (onConfigureNativeAudio) {
-      const legacyCb = onConfigureNativeAudio;
-      wrappedOnConfig = (state: AudioEngineConfigurationState) =>
-        legacyCb(engineStateToTrackState(state), state.preferSpeakerOutput);
-    }
-
-    const cleanup = setupIOSAudioManagement(
-      preferSpeakerOutput,
-      wrappedOnConfig
-    );
-    return cleanup;
-  }, [preferSpeakerOutput, onConfigureNativeAudio]);
+    return setupIOSAudioManagement(preferSpeakerOutput, wrapped);
+  }, [preferSpeakerOutput]);
 }
 
 /**
