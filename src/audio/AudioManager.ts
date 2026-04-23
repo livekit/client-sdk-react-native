@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import AudioSession, { type AppleAudioConfiguration } from './AudioSession';
-import { log } from '..';
+import { log } from '../logger';
 import { audioDeviceModuleEvents } from '@livekit/react-native-webrtc';
 
 export type AudioEngineConfigurationState = {
