@@ -60,7 +60,14 @@ public class AudioUtils {
             case "duckOthers":
                 categoryOptions.insert(.duckOthers)
             case "allowBluetooth":
+                // Gated on compiler version (not iOS deploy target):
+                // .allowBluetoothHFP is only declared in the Xcode 26 /
+                // Swift 6.2 SDK, which replaces the deprecated .allowBluetooth.
+                #if swift(>=6.2)
+                categoryOptions.insert(.allowBluetoothHFP)
+                #else
                 categoryOptions.insert(.allowBluetooth)
+                #endif
             case "allowBluetoothA2DP":
                 categoryOptions.insert(.allowBluetoothA2DP)
             case "allowAirPlay":
