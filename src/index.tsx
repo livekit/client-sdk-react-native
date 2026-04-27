@@ -1,7 +1,10 @@
+// Automatic polyfills, keep these at the top.
 import 'well-known-symbols/Symbol.asyncIterator/auto';
 import 'well-known-symbols/Symbol.iterator/auto';
-import './polyfills/MediaRecorderShim';
 import './polyfills/DOMException';
+// Caution: This has a transitive import of livekit-client, keep last.
+import './polyfills/MediaRecorderShim';
+
 import { registerGlobals as webrtcRegisterGlobals } from '@livekit/react-native-webrtc';
 import { setupURLPolyfill } from 'react-native-url-polyfill';
 import './polyfills/EncoderDecoderTogether.min.js';
