@@ -10,6 +10,7 @@ export type AudioEngineConfigurationState = {
 };
 
 const kAudioEngineErrorFailedToConfigureAudioSession = -4100;
+let activeAudioManagementSetup: object | undefined;
 
 /**
  * @inline
@@ -37,6 +38,8 @@ export function setupIOSAudioManagement(
     return () => {};
   }
 
+  const setupToken = {};
+  activeAudioManagementSetup = setupToken;
   let audioEngineState: AudioEngineConfigurationState = {
     isPlayoutEnabled: false,
     isRecordingEnabled: false,
@@ -104,6 +107,10 @@ export function setupIOSAudioManagement(
   audioDeviceModuleEvents.setDidDisableEngineHandler(handleEngineStateUpdate);
 
   return () => {
+    if (activeAudioManagementSetup !== setupToken) {
+      return;
+    }
+    activeAudioManagementSetup = undefined;
     audioDeviceModuleEvents.setWillEnableEngineHandler(null);
     audioDeviceModuleEvents.setDidDisableEngineHandler(null);
   };
