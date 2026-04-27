@@ -1,5 +1,11 @@
 # @livekit/react-native
 
+## 2.10.2
+
+### Patch Changes
+
+- Additional fix for DOMException polyfil - [#346](https://github.com/livekit/client-sdk-react-native/pull/346) ([@davidliu](https://github.com/davidliu))
+
 ## 2.10.1
 
 ### Patch Changes
