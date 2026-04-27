@@ -1,3 +1,6 @@
+/**
+ * Note: This shim has a transitive import of livekit-client.
+ */
 import { MediaRecorder } from "../audio/MediaRecorder";
 
 function shimMediaRecorder() {
