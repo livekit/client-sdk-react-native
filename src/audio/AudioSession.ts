@@ -197,36 +197,18 @@ export type AppleAudioConfiguration = {
   audioMode?: AppleAudioMode;
 };
 
+/**
+ * @deprecated Retained only for the legacy `useIOSAudioManagement` hook and
+ *   `getDefaultAppleAudioConfigurationForMode`. New code should pass an
+ *   `onConfigureNativeAudio` callback to `setupIOSAudioManagement`, which
+ *   receives an `AudioEngineConfigurationState` (playout/recording/speaker
+ *   booleans). That shape has no direct `AudioTrackState` equivalent.
+ */
 export type AudioTrackState =
   | 'none'
   | 'remoteOnly'
   | 'localOnly'
   | 'localAndRemote';
-
-export function getDefaultAppleAudioConfigurationForMode(
-  mode: AudioTrackState,
-  preferSpeakerOutput: boolean = true
-): AppleAudioConfiguration {
-  if (mode === 'remoteOnly') {
-    return {
-      audioCategory: 'playback',
-      audioCategoryOptions: ['mixWithOthers'],
-      audioMode: 'spokenAudio',
-    };
-  } else if (mode === 'localAndRemote' || mode === 'localOnly') {
-    return {
-      audioCategory: 'playAndRecord',
-      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
-      audioMode: preferSpeakerOutput ? 'videoChat' : 'voiceChat',
-    };
-  }
-
-  return {
-    audioCategory: 'soloAmbient',
-    audioCategoryOptions: [],
-    audioMode: 'default',
-  };
-}
 
 export default class AudioSession {
   /**
@@ -234,7 +216,7 @@ export default class AudioSession {
    *
    * Must be called prior to connecting to a Room for the configuration to apply correctly.
    *
-   * See also useIOSAudioManagement for automatic configuration of iOS audio options.
+   * See also `setupIOSAudioManagement` for automatic configuration of iOS audio options.
    */
   static configureAudio = async (config: AudioConfiguration) => {
     await LiveKitModule.configureAudio(config);

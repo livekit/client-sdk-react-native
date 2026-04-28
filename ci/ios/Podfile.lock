@@ -5,10 +5,10 @@ PODS:
   - FBLazyVector (0.82.1)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - hermes-engine (0.82.0):
-    - hermes-engine/Pre-built (= 0.82.0)
-  - hermes-engine/Pre-built (0.82.0)
-  - livekit-react-native (2.9.8):
+  - hermes-engine (0.82.1):
+    - hermes-engine/Pre-built (= 0.82.1)
+  - hermes-engine/Pre-built (0.82.1)
+  - livekit-react-native (2.10.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -37,9 +37,9 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - livekit-react-native-webrtc (144.0.0):
+  - livekit-react-native-webrtc (144.1.0-beta.2):
     - React-Core
-    - WebRTC-SDK (= 144.7559.01)
+    - WebRTC-SDK (= 144.7559.04)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2441,7 +2441,7 @@ PODS:
     - React-utils (= 0.82.1)
     - SocketRocket
   - SocketRocket (0.7.1)
-  - WebRTC-SDK (144.7559.01)
+  - WebRTC-SDK (144.7559.04)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2686,14 +2686,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
+  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 0aa6183b9afe3c31fc65b5d1eeef1f3c19b63bfa
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  livekit-react-native: 16923c9c9cdf21c68cbac52f9a5222c9f05c2f06
-  livekit-react-native-webrtc: a9a45c67543105a40192b144809513e5ab266d0a
+  glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
+  hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
+  livekit-react-native: d3bef98b710d5f0fb6ad1c7734c954ddde910150
+  livekit-react-native-webrtc: 6fc2ff1df5af82d1adb25828ba14a90380a2073e
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
@@ -2761,7 +2761,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 878add6c7d8ff8cea87697c44d29c03b79b6f2d9
   ReactCommon: 804dc80944fa90b86800b43c871742ec005ca424
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  WebRTC-SDK: ab9b5319e458c2bfebdc92b3600740da35d5630d
+  WebRTC-SDK: ac5965a3cc2c258973466e3b1739ab0308bab0d0
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
 
 PODFILE CHECKSUM: 2808703946713a7b53edc61b7e02157e7eb82b22

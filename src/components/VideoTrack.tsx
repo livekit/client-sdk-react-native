@@ -22,7 +22,9 @@ import {
   useEffect,
   useMemo,
   useState,
+  type ForwardRefExoticComponent,
   type ReactNode,
+  type RefAttributes,
 } from 'react';
 import { RemoteVideoTrack } from 'livekit-client';
 import ViewPortDetector from './ViewPortDetector';
@@ -122,6 +124,9 @@ export type VideoTrackProps = {
   };
 };
 
+/**
+ * @inline
+ */
 type RTCViewInstance = InstanceType<typeof RTCView>;
 
 /**
@@ -132,7 +137,9 @@ type RTCViewInstance = InstanceType<typeof RTCView>;
  * @returns A React component that renders the given video track.
  * @public
  */
-export const VideoTrack = forwardRef<RTCViewInstance, VideoTrackProps>(
+export const VideoTrack: ForwardRefExoticComponent<
+  VideoTrackProps & RefAttributes<RTCViewInstance>
+> = forwardRef<RTCViewInstance, VideoTrackProps>(
   (
     {
       style = {},

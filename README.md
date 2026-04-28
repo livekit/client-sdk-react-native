@@ -339,9 +339,38 @@ await AudioSession.startAudioSession();
 
 ### iOS
 
-For iOS, the most appropriate audio configuration may change over time when local/remote
-audio tracks publish and unpublish from the room. To adapt to this, the [`useIOSAudioManagement`](https://htmlpreview.github.io/?https://raw.githubusercontent.com/livekit/client-sdk-react-native/main/docs/functions/useIOSAudioManagement.html)
-hook is advised over just configuring the audio session once for the entire audio session.
+For iOS, `registerGlobals()` automatically configures and activates the audio
+session based on WebRTC audio engine lifecycle events. This is enabled by
+default and is usually enough for voice and video apps:
+
+```js
+registerGlobals();
+```
+
+If your app manages `AVAudioSession` directly, disable the automatic setup:
+
+```js
+registerGlobals({ autoConfigureAudioSession: false });
+```
+
+For custom automatic behavior, disable the default setup and call
+`setupIOSAudioManagement` once during app startup:
+
+```js
+import { registerGlobals, setupIOSAudioManagement } from '@livekit/react-native';
+
+registerGlobals({ autoConfigureAudioSession: false });
+
+const cleanup = setupIOSAudioManagement(true, (state) => ({
+  audioCategory: state.isRecordingEnabled ? 'playAndRecord' : 'playback',
+  audioCategoryOptions: ['mixWithOthers'],
+  audioMode: state.preferSpeakerOutput ? 'videoChat' : 'voiceChat',
+}));
+```
+
+The older `useIOSAudioManagement(room, ...)` hook is still exported for
+backward compatibility, but it is deprecated. New code should prefer the
+startup-level audio engine integration above.
 
 ## Screenshare
 

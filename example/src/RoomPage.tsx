@@ -25,7 +25,6 @@ import {
   useTracks,
   type TrackReferenceOrPlaceholder,
   AndroidAudioTypePresets,
-  useIOSAudioManagement,
   useRNE2EEManager,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';
@@ -105,8 +104,6 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
     setup();
     return () => {};
   }, [room, e2ee]);
-
-  useIOSAudioManagement(room, true);
 
   // Setup room listeners
   useEffect(() => {
