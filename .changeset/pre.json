@@ -5,5 +5,7 @@
     "@livekit/react-native": "2.10.2",
     "livekit-react-native-example": "0.1.0"
   },
-  "changesets": []
+  "changesets": [
+    "wild-olives-shine"
+  ]
 }

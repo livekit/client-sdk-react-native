@@ -1,5 +1,11 @@
 # @livekit/react-native
 
+## 2.11.0-beta.0
+
+### Minor Changes
+
+- Migrate Apple platforms to AVAudioEngine-based audio device module - [#317](https://github.com/livekit/client-sdk-react-native/pull/317) ([@hiroshihorie](https://github.com/hiroshihorie))
+
 ## 2.10.2
 
 ### Patch Changes
