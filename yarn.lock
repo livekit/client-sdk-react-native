@@ -5498,15 +5498,15 @@ __metadata:
   linkType: hard
 
 "babel-plugin-module-resolver@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "babel-plugin-module-resolver@npm:5.0.2"
+  version: 5.0.3
+  resolution: "babel-plugin-module-resolver@npm:5.0.3"
   dependencies:
     find-babel-config: "npm:^2.1.1"
     glob: "npm:^9.3.3"
     pkg-up: "npm:^3.1.0"
     reselect: "npm:^4.1.7"
     resolve: "npm:^1.22.8"
-  checksum: 10/8084fa8a4cd96aaa861e5fe765a6cd03accef64d21d4108e314029bcd5f3a7fd96faf0c877c575a6a24d4fe0d87458d49748ca56faa4c77b2b812e4ed6023768
+  checksum: 10/a39cf22d799b5b846d0ba8569f089b7d45f52204bf99a34aee1e6cf1c1b2c9ce5c7cf2f83dc75905c3e3823ad58c787a4fad8211daad97c412611c5ea3b5afd7
   languageName: node
   linkType: hard
 
