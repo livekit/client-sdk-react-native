@@ -1,0 +1,4 @@
+# CODEOWNERS for client-sdk-react-native
+# These owners will be requested for review on all PRs
+
+* @davidliu @hiroshihorie @xianshijing-lk
