@@ -6,6 +6,7 @@
     "livekit-react-native-example": "0.1.0"
   },
   "changesets": [
+    "quiet-crews-cover",
     "wild-olives-shine"
   ]
 }
