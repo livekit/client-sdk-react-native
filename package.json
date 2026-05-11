@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/config-conventional": "^21.0.0",
     "@eslint/compat": "^2.1.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.35.0",
