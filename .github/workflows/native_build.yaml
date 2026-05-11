@@ -13,21 +13,21 @@ jobs:
   android-compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 22
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: |
             ~/.npm
@@ -55,15 +55,15 @@ jobs:
   ios-compile:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 22
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: |
             ~/.npm
@@ -75,7 +75,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Cache gem bundle
-        uses: actions/cache@v4
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: ./ci/vendor
           key: ${{ runner.os }}-gembundle-${{ hashFiles('**/Gemfile.lock') }}
@@ -83,7 +83,7 @@ jobs:
             ${{ runner.os }}-gembundle-
 
       - name: Cache cocoapods
-        uses: actions/cache@v4
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: ./ci/ios/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
