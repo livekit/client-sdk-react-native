@@ -3624,7 +3624,7 @@ __metadata:
     react: "npm:19.2.0"
     react-native: "npm:0.83.0"
     react-native-builder-bob: "npm:^0.40.17"
-    react-native-url-polyfill: "npm:^1.3.0"
+    react-native-url-polyfill: "npm:^3.0.0"
     release-it: "npm:^19.0.4"
     typed-emitter: "npm:^2.1.0"
     typedoc: "npm:^0.28.14"
@@ -10369,7 +10369,7 @@ __metadata:
     react-native-safe-area-context: "npm:^5.5.2"
     react-native-screens: "npm:^4.16.0"
     react-native-toast-message: "npm:^2.2.0"
-    react-native-url-polyfill: "npm:^1.3.0"
+    react-native-url-polyfill: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
 
@@ -12473,14 +12473,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-url-polyfill@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "react-native-url-polyfill@npm:1.3.0"
+"react-native-url-polyfill@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "react-native-url-polyfill@npm:3.0.0"
   dependencies:
     whatwg-url-without-unicode: "npm:8.0.0-3"
   peerDependencies:
     react-native: "*"
-  checksum: 10/e2dcfc11744ab16e841c44d037062dee971cf1387cfc20dd610f175e53eb8c203a1c9d9f0df3570605371560f3e64f6f078f31409846fa1c68dfd316b168df33
+  checksum: 10/62457a360745bb65fda2349bb95d2a90ad70f87005aa464fa8dd4919fa34bf2007f64bf6bbb1a76b5cdb579e3df9da6a23040a0eddf64456cadf6e766069854f
   languageName: node
   linkType: hard
 
