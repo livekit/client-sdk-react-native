@@ -10,7 +10,7 @@
       "source": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
       "react-native": "./src/index.tsx",
-      "import":  "./lib/module/index.js",
+      "import": "./lib/module/index.js",
       "require": "./lib/commonjs/index.js",
       "default": "./lib/commonjs/index.js"
     }
