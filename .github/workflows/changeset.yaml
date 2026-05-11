@@ -22,7 +22,7 @@ jobs:
       NPM_CONFIG_PROVENANCE: true
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
