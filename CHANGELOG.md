@@ -1,5 +1,11 @@
 # @livekit/react-native
 
+## 2.10.3
+
+### Patch Changes
+
+- Fix incomplete exports map in package.json, causing a dual-instance of @livekit/components and breaking RoomContext - [`b6e9f002d0c3dff6d364435ea07ad6da01b48bcf`](https://github.com/livekit/client-sdk-react-native/commit/b6e9f002d0c3dff6d364435ea07ad6da01b48bcf) ([@davidliu](https://github.com/davidliu))
+
 ## 2.10.2
 
 ### Patch Changes
