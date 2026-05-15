@@ -13121,16 +13121,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-is-edge-to-edge@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "react-native-is-edge-to-edge@npm:1.2.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/8fb6d8ab7b953c7d7cec8c987cef24f1c5348a293a85cb49c7c53b54ef110c0ca746736ae730e297603c8c76020df912e93915fb17518c4f2f91143757177aba
-  languageName: node
-  linkType: hard
-
 "react-native-monorepo-config@npm:0.3.1":
   version: 0.3.1
   resolution: "react-native-monorepo-config@npm:0.3.1"
@@ -13162,16 +13152,15 @@ __metadata:
   linkType: hard
 
 "react-native-screens@npm:^4.16.0":
-  version: 4.16.0
-  resolution: "react-native-screens@npm:4.16.0"
+  version: 4.25.0
+  resolution: "react-native-screens@npm:4.25.0"
   dependencies:
     react-freeze: "npm:^1.0.0"
-    react-native-is-edge-to-edge: "npm:^1.2.1"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
-    react-native: "*"
-  checksum: 10/f055d37b3abf96f42c15d61645441995884ed69b2a6b35f63a21abeb147b9df7e084447d2a329a424ee3686d703c25817ea588d3be9e6ebc38e5c653ebe5e05b
+    react-native: ">=0.82.0"
+  checksum: 10/ef0b0abf352801a7cd79bf1a15328c07f29718fd8eb8100c3051fd7f80b07985b86ead8011b122cc7afc3ac831b650145a3cfeeee869922a5ed34f3ba39b96be
   languageName: node
   linkType: hard
 
