@@ -38,15 +38,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install Yarn
-        run: |
-          npm install -g yarn
+      - name: Enable Corepack
+        run: corepack enable
 
-      - name: Yarn
+      - name: Install dependencies
         run: |
-          yarn install
+          yarn install --immutable
           cd ci
-          yarn
+          yarn install --immutable
 
       - name: Compile Android (Debug)
         working-directory: ./ci/android/
@@ -90,16 +89,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
 
-      - name: Install Yarn
-        run: |
-          npm install -g yarn
-          yarn
+      - name: Enable Corepack
+        run: corepack enable
 
-      - name: Yarn
+      - name: Install dependencies
         run: |
-          yarn install
+          yarn install --immutable
           cd ci/
-          yarn
+          yarn install --immutable
       - name: Pods
         run: |
           cd ci/ios/

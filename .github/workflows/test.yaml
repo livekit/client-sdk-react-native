@@ -28,10 +28,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install Yarn
-        run: |
-          npm install -g yarn
-          yarn
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
 
       - name: Typescript
         run: yarn typescript
