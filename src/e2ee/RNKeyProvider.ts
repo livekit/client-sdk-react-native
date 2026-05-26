@@ -6,6 +6,7 @@ import {
 } from '@livekit/react-native-webrtc';
 
 const defaultRatchetSalt = 'LKFrameEncryptionKey';
+const defaultKeySize = 128;
 const defaultMagicBytes = 'LK-ROCKS';
 const defaultRatchetWindowSize = 16;
 const defaultFailureTolerance = -1;
@@ -35,6 +36,7 @@ export default class RNKeyProvider extends BaseKeyProvider {
       keyRingSize: options.keyringSize ?? defaultKeyRingSize,
       keyringSize: options.keyringSize ?? defaultKeyRingSize,
       discardFrameWhenCryptorNotReady: defaultDiscardFrameWhenCryptorNotReady,
+      keySize: options.keySize ?? defaultKeySize,
     };
 
     let magicBytes = options.uncryptedMagicBytes ?? defaultMagicBytes;
