@@ -31,7 +31,12 @@ import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
 import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 import { setupNativeEvents } from './events/EventEmitter';
-import { ReadableStream, WritableStream, CountQueuingStrategy, TransformStream } from 'web-streams-polyfill';
+import {
+  ReadableStream,
+  WritableStream,
+  CountQueuingStrategy,
+  TransformStream,
+} from 'web-streams-polyfill';
 
 export interface RegisterGlobalsOptions {
   /**

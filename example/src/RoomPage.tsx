@@ -182,7 +182,10 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom', 'left', 'right']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['top', 'bottom', 'left', 'right']}
+    >
       {stageView}
       {otherParticipantsView}
       <RoomControls
