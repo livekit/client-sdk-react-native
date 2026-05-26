@@ -1,5 +1,23 @@
 # @livekit/react-native
 
+## 2.11.0
+
+### Minor Changes
+
+- Migrate Apple platforms to AVAudioEngine-based audio device module - [#317](https://github.com/livekit/client-sdk-react-native/pull/317) ([@hiroshihorie](https://github.com/hiroshihorie))
+
+### Patch Changes
+
+- Update `@livekit/react-native-webrtc` to 144.1.0 - [#393](https://github.com/livekit/client-sdk-react-native/pull/393) ([@davidliu](https://github.com/davidliu))
+
+- Update `livekit-client` to 2.19.0 - [#391](https://github.com/livekit/client-sdk-react-native/pull/391) ([@davidliu](https://github.com/davidliu))
+
+- Fix incomplete exports map in package.json, causing a dual-instance of @livekit/components and breaking RoomContext - [#351](https://github.com/livekit/client-sdk-react-native/pull/351) ([@davidliu](https://github.com/davidliu))
+
+- Update `web-streams-polyfill` to 4.3.0 - [#391](https://github.com/livekit/client-sdk-react-native/pull/391) ([@davidliu](https://github.com/davidliu))
+
+- Add polyfills for `CountQueuingStrategy` and `TransformStream` for compatibility with livekit-client - [#391](https://github.com/livekit/client-sdk-react-native/pull/391) ([@davidliu](https://github.com/davidliu))
+
 ## 2.11.0-beta.1
 
 ### Patch Changes
