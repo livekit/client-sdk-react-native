@@ -31,7 +31,12 @@ import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
 import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 import { setupNativeEvents } from './events/EventEmitter';
-import { ReadableStream, WritableStream } from 'web-streams-polyfill';
+import {
+  ReadableStream,
+  WritableStream,
+  CountQueuingStrategy,
+  TransformStream,
+} from 'web-streams-polyfill';
 
 export interface RegisterGlobalsOptions {
   /**
@@ -139,6 +144,16 @@ function shimWebstreams() {
   if (typeof global.ReadableStream === 'undefined') {
     // @ts-expect-error
     global.ReadableStream = ReadableStream;
+  }
+  // @ts-expect-error: global.CountQueuingStrategy isn't typed here.
+  if (typeof global.CountQueuingStrategy === 'undefined') {
+    // @ts-expect-error
+    global.CountQueuingStrategy = CountQueuingStrategy;
+  }
+  // @ts-expect-error: global.TransformStream isn't typed here.
+  if (typeof global.TransformStream === 'undefined') {
+    // @ts-expect-error
+    global.TransformStream = TransformStream;
   }
 }
 
