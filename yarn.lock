@@ -3867,12 +3867,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/protocol@npm:1.42.0":
-  version: 1.42.0
-  resolution: "@livekit/protocol@npm:1.42.0"
+"@livekit/protocol@npm:1.45.8":
+  version: 1.45.8
+  resolution: "@livekit/protocol@npm:1.45.8"
   dependencies:
     "@bufbuild/protobuf": "npm:^1.10.0"
-  checksum: 10/a2780387fa6914f33b5585509c8ab96d2bf13e9972c8377091badeaefe91fa5ea338c9bac839f64146e81f06865ead6ccaf58b9850ac539885657d6c81a8e3b2
+  checksum: 10/53144553718a4fd71b85298201c8548b9a5d814a2f61a7b5d930442444f05a4e27c5f4cf29e0d7221fbda9209684a670ffba8d092d9aaf6b413396e036dd8500
   languageName: node
   linkType: hard
 
@@ -3914,7 +3914,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.4"
     events: "npm:^3.3.0"
     jest: "npm:^30.4.2"
-    livekit-client: "npm:^2.15.8"
+    livekit-client: "npm:^2.19.0"
     loglevel: "npm:^1.8.0"
     pod-install: "npm:^1.0.9"
     prettier: "npm:^3.6.2"
@@ -10994,23 +10994,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"livekit-client@npm:^2.15.8":
-  version: 2.15.8
-  resolution: "livekit-client@npm:2.15.8"
+"livekit-client@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "livekit-client@npm:2.19.0"
   dependencies:
     "@livekit/mutex": "npm:1.1.1"
-    "@livekit/protocol": "npm:1.42.0"
+    "@livekit/protocol": "npm:1.45.8"
     events: "npm:^3.3.0"
     jose: "npm:^6.1.0"
     loglevel: "npm:^1.9.2"
     sdp-transform: "npm:^2.15.0"
-    ts-debounce: "npm:^4.0.0"
     tslib: "npm:2.8.1"
     typed-emitter: "npm:^2.1.0"
-    webrtc-adapter: "npm:^9.0.1"
+    webrtc-adapter: "npm:9.0.5"
   peerDependencies:
     "@types/dom-mediacapture-record": ^1
-  checksum: 10/bce9a5fa4d1d7abb716d520d6f6a72555b1e44c15b21e50493851056f026e377d1adb7ffa93c98a4f75826238f7a3d4027cf2c9d9f51b92ce18ff5a3d6d04f32
+  checksum: 10/66d6bf49e65652369419da4118690578cf372e8e4ae3d3c081ebb2b7931ea62418f10bc7e6ca5e39fae90ed97642ef01292082b602f469721a19bbdbc8777c6a
   languageName: node
   linkType: hard
 
@@ -11035,7 +11034,7 @@ __metadata:
     "@types/fastestsmallesttextencoderdecoder": "npm:^1.0.0"
     "@types/react": "npm:^19.2.0"
     babel-plugin-module-resolver: "npm:^5.0.2"
-    livekit-client: "npm:^2.15.8"
+    livekit-client: "npm:^2.19.0"
     patch-package: "npm:^8.0.0"
     react: "npm:19.1.1"
     react-native: "npm:0.82.1"
@@ -14659,13 +14658,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-debounce@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "ts-debounce@npm:4.0.0"
-  checksum: 10/346a5f753fd2d855befe351c29782ee998c0ecd309f7650082c438ef5833cc4e2c70d8eea5d8a277d5b42fa997a6e9ba9eab5b88edd8d1e8d292367dcd09ef8b
-  languageName: node
-  linkType: hard
-
 "tslib@npm:2.8.1, tslib@npm:^2.4.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
@@ -15217,12 +15209,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webrtc-adapter@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "webrtc-adapter@npm:9.0.1"
+"webrtc-adapter@npm:9.0.5":
+  version: 9.0.5
+  resolution: "webrtc-adapter@npm:9.0.5"
   dependencies:
     sdp: "npm:^3.2.0"
-  checksum: 10/5e73ddb6fb807e28fc4bb727bdee2717a697bcf24cfbe1e401c5a3c57d61627fa000b6185470ec3c9fcc1dca42093b67776742c7fde7002fbc14da272a020cbf
+  checksum: 10/23c87b78b689b542ad52723c61c71aead3e07d8ddb4479daafa3fd9490ae3a199859149bb9fb4a16c7e9d13a9e0527e684e781791a221391c21781be2fb5c2e9
   languageName: node
   linkType: hard
 
