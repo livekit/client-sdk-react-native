@@ -6,7 +6,6 @@ import type {
 
 import {
   StyleSheet,
-  View,
   FlatList,
   type ListRenderItem,
   findNodeHandle,
@@ -28,6 +27,11 @@ import {
   useRNE2EEManager,
 } from '@livekit/react-native';
 import { Platform } from 'react-native';
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  initialWindowMetrics,
+} from 'react-native-safe-area-context';
 // @ts-ignore
 import {
   mediaDevices,
@@ -70,19 +74,21 @@ export const RoomPage = ({
   let e2eeOptions = e2ee ? { e2eeManager } : undefined;
 
   return (
-    <LiveKitRoom
-      serverUrl={url}
-      token={token}
-      connect={true}
-      options={{
-        adaptiveStream: { pixelDensity: 'screen' },
-        e2ee: e2eeOptions,
-      }}
-      audio={false}
-      video={true}
-    >
-      <RoomView navigation={navigation} e2ee={e2ee} />
-    </LiveKitRoom>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <LiveKitRoom
+        serverUrl={url}
+        token={token}
+        connect={true}
+        options={{
+          adaptiveStream: { pixelDensity: 'screen' },
+          e2ee: e2eeOptions,
+        }}
+        audio={false}
+        video={true}
+      >
+        <RoomView navigation={navigation} e2ee={e2ee} />
+      </LiveKitRoom>
+    </SafeAreaProvider>
   );
 };
 
@@ -176,7 +182,7 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom', 'left', 'right']}>
       {stageView}
       {otherParticipantsView}
       <RoomControls
@@ -241,7 +247,7 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
         }}
       />
       {screenCapturePickerView}
-    </View>
+    </SafeAreaView>
   );
 };
 
