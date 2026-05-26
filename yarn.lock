@@ -3927,11 +3927,11 @@ __metadata:
     typed-emitter: "npm:^2.1.0"
     typedoc: "npm:^0.28.14"
     typescript: "npm:^5.9.2"
-    web-streams-polyfill: "npm:^4.1.0"
+    web-streams-polyfill: "npm:^4.3.0"
     well-known-symbols: "npm:^4.1.0"
   peerDependencies:
     "@livekit/react-native-webrtc": ^144.1.0-beta.2
-    livekit-client: ^2.15.8
+    livekit-client: ^2.19.0
     react: "*"
     react-native: "*"
   languageName: unknown
@@ -15188,10 +15188,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-streams-polyfill@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "web-streams-polyfill@npm:4.1.0"
-  checksum: 10/c6e802e6b83a8dc72acee8ec14b3a4af46d5ea4a15d0260303d7e4cab3c600716ff998b70457bc3ac0998073c0e73344c89400bfcc5f49a9bc0b10bb263c2f5f
+"web-streams-polyfill@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "web-streams-polyfill@npm:4.3.0"
+  checksum: 10/70d1ac70d6c155dd5714b09902669954ecb7cc97e636793096daf6b3ba303241c91952ef74c84646e9fd15dcd00e2ec579e4bc3f303ecfc251bd77c6691f19e2
   languageName: node
   linkType: hard
 
