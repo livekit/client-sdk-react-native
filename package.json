@@ -70,7 +70,6 @@
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8",
-    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/compat": "^2.1.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.35.0",
@@ -80,7 +79,6 @@
     "@react-native/eslint-config": "0.83.0",
     "@types/fastestsmallesttextencoderdecoder": "^1.0.0",
     "@types/react": "^19.2.0",
-    "commitlint": "^19.8.1",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
@@ -127,31 +125,6 @@
       "<rootDir>/example",
       "<rootDir>/lib/"
     ]
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "type-enum": [
-        2,
-        "always",
-        [
-          "build",
-          "chore",
-          "ci",
-          "docs",
-          "feat",
-          "fix",
-          "perf",
-          "refactor",
-          "revert",
-          "style",
-          "test",
-          "example"
-        ]
-      ]
-    }
   },
   "prettier": {
     "quoteProps": "consistent",
