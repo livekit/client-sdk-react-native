@@ -78,7 +78,6 @@
     "@livekit/react-native-webrtc": "^144.1.0",
     "@react-native/babel-preset": "0.83.0",
     "@react-native/eslint-config": "0.83.0",
-    "@release-it/conventional-changelog": "10.0.1",
     "@types/fastestsmallesttextencoderdecoder": "^1.0.0",
     "@types/react": "^19.2.0",
     "commitlint": "^19.8.1",
@@ -92,7 +91,6 @@
     "react": "19.2.0",
     "react-native": "0.83.0",
     "react-native-builder-bob": "^0.40.17",
-    "release-it": "^19.0.4",
     "typedoc": "^0.28.14",
     "typescript": "^5.9.2"
   },
@@ -108,7 +106,6 @@
     "typescript": "tsc --noemit -p tsconfig.build.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
-    "release": "release-it",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --verbose",
     "ci:version": "changeset version && yarn build-docs",
@@ -154,36 +151,6 @@
           "example"
         ]
       ]
-    }
-  },
-  "release-it": {
-    "hooks": {
-      "before:init": [
-        "yarn lint",
-        "yarn test --passWithNoTests",
-        "yarn typescript"
-      ],
-      "after:bump": [
-        "yarn pods",
-        "yarn build-docs"
-      ],
-      "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
-    },
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "angular",
-        "ignoreRecommendedBump": true
-      }
     }
   },
   "prettier": {

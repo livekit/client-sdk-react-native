@@ -78,13 +78,15 @@ Our pre-commit hooks verify that the linter and tests pass when committing.
 
 ### Publishing to npm
 
-We use [release-it](https://github.com/release-it/release-it) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
+We use [Changesets](https://github.com/changesets/changesets) to manage versioning and releases.
 
-To publish new versions, run the following:
+If your pull request includes user-facing changes, add a changeset describing the change:
 
 ```sh
-yarn release
+yarn changeset
 ```
+
+When changesets are merged to `main`, the [Release workflow](.github/workflows/changeset.yaml) opens a "Version Packages" pull request. Merging that PR bumps the version, publishes to npm, and creates a GitHub release.
 
 ### Scripts
 
