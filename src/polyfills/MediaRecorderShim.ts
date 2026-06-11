@@ -9,7 +9,6 @@ function shimMediaRecorder() {
     // @ts-expect-error
     global.MediaRecorder = MediaRecorder
   }
-  MediaRecorder
 }
 
 shimMediaRecorder();
