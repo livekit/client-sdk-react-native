@@ -75,7 +75,7 @@
     "@eslint/js": "^9.35.0",
     "@livekit/changesets-changelog-github": "^0.0.4",
     "@livekit/react-native-webrtc": "^144.1.0",
-    "@react-native/babel-preset": "0.83.0",
+    "@react-native/babel-preset": "0.85.3",
     "@react-native/eslint-config": "0.83.0",
     "@types/fastestsmallesttextencoderdecoder": "^1.0.0",
     "@types/react": "^19.2.0",
