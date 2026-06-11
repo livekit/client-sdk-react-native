@@ -17,7 +17,7 @@
     "@supersami/rn-foreground-service": "^2.2.5",
     "livekit-client": "^2.19.0",
     "react": "19.1.1",
-    "react-native": "0.82.1",
+    "react-native": "0.85.3",
     "react-native-callkeep": "^4.3.14",
     "react-native-dialog": "^9.3.0",
     "react-native-safe-area-context": "^5.5.2",
