@@ -3662,7 +3662,7 @@ __metadata:
     web-streams-polyfill: "npm:^4.3.0"
     well-known-symbols: "npm:^4.1.0"
   peerDependencies:
-    "@livekit/react-native-webrtc": ^144.1.0
+    "@livekit/react-native-webrtc": ^144.1.1
     livekit-client: ^2.19.0
     react: "*"
     react-native: "*"
