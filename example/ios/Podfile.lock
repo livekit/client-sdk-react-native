@@ -5,10 +5,10 @@ PODS:
   - FBLazyVector (0.82.1)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - hermes-engine (0.82.0):
-    - hermes-engine/Pre-built (= 0.82.0)
-  - hermes-engine/Pre-built (0.82.0)
-  - livekit-react-native (2.11.0-beta.1):
+  - hermes-engine (0.82.1):
+    - hermes-engine/Pre-built (= 0.82.1)
+  - hermes-engine/Pre-built (0.82.1)
+  - livekit-react-native (2.11.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -39,7 +39,7 @@ PODS:
     - Yoga
   - livekit-react-native-webrtc (144.1.0):
     - React-Core
-    - WebRTC-SDK (= 144.7559.04)
+    - WebRTC-SDK (= 144.7559.10)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2530,7 +2530,7 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
-  - WebRTC-SDK (144.7559.04)
+  - WebRTC-SDK (144.7559.10)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2789,10 +2789,10 @@ SPEC CHECKSUMS:
   FBLazyVector: 0aa6183b9afe3c31fc65b5d1eeef1f3c19b63bfa
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  livekit-react-native: a051e6aa4c21e1b2429d136a3d544ae0ccfa08a6
-  livekit-react-native-webrtc: 6384bffff182166749ea42ccc419cee6785b0603
-  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
+  hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
+  livekit-react-native: b8a86fb1c57270437f8a010437c0570585a13625
+  livekit-react-native-webrtc: 9add5324b1c13f41577dffc01c2388d8e84d8348
+  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
   RCTTypeSafety: c693294e3993056955c3010eb1ebc574f1fcded6
@@ -2862,7 +2862,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 01e4301688a611936e3644746ffe3325d3181952
   RNScreens: 0bbf16c074ae6bb1058a7bf2d1ae017f4306797c
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  WebRTC-SDK: ac5965a3cc2c258973466e3b1739ab0308bab0d0
+  WebRTC-SDK: 1d7fc2ae91da6edd63e25f3882ff24f86a8d9d8b
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
 
 PODFILE CHECKSUM: a921a659e37cd7dfb12da519493e10c9f38400a1
