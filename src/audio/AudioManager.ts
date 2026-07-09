@@ -1,7 +1,10 @@
 import { Platform } from 'react-native';
 import AudioSession, { type AppleAudioConfiguration } from './AudioSession';
 import { log } from '../logger';
-import { audioDeviceModuleEvents } from '@livekit/react-native-webrtc';
+import {
+  audioDeviceModuleEvents,
+  AudioDeviceModule,
+} from '@livekit/react-native-webrtc';
 
 export type AudioEngineConfigurationState = {
   isPlayoutEnabled: boolean;
@@ -10,12 +13,32 @@ export type AudioEngineConfigurationState = {
 };
 
 const kAudioEngineErrorFailedToConfigureAudioSession = -4100;
-let activeAudioManagementSetup: object | undefined;
+let activeSetupToken: object | undefined;
 
 /**
  * @inline
  */
 type CleanupFn = () => void;
+
+// Wraps a path-specific teardown so each setup supersedes the previous one
+// cleanly: the returned cleanup tears down only while its setup is still the
+// active one, so it runs at most once and a stale cleanup from a superseded
+// setup is a no-op. A new setup defuses the previous cleanup by replacing the
+// token rather than by running its teardown, because each path's body already
+// replaces the other path's mechanism in an order that never leaves the hooks
+// unowned - running the old teardown first would reopen exactly that window.
+function finalizeAudioManagement(
+  token: object,
+  teardown: CleanupFn
+): CleanupFn {
+  return () => {
+    if (activeSetupToken !== token) {
+      return;
+    }
+    activeSetupToken = undefined;
+    teardown();
+  };
+}
 
 /**
  * Sets up automatic iOS audio session management based on audio engine state.
@@ -38,8 +61,48 @@ export function setupIOSAudioManagement(
     return () => {};
   }
 
+  // Supersede any previous setup (safe to call repeatedly, and to switch between
+  // default and custom). Claiming the token defuses the previous cleanup without
+  // running it. The path bodies below then replace the other path's mechanism in
+  // an order that keeps the hooks owned throughout the switch.
   const setupToken = {};
-  activeAudioManagementSetup = setupToken;
+  activeSetupToken = setupToken;
+
+  // Default path: configure the AVAudioSession natively so the engine's
+  // worker thread never round-trips to JS in willEnable/didDisable - that round
+  // trip is what can deadlock. The native observer applies `recording` while
+  // recording, `playout` while playout-only, and deactivates on full stop.
+  if (!onConfigureNativeAudio) {
+    AudioDeviceModule.setAutomaticAudioSessionConfiguration({
+      recording: getDefaultAppleAudioConfigurationForAudioState({
+        isPlayoutEnabled: true,
+        isRecordingEnabled: true,
+        preferSpeakerOutput,
+      }),
+      playout: getDefaultAppleAudioConfigurationForAudioState({
+        isPlayoutEnabled: true,
+        isRecordingEnabled: false,
+        preferSpeakerOutput,
+      }),
+      deactivateOnStop: true,
+    });
+
+    // Set native config first, then clear any handlers a prior custom setup left
+    // registered, so native (not a stale JS handler) owns the hooks. In the brief
+    // overlap a still-registered handler wins, so a racing callback is never dropped.
+    audioDeviceModuleEvents.setWillEnableEngineHandler(null);
+    audioDeviceModuleEvents.setDidDisableEngineHandler(null);
+
+    return finalizeAudioManagement(setupToken, () => {
+      AudioDeviceModule.setAutomaticAudioSessionConfiguration(null);
+    });
+  }
+
+  // Custom path: derive + apply the session config in JS via the engine handlers
+  // (still bounded by the native 2s wait). The native default is cleared *after*
+  // the handlers are registered (below) so the JS handler, which takes precedence,
+  // owns the hooks throughout the switch.
+
   let audioEngineState: AudioEngineConfigurationState = {
     isPlayoutEnabled: false,
     isRecordingEnabled: false,
@@ -106,14 +169,14 @@ export function setupIOSAudioManagement(
   audioDeviceModuleEvents.setWillEnableEngineHandler(handleEngineStateUpdate);
   audioDeviceModuleEvents.setDidDisableEngineHandler(handleEngineStateUpdate);
 
-  return () => {
-    if (activeAudioManagementSetup !== setupToken) {
-      return;
-    }
-    activeAudioManagementSetup = undefined;
+  // Handlers are live now, so clear the native default - the JS handler takes
+  // precedence, so there is never a window where neither path is active.
+  AudioDeviceModule.setAutomaticAudioSessionConfiguration(null);
+
+  return finalizeAudioManagement(setupToken, () => {
     audioDeviceModuleEvents.setWillEnableEngineHandler(null);
     audioDeviceModuleEvents.setDidDisableEngineHandler(null);
-  };
+  });
 }
 
 // Kept in sync with `getDefaultAppleAudioConfigurationForMode` in
