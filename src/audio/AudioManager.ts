@@ -47,9 +47,27 @@ function finalizeAudioManagement(
  * invokes it for you by default unless `autoConfigureAudioSession: false`
  * is passed.
  *
+ * By default the audio session is configured and activated natively as the
+ * audio engine changes state, with no JavaScript involvement per transition.
+ *
+ * When `onConfigureNativeAudio` is provided, it runs inside the audio
+ * engine's lifecycle callbacks while native code waits for the result, with
+ * the wait bounded at a few seconds per callback. The callback must return
+ * quickly and should only derive the configuration to apply. It must not
+ * call APIs that enter the WebRTC engine or a peer connection (for example
+ * `addTransceiver`, `getUserMedia`, or device enumeration): those can block
+ * on the same engine operation the callback is holding up, and the operation
+ * would stall until the native wait times out.
+ *
+ * Calling this again replaces the previous setup, including switching
+ * between the default and custom paths. Prefer switching while disconnected.
+ * A switch during an active call only takes full effect from the next audio
+ * engine transition onward.
+ *
  * @param preferSpeakerOutput - Whether to prefer speaker output. Defaults to true.
  * @param onConfigureNativeAudio - Optional custom callback for determining audio configuration.
- * @returns A cleanup function that removes the event handlers.
+ * @returns A cleanup function that removes the installed handlers or native
+ *   configuration. A cleanup function from a superseded setup is a no-op.
  */
 export function setupIOSAudioManagement(
   preferSpeakerOutput = true,
