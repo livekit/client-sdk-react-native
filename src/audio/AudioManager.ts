@@ -60,9 +60,10 @@ function finalizeAudioManagement(
  * would stall until the native wait times out.
  *
  * Calling this again replaces the previous setup, including switching
- * between the default and custom paths. Prefer switching while disconnected.
- * A switch during an active call only takes full effect from the next audio
- * engine transition onward.
+ * between the default and custom paths. Switch while disconnected: a switch
+ * during an active call is unsupported. In particular, switching away from a
+ * custom setup mid-call abandons the audio session activation that the custom
+ * handlers took, so the session can stay active after the call ends.
  *
  * @param preferSpeakerOutput - Whether to prefer speaker output. Defaults to true.
  * @param onConfigureNativeAudio - Optional custom callback for determining audio configuration.
