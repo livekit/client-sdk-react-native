@@ -24,11 +24,6 @@ public class AudioSinkRenderer: BaseAudioSinkRenderer {
         let length = Int(pcmBuffer.frameCapacity * pcmBuffer.format.streamDescription.pointee.mBytesPerFrame)
         let data = NSData(bytes: channels[0], length: length)
         let base64 = data.base64EncodedString()
-        NSLog("AUDIO DATA!!!!")
-        NSLog("\(data.length)")
-        NSLog(base64)
-        NSLog("\(base64.count)")
-        NSLog("\(length)")
         eventEmitter.sendEvent(withName: LKEvents.kEventAudioData, body: [
             "data": base64,
             "id": reactTag
