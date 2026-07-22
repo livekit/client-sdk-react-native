@@ -199,10 +199,10 @@ export type AppleAudioConfiguration = {
 
 /**
  * @deprecated Retained only for the legacy `useIOSAudioManagement` hook and
- *   `getDefaultAppleAudioConfigurationForMode`. New code should pass an
- *   `onConfigureNativeAudio` callback to `setupIOSAudioManagement`, which
- *   receives an `AudioEngineConfigurationState` (playout/recording/speaker
- *   booleans). That shape has no direct `AudioTrackState` equivalent.
+ *   `getDefaultAppleAudioConfigurationForMode`. New code should use
+ *   `setupIOSAudioManagement` (optionally with an `IOSAudioSessionPolicy`).
+ *   That API is driven by playout/recording engine state, which has no direct
+ *   `AudioTrackState` equivalent.
  */
 export type AudioTrackState =
   | 'none'

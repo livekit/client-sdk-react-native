@@ -353,19 +353,26 @@ If your app manages `AVAudioSession` directly, disable the automatic setup:
 registerGlobals({ autoConfigureAudioSession: false });
 ```
 
-For custom automatic behavior, disable the default setup and call
-`setupIOSAudioManagement` once during app startup:
+For custom categories/modes, disable the default setup and pass a static
+policy to `setupIOSAudioManagement` once during app startup:
 
 ```js
 import { registerGlobals, setupIOSAudioManagement } from '@livekit/react-native';
 
 registerGlobals({ autoConfigureAudioSession: false });
 
-const cleanup = setupIOSAudioManagement(true, (state) => ({
-  audioCategory: state.isRecordingEnabled ? 'playAndRecord' : 'playback',
-  audioCategoryOptions: ['mixWithOthers'],
-  audioMode: state.preferSpeakerOutput ? 'videoChat' : 'voiceChat',
-}));
+const cleanup = setupIOSAudioManagement(true, {
+  recording: {
+    audioCategory: 'playAndRecord',
+    audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+    audioMode: 'videoChat',
+  },
+  playout: {
+    audioCategory: 'playback',
+    audioCategoryOptions: ['mixWithOthers'],
+    audioMode: 'spokenAudio',
+  },
+});
 ```
 
 The older `useIOSAudioManagement(room, ...)` hook is still exported for

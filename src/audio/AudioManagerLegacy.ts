@@ -20,12 +20,16 @@ import {
  *   The `room` parameter is ignored — audio session is now managed
  *   via audio engine events, not room track counts.
  *
+ *   The `onConfigureNativeAudio` callback is also deprecated and unsafe: it
+ *   runs under a bounded native wait on the audio worker thread. Prefer the
+ *   default native path, or pass an `IOSAudioSessionPolicy` to
+ *   `setupIOSAudioManagement`.
+ *
  *   Note: the `trackState` passed to `onConfigureNativeAudio` is now
  *   derived from the audio engine's playout/recording state, not from
  *   publication counts. Edge cases can differ. For example, a
  *   published-but-muted local audio track that previously yielded
- *   `localOnly` may now appear as `remoteOnly` or `none`. Callers with
- *   nuanced per-state logic should migrate to `setupIOSAudioManagement`.
+ *   `localOnly` may now appear as `remoteOnly` or `none`.
  */
 export function useIOSAudioManagement(
   _room: Room,
@@ -43,19 +47,20 @@ export function useIOSAudioManagement(
   callbackRef.current = onConfigureNativeAudio;
 
   useEffect(() => {
+    // Without a custom callback, use the safe native default path.
+    if (!callbackRef.current) {
+      return setupIOSAudioManagement(preferSpeakerOutput);
+    }
+
     const wrapped = (
       state: AudioEngineConfigurationState
     ): AppleAudioConfiguration => {
-      const cb = callbackRef.current;
+      const cb = callbackRef.current!;
       const trackState = engineStateToTrackState(state);
-      return cb
-        ? cb(trackState, state.preferSpeakerOutput)
-        : getDefaultAppleAudioConfigurationForMode(
-            trackState,
-            state.preferSpeakerOutput
-          );
+      return cb(trackState, state.preferSpeakerOutput);
     };
 
+    // setupIOSAudioManagement warns that the callback form is deprecated.
     return setupIOSAudioManagement(preferSpeakerOutput, wrapped);
   }, [preferSpeakerOutput]);
 }
