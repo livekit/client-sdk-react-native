@@ -1,5 +1,13 @@
 # @livekit/react-native
 
+## 2.11.1
+
+### Patch Changes
+
+- Update @livekit/react-native-webrtc to 144.1.1 - [#423](https://github.com/livekit/client-sdk-react-native/pull/423) ([@davidliu](https://github.com/davidliu))
+
+  144.1.0 had an issue which could cause deadlocks when the audio state had changed.
+
 ## 2.11.0
 
 ### Minor Changes

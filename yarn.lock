@@ -3624,6 +3624,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@livekit/react-native-webrtc@npm:^144.1.1":
+  version: 144.1.1
+  resolution: "@livekit/react-native-webrtc@npm:144.1.1"
+  dependencies:
+    base64-js: "npm:1.5.1"
+    debug: "npm:4.3.4"
+  peerDependencies:
+    react-native: ">=0.60.0"
+  checksum: 10/3dda38db0fb76959236be98ea9fad6823b47e23a5fe618fcf06f8e248956e35480b308a6c20ec59c53cadc8dc95ed20ce1d3f0a1b378771db1dc053119ac7f8d
+  languageName: node
+  linkType: hard
+
 "@livekit/react-native@workspace:.":
   version: 0.0.0-use.local
   resolution: "@livekit/react-native@workspace:."
@@ -3662,7 +3674,7 @@ __metadata:
     web-streams-polyfill: "npm:^4.3.0"
     well-known-symbols: "npm:^4.1.0"
   peerDependencies:
-    "@livekit/react-native-webrtc": ^144.1.0
+    "@livekit/react-native-webrtc": ^144.1.1
     livekit-client: ^2.19.0
     react: "*"
     react-native: "*"
@@ -9538,7 +9550,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
-    "@livekit/react-native-webrtc": "npm:^144.1.0"
+    "@livekit/react-native-webrtc": "npm:^144.1.1"
     "@react-native-async-storage/async-storage": "npm:^1.17.10"
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"
