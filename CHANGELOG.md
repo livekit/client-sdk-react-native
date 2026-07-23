@@ -1,5 +1,15 @@
 # @livekit/react-native
 
+## 2.12.0
+
+### Minor Changes
+
+- Configure the iOS audio session natively in the default path, removing the audio engine's JS round trip and its deadlock window. Deprecate the unsafe `onConfigureNativeAudio` callback form of `setupIOSAudioManagement`. Developers can instead pass in a static `IOSAudioSessionPolicy`. - [#434](https://github.com/livekit/client-sdk-react-native/pull/434) ([@hiroshihorie](https://github.com/hiroshihorie))
+
+### Patch Changes
+
+- Update @livekit/react-native-webrtc to 144.1.2 - [#434](https://github.com/livekit/client-sdk-react-native/pull/434) ([@hiroshihorie](https://github.com/hiroshihorie))
+
 ## 2.11.1
 
 ### Patch Changes
