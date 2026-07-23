@@ -46,23 +46,37 @@ export function useIOSAudioManagement(
   const callbackRef = useRef(onConfigureNativeAudio);
   callbackRef.current = onConfigureNativeAudio;
 
+  // React to callback *presence*, not identity: `enabled ? cb : undefined`
+  // must be able to flip between the native default path and the JS
+  // callback path. Mid-call path switches remain unsupported (see
+  // setupIOSAudioManagement); this only restores mount/post-mount selection.
+  const hasConfigureCallback = onConfigureNativeAudio != null;
+
   useEffect(() => {
     // Without a custom callback, use the safe native default path.
-    if (!callbackRef.current) {
+    if (!hasConfigureCallback) {
       return setupIOSAudioManagement(preferSpeakerOutput);
     }
 
     const wrapped = (
       state: AudioEngineConfigurationState
     ): AppleAudioConfiguration => {
-      const cb = callbackRef.current!;
       const trackState = engineStateToTrackState(state);
-      return cb(trackState, state.preferSpeakerOutput);
+      // Read the ref at call time and fall back if the caller cleared the
+      // callback between renders while this custom path is still armed
+      // (e.g. before the presence-driven effect re-runs).
+      const cb = callbackRef.current;
+      return cb
+        ? cb(trackState, state.preferSpeakerOutput)
+        : getDefaultAppleAudioConfigurationForMode(
+            trackState,
+            state.preferSpeakerOutput
+          );
     };
 
     // setupIOSAudioManagement warns that the callback form is deprecated.
     return setupIOSAudioManagement(preferSpeakerOutput, wrapped);
-  }, [preferSpeakerOutput]);
+  }, [preferSpeakerOutput, hasConfigureCallback]);
 }
 
 /**
