@@ -1952,15 +1952,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/react-native-webrtc@npm:^144.1.1":
-  version: 144.1.1
-  resolution: "@livekit/react-native-webrtc@npm:144.1.1"
+"@livekit/react-native-webrtc@npm:^144.1.2":
+  version: 144.1.2
+  resolution: "@livekit/react-native-webrtc@npm:144.1.2"
   dependencies:
     base64-js: "npm:1.5.1"
     debug: "npm:4.3.4"
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 10/3dda38db0fb76959236be98ea9fad6823b47e23a5fe618fcf06f8e248956e35480b308a6c20ec59c53cadc8dc95ed20ce1d3f0a1b378771db1dc053119ac7f8d
+  checksum: 10/ed4a3594c060404c89020568f0602ad48c51d9738b5479ef9fdecd330ba49349b98afa5b4db7c9faea394cc62edea993a4e8b39cde1181e79966a1c1da65a97a
   languageName: node
   linkType: hard
 
@@ -3550,7 +3550,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
     "@livekit/react-native": "npm:*"
-    "@livekit/react-native-webrtc": "npm:^144.1.1"
+    "@livekit/react-native-webrtc": "npm:^144.1.2"
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"
     "@react-native-community/cli-platform-ios": "npm:20.0.0"

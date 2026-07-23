@@ -135,7 +135,11 @@ export function setupIOSAudioManagement(
     );
   }
 
-  return setupNativePolicyPath(setupToken, preferSpeakerOutput, policyOrCallback);
+  return setupNativePolicyPath(
+    setupToken,
+    preferSpeakerOutput,
+    policyOrCallback
+  );
 }
 
 function setupNativePolicyPath(
