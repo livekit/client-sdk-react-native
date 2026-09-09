@@ -2617,9 +2617,8 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/livekit/podspecs.git:
-    - LiveKitWebRTC
   trunk:
+    - LiveKitWebRTC
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2793,8 +2792,8 @@ SPEC CHECKSUMS:
   hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
   livekit-react-native: 27001a5d9454cc8d27894317425aa511801154e2
   livekit-react-native-webrtc: 8ac4a8c004158ec95db235b6c6a818dee66df0a4
-  LiveKitWebRTC: c055d3954f3c3f17f0e327f72b8e91a6c3ebcc47
-  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
+  LiveKitWebRTC: 6abc86e190722e223fc870284547b6f229288c46
+  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
   RCTTypeSafety: c693294e3993056955c3010eb1ebc574f1fcded6
@@ -2866,6 +2865,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
 
-PODFILE CHECKSUM: 841abb8b2992cf16bb758bde8cf7f8cdbfb22695
+PODFILE CHECKSUM: a921a659e37cd7dfb12da519493e10c9f38400a1
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.17.0
