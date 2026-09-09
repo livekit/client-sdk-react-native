@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.82.1):
     - hermes-engine/Pre-built (= 0.82.1)
   - hermes-engine/Pre-built (0.82.1)
-  - livekit-react-native (2.11.0):
+  - livekit-react-native (2.12.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -38,8 +38,9 @@ PODS:
     - SocketRocket
     - Yoga
   - livekit-react-native-webrtc (144.1.2):
+    - LiveKitWebRTC (= 144.7559.15)
     - React-Core
-    - WebRTC-SDK (= 144.7559.10)
+  - LiveKitWebRTC (144.7559.15)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2530,7 +2531,6 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
-  - WebRTC-SDK (144.7559.10)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2617,9 +2617,10 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
+  https://github.com/livekit/podspecs.git:
+    - LiveKitWebRTC
   trunk:
     - SocketRocket
-    - WebRTC-SDK
 
 EXTERNAL SOURCES:
   boost:
@@ -2790,8 +2791,9 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
-  livekit-react-native: b8a86fb1c57270437f8a010437c0570585a13625
-  livekit-react-native-webrtc: 5ff3e8d229a3fcd34f99fe4cb1c2c93f92017b0c
+  livekit-react-native: 27001a5d9454cc8d27894317425aa511801154e2
+  livekit-react-native-webrtc: 8ac4a8c004158ec95db235b6c6a818dee66df0a4
+  LiveKitWebRTC: c055d3954f3c3f17f0e327f72b8e91a6c3ebcc47
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
@@ -2862,9 +2864,8 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 01e4301688a611936e3644746ffe3325d3181952
   RNScreens: 0bbf16c074ae6bb1058a7bf2d1ae017f4306797c
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  WebRTC-SDK: 1d7fc2ae91da6edd63e25f3882ff24f86a8d9d8b
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
 
-PODFILE CHECKSUM: a921a659e37cd7dfb12da519493e10c9f38400a1
+PODFILE CHECKSUM: 841abb8b2992cf16bb758bde8cf7f8cdbfb22695
 
 COCOAPODS: 1.16.2

@@ -25,7 +25,7 @@ public class VolumeAudioRenderer: BaseVolumeAudioRenderer {
     }
 }
 
-public class BaseVolumeAudioRenderer: NSObject, RTCAudioRenderer {
+public class BaseVolumeAudioRenderer: NSObject, LKRTCAudioRenderer {
     private let frameInterval: Int
     private var skippedFrames = 0
     public init(intervalMs: Double = 30) {

@@ -37,6 +37,16 @@ This library depends on `@livekit/react-native-webrtc`, which has additional ins
 - [iOS Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
 - [Android Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
 
+On iOS, the underlying `LiveKitWebRTC` pod is published from
+[livekit/podspecs](https://github.com/livekit/podspecs) rather than the CocoaPods trunk, so add both
+sources at the top of your `Podfile`. Both lines are required: declaring any source disables the
+implicit trunk default, and the rest of your pods would no longer resolve.
+
+```ruby
+source 'https://cdn.cocoapods.org/'
+source 'https://github.com/livekit/podspecs.git'
+```
+
 ---
 
 Once the `@livekit/react-native-webrtc` dependency is installed, one last step is needed to finish the installation:

@@ -14,7 +14,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _audioProcessingModule = [[RTCDefaultAudioProcessingModule alloc] init];
+        _audioProcessingModule = [[LKRTCDefaultAudioProcessingModule alloc] init];
         _capturePostProcessingAdapter = [[LKAudioProcessingAdapter alloc] init];
         _renderPreProcessingAdapter = [[LKAudioProcessingAdapter alloc] init];
         _audioProcessingModule.capturePostProcessingDelegate = _capturePostProcessingAdapter;
@@ -23,19 +23,19 @@
     return self;
 }
 
-- (void)addLocalAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer {
+- (void)addLocalAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer {
   [_capturePostProcessingAdapter addAudioRenderer:renderer];
 }
 
-- (void)removeLocalAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer {
+- (void)removeLocalAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer {
   [_capturePostProcessingAdapter removeAudioRenderer:renderer];
 }
 
-- (void)addRemoteAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer {
+- (void)addRemoteAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer {
   [_renderPreProcessingAdapter addAudioRenderer:renderer];
 }
 
-- (void)removeRemoteAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer {
+- (void)removeRemoteAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer {
   [_renderPreProcessingAdapter removeAudioRenderer:renderer];
 }
 
