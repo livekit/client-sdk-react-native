@@ -79,7 +79,7 @@
     "@react-native/eslint-config": "0.83.0",
     "@types/fastestsmallesttextencoderdecoder": "^1.0.0",
     "@types/react": "^19.2.0",
-    "eslint": "^9.35.0",
+    "eslint": "^10.4.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.4.2",
