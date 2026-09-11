@@ -1,6 +1,6 @@
 package com.livekit.reactnative.audio.processing
 
-import org.webrtc.ExternalAudioProcessingFactory
+import livekit.org.webrtc.ExternalAudioProcessingFactory
 import java.nio.ByteBuffer
 
 /**

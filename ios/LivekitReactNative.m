@@ -6,8 +6,8 @@
 @implementation LivekitReactNative
 
 +(void)setup {
-    RTCDefaultVideoEncoderFactory *videoEncoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
-    RTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = [[RTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
+    LKRTCDefaultVideoEncoderFactory *videoEncoderFactory = [[LKRTCDefaultVideoEncoderFactory alloc] init];
+    LKRTCVideoEncoderFactorySimulcast *simulcastVideoEncoderFactory = [[LKRTCVideoEncoderFactorySimulcast alloc] initWithPrimary:videoEncoderFactory fallback:videoEncoderFactory];
     WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
     options.videoEncoderFactory = simulcastVideoEncoderFactory;
     options.audioProcessingModule = LKAudioProcessingManager.sharedInstance.audioProcessingModule;

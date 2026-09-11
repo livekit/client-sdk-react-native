@@ -85,6 +85,8 @@ export function useIOSAudioManagement(
  * Kept in sync with `getDefaultAppleAudioConfigurationForAudioState` in
  * `./AudioManager.ts`. If you change the defaults in one place, update the
  * other so the legacy path and the new path produce the same configuration.
+ * `AudioTrackState` carries no voice-processing state, so this matches the
+ * voice-processing-enabled results of that function only.
  */
 export function getDefaultAppleAudioConfigurationForMode(
   mode: AudioTrackState,
@@ -99,7 +101,20 @@ export function getDefaultAppleAudioConfigurationForMode(
   } else if (mode === 'localAndRemote' || mode === 'localOnly') {
     return {
       audioCategory: 'playAndRecord',
-      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+      audioCategoryOptions: preferSpeakerOutput
+        ? [
+            'mixWithOthers',
+            'allowBluetooth',
+            'allowBluetoothA2DP',
+            'allowAirPlay',
+            'defaultToSpeaker',
+          ]
+        : [
+            'mixWithOthers',
+            'allowBluetooth',
+            'allowBluetoothA2DP',
+            'allowAirPlay',
+          ],
       audioMode: preferSpeakerOutput ? 'videoChat' : 'voiceChat',
     };
   }

@@ -4,7 +4,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.livekit.reactnative.audio.events.Events
-import org.webrtc.AudioTrackSink
+import livekit.org.webrtc.AudioTrackSink
 import java.nio.ByteBuffer
 import java.util.Arrays
 import kotlin.io.encoding.Base64
