@@ -1,5 +1,65 @@
 # @livekit/react-native
 
+## 3.0.0
+
+### Major Changes
+
+- Move to the LiveKit prefixed WebRTC builds: `io.github.webrtc-sdk:android-prefixed` on Android and the `LiveKitWebRTC` pod on iOS. This prevents collisions against any other WebRTC implementations. - [#455](https://github.com/livekit/client-sdk-react-native/pull/455) ([@davidliu](https://github.com/davidliu))
+
+  Apps that only use the JavaScript API need no changes.
+
+  Native integrations must migrate to the prefixed symbols:
+  - Android: `org.webrtc.*` becomes `livekit.org.webrtc.*`.
+    Custom `-keep class org.webrtc.**` ProGuard rules must be updated to `livekit.org.webrtc.**`.
+  - iOS: types gain an `LK` prefix (`RTCAudioRenderer` becomes `LKRTCAudioRenderer`, `RTCAudioBuffer` becomes `LKRTCAudioBuffer`, and so on).
+
+### Minor Changes
+
+- iOS: align the default `playAndRecord` presets with the LiveKit Swift SDK. - [#455](https://github.com/livekit/client-sdk-react-native/pull/455) ([@davidliu](https://github.com/davidliu))
+
+  The duplex (recording) presets now request `mixWithOthers`, `allowBluetooth`,
+  `allowBluetoothA2DP` and `allowAirPlay`, matching `playAndRecordOptions` in the
+  Swift SDK. Previously only `allowBluetooth` and `mixWithOthers` were requested,
+  so A2DP output devices and AirPlay routes were unavailable during a call on this
+  platform but available on others.
+
+  When `preferSpeakerOutput` is set, `defaultToSpeaker` is now requested as well.
+  The `videoChat` mode implies a speaker route, but iOS may rewrite the mode when
+  Voice Processing I/O is instantiated - the Swift SDK observed it switching to
+  `voiceChat`, which routes to the receiver. Requesting the option explicitly
+  keeps the speaker route across that rewrite.
+
+  This affects the defaults used by `setupIOSAudioManagement` and the deprecated
+  `getDefaultAppleAudioConfigurationForMode`. A custom `IOSAudioSessionPolicy` or
+  `AppleAudioConfiguration` is unaffected - those supply their own options.
+
+- iOS: pick the audio session mode based on Apple Voice Processing I/O state. - [#455](https://github.com/livekit/client-sdk-react-native/pull/455) ([@davidliu](https://github.com/davidliu))
+
+  iOS applies a reduced, call-tuned speaker gain while capture is active under the
+  `voiceChat`/`videoChat` session modes. Apple Voice Processing I/O compensates
+  with its own loudness stage, so with VPIO off remote audio played back
+  noticeably quieter.
+
+  `LiveKitWebRTC` 144.7559.15 reports the resolved VPIO state to the audio device
+  module's `willEnableEngine` hook. The default recording configuration now uses
+  that: with VPIO running it keeps `voiceChat`/`videoChat` as before, and with VPIO
+  off (for example after `AudioDeviceModule.setVoiceProcessingEnabled(false)`) it
+  switches to the `default` mode, which keeps media gain. That mode routes to the
+  receiver, so `preferSpeakerOutput` is expressed through the `defaultToSpeaker`
+  category option instead of the implicit routing the chat modes provide. This
+  matches what the LiveKit Swift SDK already does.
+
+  `IOSAudioSessionPolicy` gains an optional `recordingWithoutVoiceProcessing`
+  configuration for the VPIO-off case. Policies that omit it keep using their
+  `recording` configuration for both, so existing setups are unaffected.
+  `AudioEngineConfigurationState`, passed to the deprecated
+  `setupIOSAudioManagement` callback form, gains a matching
+  `isVoiceProcessingEnabled` field.
+
+  Requires `@livekit/react-native-webrtc` with the five-argument `willEnableEngine`
+  delegate method. Older versions crash with an unrecognized selector when the
+  audio engine first enables.
+
 ## 2.12.0
 
 ### Minor Changes
