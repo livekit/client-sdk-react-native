@@ -26,13 +26,23 @@ The app pings on mount and on tap. What lands in the collector, all with
 
 ```
 lk.device.app_state.changed   lk.device.app_state=foreground
-lk.device.thermal.changed     lk.device.thermal.state=nominal
-lk.device.low_power.changed   lk.device.low_power.enabled=false
 lk.ping                       lk.ping.seq=1
 ```
 
-`lk.device.memory.changed` is the one leg left untested: the simulator gives no way to drive
-`DispatchSource`'s memory-pressure levels, and the handler is the same shape as the other two.
+Thermal state, low power mode and memory pressure are **not** in that list any more, and that is
+the design: React Native follows the phones, so those go to the Rust core natively
+(`LKDeviceState.swift`, `DeviceStateMonitor.kt`) and never pass through JavaScript. Until the core
+is bound here, the monitors have no consumer — they were verified reaching the collector through a
+temporary JS bridge (`thermal=nominal`, `lowPower=false`) before that bridge was removed. Memory
+pressure was never exercised: the simulator gives no way to drive `DispatchSource`'s levels.
+
+## Where this is heading
+
+`livekit-client` now has a seam (`src/telemetry/backend.ts`) that is SPEC's typed surface —
+the same boundary Swift, Kotlin and Dart cross into `livekit-telemetry`. This package will
+implement it over UniFFI bindings to that crate, so a React Native app gets the same windowing,
+the same upload policy and the same write-ahead file cache as an iOS or Android app, while reusing
+`livekit-client`'s instrumentation unchanged. `Telemetry.setBackend` is where it plugs in.
 
 ## What this found
 

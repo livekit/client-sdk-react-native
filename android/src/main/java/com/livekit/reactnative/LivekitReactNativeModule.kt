@@ -32,7 +32,11 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     val audioSinkManager = AudioSinkManager(reactContext)
     val audioManager = AudioSwitchManager(reactContext.applicationContext)
 
-    /** Telemetry asks for this once, at `registerGlobals`; nothing is observed until it does. */
+    /**
+     * Thermal state, power save mode and memory pressure, for SPEC's cadence policy. These reach
+     * the Rust core, never JavaScript: `livekit-client` has no business knowing a phone gets hot.
+     * Called once by whoever hosts the core; nothing is observed until it is.
+     */
     private val deviceStateMonitor = DeviceStateMonitor(reactContext.applicationContext) { change ->
         val payload = Arguments.createMap()
         change.forEach { (key, value) ->

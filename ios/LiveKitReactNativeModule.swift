@@ -259,9 +259,12 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         return nil
     }
 
-    /// Telemetry asks for this once, at `registerGlobals`; nothing is observed until it does.
+    /// Thermal state, low power mode and memory pressure, for SPEC's cadence policy. These reach
+    /// the Rust core, never JavaScript: `livekit-client` has no business knowing a phone gets hot.
+    /// Called once by whoever hosts the core; nothing is observed until it is.
+    ///
     /// The first state comes back on the promise rather than as an event — an event sent from
-    /// inside this call would race the listener JS is registering around it, and be dropped.
+    /// inside this call would race the listener a caller registers around it, and be dropped.
     @objc(startDeviceStateUpdates:withRejecter:)
     public func startDeviceStateUpdates(
         _ resolve: @escaping RCTPromiseResolveBlock,
