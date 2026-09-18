@@ -171,6 +171,7 @@ export * from './audio/AudioManager';
 export * from './audio/AudioManagerLegacy';
 export * from './audio/MediaRecorder';
 export { registerTelemetry } from './telemetry';
+export { nativeBatchStore } from './telemetryStorage';
 export { Telemetry } from 'livekit-client';
 
 export {

@@ -15,6 +15,11 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
     private var deviceState: LKDeviceState? = nil
 
+    /// SPEC's cache budget: 4 MiB across at most 512 batches, nothing older than a day.
+    private lazy var batchStore = LKBatchStore(maxBytes: 4 * 1024 * 1024,
+                                               maxBatches: 512,
+                                               maxAgeSeconds: 24 * 60 * 60)
+
     // This cannot be initialized in init as self.bridge is given afterwards.
     private var _audioRendererManager: AudioRendererManager? = nil
     public var audioRendererManager: AudioRendererManager {
@@ -276,6 +281,38 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             }
         }
         resolve(deviceState?.snapshot() ?? [:])
+    }
+
+    /// The write-ahead cache `livekit-client`'s pipeline stores batches in. Synchronous, because
+    /// its queue path has no await in it; base64 because the bridge does not carry bytes.
+    @objc(batchStorePut:body:)
+    public func batchStorePut(_ id: String, body: String) -> [String] {
+        guard let data = Data(base64Encoded: body) else { return [] }
+        return batchStore.put(id: id, body: data)
+    }
+
+    @objc(batchStorePending)
+    public func batchStorePending() -> [String] {
+        batchStore.pending()
+    }
+
+    @objc(batchStoreRead:)
+    public func batchStoreRead(_ id: String) -> String? {
+        batchStore.read(id: id)?.base64EncodedString()
+    }
+
+    // A blocking synchronous method must return an *object*: the TurboModule interop retains
+    // whatever it gets back, so a `Bool` return is read as a pointer and segfaults the app.
+    @objc(batchStoreRemove:)
+    public func batchStoreRemove(_ id: String) -> Any? {
+        batchStore.remove(id: id)
+        return nil
+    }
+
+    @objc(batchStoreClear)
+    public func batchStoreClear() -> Any? {
+        batchStore.clear()
+        return nil
     }
 
     override public func supportedEvents() -> [String]! {

@@ -36,13 +36,21 @@ is bound here, the monitors have no consumer — they were verified reaching the
 temporary JS bridge (`thermal=nominal`, `lowPower=false`) before that bridge was removed. Memory
 pressure was never exercised: the simulator gives no way to drive `DispatchSource`'s levels.
 
+## The file cache
+
+`src/telemetryStorage.ts` gives `livekit-client`'s pipeline a `TelemetryStorage` backed by
+`LKBatchStore.swift` / `BatchStore.kt` — a directory of batch files mirroring the Rust core's
+`FileCache`. Proved on the simulator: with the collector down the app cached 36 batches to
+`Library/Caches/livekit-telemetry`, was killed from `simctl`, and on relaunch with the collector
+back delivered all 45 records, including the 35 per-tick self-reports that reconstruct the offline
+period after the fact.
+
 ## Where this is heading
 
-`livekit-client` now has a seam (`src/telemetry/backend.ts`) that is SPEC's typed surface —
-the same boundary Swift, Kotlin and Dart cross into `livekit-telemetry`. This package will
-implement it over UniFFI bindings to that crate, so a React Native app gets the same windowing,
-the same upload policy and the same write-ahead file cache as an iOS or Android app, while reusing
-`livekit-client`'s instrumentation unchanged. `Telemetry.setBackend` is where it plugs in.
+The caching semantics of the native SDKs are here now, without Rust. If the bigger question ever
+resolves the other way — React Native binding the core through UniFFI for the whole pipeline —
+`livekit-client` already has the seam for it (`src/telemetry/backend.ts`, SPEC's typed surface),
+and `Telemetry.setBackend` is where it would plug in. Nothing done here forecloses that.
 
 ## What this found
 

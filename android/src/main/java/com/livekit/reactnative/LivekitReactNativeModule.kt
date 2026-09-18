@@ -1,6 +1,7 @@
 package com.livekit.reactnative
 
 import android.media.AudioAttributes
+import android.util.Base64
 import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
@@ -8,6 +9,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.livekit.reactnative.audio.AudioDeviceKind
 import com.livekit.reactnative.audio.AudioManagerUtils
@@ -53,6 +55,47 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
      * The first state comes back on the promise rather than as an event — an event sent from inside
      * this call would race the listener JS is registering around it, and be dropped.
      */
+    /**
+     * The write-ahead cache `livekit-client`'s pipeline stores batches in. Synchronous, because its
+     * queue path has no await in it; base64 because the bridge does not carry bytes.
+     *
+     * SPEC's budget: 4 MiB across at most 512 batches, nothing older than a day.
+     */
+    private val batchStore by lazy {
+        BatchStore(reactContext.applicationContext, 4L * 1024 * 1024, 512, 24L * 60 * 60 * 1000)
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun batchStorePut(id: String, body: String): WritableArray {
+        val evicted = batchStore.put(id, Base64.decode(body, Base64.NO_WRAP))
+        val out = Arguments.createArray()
+        evicted.forEach { out.pushString(it) }
+        return out
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun batchStorePending(): WritableArray {
+        val out = Arguments.createArray()
+        batchStore.pending().forEach { out.pushString(it) }
+        return out
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun batchStoreRead(id: String): String? =
+        batchStore.read(id)?.let { Base64.encodeToString(it, Base64.NO_WRAP) }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun batchStoreRemove(id: String): Boolean {
+        batchStore.remove(id)
+        return true
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun batchStoreClear(): Boolean {
+        batchStore.clear()
+        return true
+    }
+
     @ReactMethod
     fun startDeviceStateUpdates(promise: Promise) {
         deviceStateMonitor.start()
