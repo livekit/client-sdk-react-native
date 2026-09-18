@@ -5,7 +5,7 @@
  *
  * The iOS simulator shares the host's network stack, so 127.0.0.1 is the Mac.
  */
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Button, SafeAreaView, ScrollView, Text} from 'react-native';
 import {ping} from './src/telemetry';
 
@@ -31,6 +31,11 @@ export default function App() {
     },
     [say],
   );
+
+  // Ping on mount as well as on tap, so a headless `simctl launch` proves the path on its own.
+  useEffect(() => {
+    send('protobuf').then(() => send('json'));
+  }, [send]);
 
   return (
     <SafeAreaView>
