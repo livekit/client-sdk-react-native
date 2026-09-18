@@ -31,6 +31,41 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
 
     val audioSinkManager = AudioSinkManager(reactContext)
     val audioManager = AudioSwitchManager(reactContext.applicationContext)
+
+    /** Telemetry asks for this once, at `registerGlobals`; nothing is observed until it does. */
+    private val deviceStateMonitor = DeviceStateMonitor(reactContext.applicationContext) { change ->
+        val payload = Arguments.createMap()
+        change.forEach { (key, value) ->
+            when (value) {
+                is Boolean -> payload.putBoolean(key, value)
+                else -> payload.putString(key, value.toString())
+            }
+        }
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit(DeviceStateMonitor.EVENT_NAME, payload)
+    }
+
+    /**
+     * The first state comes back on the promise rather than as an event — an event sent from inside
+     * this call would race the listener JS is registering around it, and be dropped.
+     */
+    @ReactMethod
+    fun startDeviceStateUpdates(promise: Promise) {
+        deviceStateMonitor.start()
+        val snapshot = Arguments.createMap()
+        deviceStateMonitor.snapshot().forEach { (key, value) ->
+            when (value) {
+                is Boolean -> snapshot.putBoolean(key, value)
+                else -> snapshot.putString(key, value.toString())
+            }
+        }
+        promise.resolve(snapshot)
+    }
+
+    override fun invalidate() {
+        deviceStateMonitor.stop()
+        super.invalidate()
+    }
     override fun getName(): String {
         return "LivekitReactNativeModule"
     }

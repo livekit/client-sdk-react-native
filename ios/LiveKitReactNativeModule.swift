@@ -7,10 +7,13 @@ struct LKEvents {
     static let kEventVolumeProcessed = "LK_VOLUME_PROCESSED";
     static let kEventMultibandProcessed = "LK_MULTIBAND_PROCESSED";
     static let kEventAudioData = "LK_AUDIO_DATA";
+    static let kEventDeviceState = LKDeviceState.eventName;
 }
 
 @objc(LivekitReactNativeModule)
 public class LivekitReactNativeModule: RCTEventEmitter {
+
+    private var deviceState: LKDeviceState? = nil
 
     // This cannot be initialized in init as self.bridge is given afterwards.
     private var _audioRendererManager: AudioRendererManager? = nil
@@ -256,11 +259,28 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         return nil
     }
 
+    /// Telemetry asks for this once, at `registerGlobals`; nothing is observed until it does.
+    /// The first state comes back on the promise rather than as an event — an event sent from
+    /// inside this call would race the listener JS is registering around it, and be dropped.
+    @objc(startDeviceStateUpdates:withRejecter:)
+    public func startDeviceStateUpdates(
+        _ resolve: @escaping RCTPromiseResolveBlock,
+        withRejecter reject: @escaping RCTPromiseRejectBlock
+    ) {
+        if deviceState == nil {
+            deviceState = LKDeviceState { [weak self] change in
+                self?.sendEvent(withName: LKEvents.kEventDeviceState, body: change)
+            }
+        }
+        resolve(deviceState?.snapshot() ?? [:])
+    }
+
     override public func supportedEvents() -> [String]! {
         return [
             LKEvents.kEventVolumeProcessed,
             LKEvents.kEventMultibandProcessed,
             LKEvents.kEventAudioData,
+            LKEvents.kEventDeviceState,
         ]
     }
 }

@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@livekit/react-native": "file:..",
+    "@livekit/react-native-webrtc": "^144.2.0",
     "@opentelemetry/otlp-transformer": "^0.222.0",
     "@react-native/new-app-screen": "0.82.1",
     "livekit-client": "file:../../client-sdk-js-telemetry",

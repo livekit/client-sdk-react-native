@@ -7,7 +7,7 @@
  * `otelcol-contrib --config ../../client-sdk-js-telemetry/src/telemetry/otelcol-web.yaml`.
  */
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, SafeAreaView, ScrollView, Text} from 'react-native';
+import {Button, NativeModules, SafeAreaView, ScrollView, Text} from 'react-native';
 import {Telemetry} from 'livekit-client';
 import {registerTelemetry} from '../src/telemetry';
 
@@ -17,12 +17,35 @@ export default function App() {
   const [log, setLog] = useState<string[]>([]);
   const say = useCallback((line: string) => setLog(prev => [...prev, line]), []);
 
+  // The PoC has no debugger attached, so warnings have to be visible on screen.
+  useEffect(() => {
+    const warn = console.warn;
+    console.warn = (...args: unknown[]) => {
+      say(`warn: ${args.map(String).join(' ')}`.slice(0, 200));
+      warn(...args);
+    };
+    return () => {
+      console.warn = warn;
+    };
+  }, [say]);
+
   const send = useCallback(
     async (encoding: 'protobuf' | 'json') => {
       try {
-        // registerGlobals() does this in a real app; the seam is what is under test here.
-        registerTelemetry();
+        // A real app gets the destination from its first Cloud connect; here it is a local
+        // collector, named before registerGlobals' seam reports the device it is running on.
         Telemetry.configure({endpoint, encoding, flushInterval: 1});
+        registerTelemetry();
+        const native = NativeModules.LivekitReactNativeModule;
+        say(
+          `native module: ${
+            native
+              ? Object.keys(native)
+                  .filter(k => k.toLowerCase().includes('device'))
+                  .join(', ') || 'linked, no device methods'
+              : 'missing'
+          }`,
+        );
         await Telemetry.ping(encoding === 'json' ? 2 : 1);
         say(`${encoding}: ${Telemetry.diagnostics()}`);
       } catch (error) {

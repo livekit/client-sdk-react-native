@@ -5,8 +5,9 @@ telemetry inside it (`src/telemetry/` there, designed in its `TELEMETRY.md`), pl
 `src/telemetry.ts` seam, which names the platform and flushes when the app leaves the foreground.
 
 A bare RN 0.82.1 app rather than the repo's `example/`: what is under test is whether the module
-runs on Hermes and reaches a collector, and WebRTC has nothing to do with that. A full RN *session*
-— connect, tracks, stats windows — needs the example app, and is the next step.
+runs on Hermes, reads the device, and reaches a collector. It does link this package's pod, so the
+native device-state code is the real thing. A full RN *session* — connect, tracks, stats windows —
+needs the example app, and is the next step.
 
 Metro resolves `../src/telemetry` (this repo's source) and `livekit-client` from a local checkout,
 so `metro.config.js` watches the folder above and pins both packages plus `@babel/runtime` to this
@@ -20,13 +21,26 @@ npx react-native start
 xcrun simctl launch "iPhone 16 Pro" org.reactjs.native.example.TelemetryPoC
 ```
 
-The app pings on mount and on tap. What lands in the collector:
+The app pings on mount and on tap. What lands in the collector, all with
+`service.name=livekit-client-react-native service.version=3.0.0 os.name=ios os.version=18.6`:
 
 ```
-lk.ping  service.name=livekit-client-react-native service.version=3.0.0 os.name=ios os.version=18.6
+lk.device.app_state.changed   lk.device.app_state=foreground
+lk.device.thermal.changed     lk.device.thermal.state=nominal
+lk.device.low_power.changed   lk.device.low_power.enabled=false
+lk.ping                       lk.ping.seq=1
 ```
+
+`lk.device.memory.changed` is the one leg left untested: the simulator gives no way to drive
+`DispatchSource`'s memory-pressure levels, and the handler is the same shape as the other two.
 
 ## What this found
+
+**An event sent from inside a native method races the listener.** `startDeviceStateUpdates` first
+sent the device snapshot with `sendEvent`, and it never arrived: JS registers the listener around
+the same call, and `RCTEventEmitter` drops an event with no listeners (natively — `console.warn`
+never sees it, so the app shows "Open debugger to view warnings" and nothing else). The first state
+now comes back on the method's promise, and only later changes are events.
 
 **Import order is load-bearing.** `livekit-client` evaluates `class … extends DOMException` and
 `new TextDecoder()` at module scope, and Hermes has neither, so importing it before the polyfills

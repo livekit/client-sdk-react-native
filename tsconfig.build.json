@@ -1,5 +1,5 @@
 
 {
   "extends": "./tsconfig",
-  "exclude": ["example", "ci"]
+  "exclude": ["example", "ci", "telemetry-poc"]
 }
