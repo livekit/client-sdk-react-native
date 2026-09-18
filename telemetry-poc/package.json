@@ -12,6 +12,7 @@
   "dependencies": {
     "@opentelemetry/otlp-transformer": "^0.222.0",
     "@react-native/new-app-screen": "0.82.1",
+    "livekit-client": "file:../../client-sdk-js-telemetry",
     "react": "19.1.1",
     "react-native": "0.82.1",
     "react-native-safe-area-context": "^5.5.2"

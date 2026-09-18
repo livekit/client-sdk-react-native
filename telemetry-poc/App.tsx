@@ -1,20 +1,17 @@
 /**
- * Telemetry PoC — the same `src/telemetry/index.ts` that `livekit-client` runs in a browser,
- * copied verbatim, sending one `lk.ping` from Hermes at the collector on the host
- * (`otelcol-contrib --config .../otelcol-web.yaml`, port 4320, fanning out to Grafana LGTM).
+ * Telemetry PoC — the integrated pipeline on React Native: `livekit-client`'s telemetry module
+ * (the same one a browser runs) plus this SDK's own `src/telemetry.ts` seam, which names the
+ * platform and flushes when the app leaves the foreground.
  *
- * The iOS simulator shares the host's network stack, so 127.0.0.1 is the Mac.
+ * The iOS simulator shares the host's network stack, so 127.0.0.1 is the Mac running
+ * `otelcol-contrib --config ../../client-sdk-js-telemetry/src/telemetry/otelcol-web.yaml`.
  */
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, SafeAreaView, ScrollView, Text} from 'react-native';
-import {ping} from './src/telemetry';
+import {Telemetry} from 'livekit-client';
+import {registerTelemetry} from '../src/telemetry';
 
 const endpoint = 'http://127.0.0.1:4320/v1/logs';
-const resource = {
-  'service.name': 'livekit-client-react-native',
-  'service.version': '0.0.0-poc',
-  'os.name': 'ios',
-};
 
 export default function App() {
   const [log, setLog] = useState<string[]>([]);
@@ -23,8 +20,11 @@ export default function App() {
   const send = useCallback(
     async (encoding: 'protobuf' | 'json') => {
       try {
-        const delivery = await ping({endpoint, resource, encoding}, encoding === 'json' ? 2 : 1);
-        say(`${encoding}: status ${delivery.status}, ${delivery.bytes} bytes`);
+        // registerGlobals() does this in a real app; the seam is what is under test here.
+        registerTelemetry();
+        Telemetry.configure({endpoint, encoding, flushInterval: 1});
+        await Telemetry.ping(encoding === 'json' ? 2 : 1);
+        say(`${encoding}: ${Telemetry.diagnostics()}`);
       } catch (error) {
         say(`${encoding}: ${String(error)}`);
       }

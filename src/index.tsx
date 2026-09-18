@@ -31,6 +31,7 @@ import type { LogLevel, SetLogLevelOptions } from './logger';
 import RNE2EEManager from './e2ee/RNE2EEManager';
 import RNKeyProvider, { type RNKeyProviderOptions } from './e2ee/RNKeyProvider';
 import { setupNativeEvents } from './events/EventEmitter';
+import { registerTelemetry } from './telemetry';
 import {
   ReadableStream,
   WritableStream,
@@ -74,6 +75,7 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
   shimCryptoUuid();
   shimWebstreams();
   setupNativeEvents();
+  registerTelemetry();
 }
 
 function livekitRegisterGlobals() {
@@ -168,6 +170,8 @@ export * from './logger';
 export * from './audio/AudioManager';
 export * from './audio/AudioManagerLegacy';
 export * from './audio/MediaRecorder';
+export { registerTelemetry } from './telemetry';
+export { Telemetry } from 'livekit-client';
 
 export {
   AudioSession,
