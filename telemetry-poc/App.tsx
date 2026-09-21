@@ -10,8 +10,12 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button, NativeModules, SafeAreaView, ScrollView, Text} from 'react-native';
 import {Telemetry} from 'livekit-client';
 import {registerTelemetry} from '../src/telemetry';
+import staging from './staging.json';
 
-const endpoint = 'http://127.0.0.1:4320/v1/logs';
+// Empty by default: the local collector. `../../../telemetry-staging/run-rn.sh` fills staging.json
+// in with a LiveKit Cloud route and a freshly minted observability token.
+const endpoint = staging.endpoint || 'http://127.0.0.1:4320/v1/logs';
+const headers = staging.token ? {Authorization: `Bearer ${staging.token}`} : undefined;
 
 export default function App() {
   const [log, setLog] = useState<string[]>([]);
@@ -34,7 +38,7 @@ export default function App() {
       try {
         // A real app gets the destination from its first Cloud connect; here it is a local
         // collector, named before registerGlobals' seam reports the device it is running on.
-        Telemetry.configure({endpoint, encoding, flushInterval: 1});
+        Telemetry.configure({endpoint, headers, encoding, flushInterval: 1});
         registerTelemetry();
         const native = NativeModules.LivekitReactNativeModule;
         say(
