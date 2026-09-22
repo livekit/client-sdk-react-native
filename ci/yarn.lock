@@ -1952,15 +1952,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/react-native-webrtc@npm:^144.2.0":
+"@livekit/react-native-webrtc@https://github.com/livekit/react-native-webrtc.git#bump-libwebrtc-to-m150":
   version: 144.2.0
-  resolution: "@livekit/react-native-webrtc@npm:144.2.0"
+  resolution: "@livekit/react-native-webrtc@https://github.com/livekit/react-native-webrtc.git#commit=fc3525a8c5f775dbaf6367922d0a857f4896efa3"
   dependencies:
     base64-js: "npm:1.5.1"
     debug: "npm:4.3.4"
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 10/fb2db76db47d976cd1ebfff16eef7ba49123a6b0c7af76c6cde671889276c7a5c8c6ed43d4402cf7412ff9905dbf4d986eaf029dd0190cd1bb6fb1897075dd72
+  checksum: 10/8d5e0316e24e7c6af4d086806fb30db56dd54eb064728b07fa78defd2dd2004c43873206488f8b8cc8cfa2d70cabeace2e6efc498b7c18b15d5fcb084d6da8c1
   languageName: node
   linkType: hard
 
@@ -3550,7 +3550,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
     "@livekit/react-native": "npm:*"
-    "@livekit/react-native-webrtc": "npm:^144.2.0"
+    "@livekit/react-native-webrtc": "https://github.com/livekit/react-native-webrtc.git#bump-libwebrtc-to-m150"
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"
     "@react-native-community/cli-platform-ios": "npm:20.0.0"

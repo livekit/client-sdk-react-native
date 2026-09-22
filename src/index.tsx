@@ -7,6 +7,7 @@ import './polyfills/MediaRecorderShim';
 
 import {
   registerGlobals as webrtcRegisterGlobals,
+  RTCPeerConnection,
   AudioDeviceModule,
   AudioEngineMuteMode,
   AudioEngineAvailability,
@@ -63,6 +64,7 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
   };
 
   webrtcRegisterGlobals();
+  shimSctpSnap();
   if (opts.autoConfigureAudioSession) {
     setupIOSAudioManagement();
   }
@@ -74,6 +76,25 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
   shimCryptoUuid();
   shimWebstreams();
   setupNativeEvents();
+}
+
+function shimSctpSnap() {
+  // The SCTP half of WARP. livekit-client owns the RTCConfiguration it hands to
+  // `new RTCPeerConnection`, so there's no way to reach it from here. Default the
+  // flag on in the global constructor instead; an explicit `enableSctpSnap` in
+  // the app's rtcConfig still wins.
+  class SctpSnapPeerConnection extends RTCPeerConnection {
+    constructor(
+      configuration?: ConstructorParameters<typeof RTCPeerConnection>[0]
+    ) {
+      super({ enableSctpSnap: true, ...configuration });
+    }
+  }
+
+  // Cast rather than `declare global`, which would ship in the .d.ts and clash
+  // with whatever DOM types the consuming app has.
+  (globalThis as unknown as { RTCPeerConnection: unknown }).RTCPeerConnection =
+    SctpSnapPeerConnection;
 }
 
 function livekitRegisterGlobals() {
