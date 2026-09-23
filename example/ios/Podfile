@@ -5,6 +5,11 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+# LiveKitWebRTC 150.x is not on CocoaPods trunk yet; it only lives in livekit/podspecs.
+# Remove both sources once the pod is published to trunk.
+source 'https://github.com/livekit/podspecs.git'
+source 'https://cdn.cocoapods.org/'
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
