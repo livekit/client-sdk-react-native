@@ -27,6 +27,7 @@ import type RNKeyProvider from './RNKeyProvider';
 import type RTCEngine from 'livekit-client/dist/src/room/RTCEngine';
 import EventEmitter from 'events';
 import type TypedEventEmitter from 'typed-emitter';
+import type { NonSharedUint8Array } from '../utils/types';
 
 /**
  * @experimental
@@ -215,8 +216,8 @@ export default class RNE2EEManager
     // Buffers from the native cryptor are never shared.
     return {
       uuid: '', //not used
-      payload: encryptedPacket.payload as Uint8Array<ArrayBuffer>,
-      iv: encryptedPacket.iv as Uint8Array<ArrayBuffer>,
+      payload: encryptedPacket.payload as NonSharedUint8Array,
+      iv: encryptedPacket.iv as NonSharedUint8Array,
       keyIndex: encryptedPacket.keyIndex,
     };
   }
@@ -246,7 +247,7 @@ export default class RNE2EEManager
     return {
       uuid: '', //not used
       // Buffers from the native cryptor are never shared.
-      payload: decryptedData as Uint8Array<ArrayBuffer>,
+      payload: decryptedData as NonSharedUint8Array,
     } satisfies DecryptDataResponseMessage['data'];
   }
 
