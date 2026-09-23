@@ -14,7 +14,7 @@
     "@livekit/react-native": "*",
     "@livekit/react-native-webrtc": "^144.2.0",
     "@react-native/new-app-screen": "0.82.1",
-    "livekit-client": "^2.19.0",
+    "livekit-client": "^2.20.0",
     "react": "19.1.1",
     "react-native": "0.82.1",
     "react-native-safe-area-context": "^5.5.2"

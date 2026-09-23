@@ -83,7 +83,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.4.2",
-    "livekit-client": "^2.19.0",
+    "livekit-client": "^2.20.0",
     "pod-install": "^1.0.19",
     "prettier": "^3.8.3",
     "react": "19.2.0",
@@ -94,7 +94,7 @@
   },
   "peerDependencies": {
     "@livekit/react-native-webrtc": "^144.2.0",
-    "livekit-client": "^2.19.0",
+    "livekit-client": "^2.20.0",
     "react": "*",
     "react-native": "*"
   },
