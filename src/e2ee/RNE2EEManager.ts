@@ -212,10 +212,11 @@ export default class RNE2EEManager
     if (!encryptedPacket) {
       throw new Error('encryption for packet failed');
     }
+    // Buffers from the native cryptor are never shared.
     return {
       uuid: '', //not used
-      payload: encryptedPacket.payload,
-      iv: encryptedPacket.iv,
+      payload: encryptedPacket.payload as Uint8Array<ArrayBuffer>,
+      iv: encryptedPacket.iv as Uint8Array<ArrayBuffer>,
       keyIndex: encryptedPacket.keyIndex,
     };
   }
@@ -244,7 +245,8 @@ export default class RNE2EEManager
 
     return {
       uuid: '', //not used
-      payload: decryptedData,
+      // Buffers from the native cryptor are never shared.
+      payload: decryptedData as Uint8Array<ArrayBuffer>,
     } satisfies DecryptDataResponseMessage['data'];
   }
 
