@@ -1,0 +1,4 @@
+{
+  "endpoint": "https://blaze-staging-evhb7s91.staging.livekit.cloud/observability/client/logs/otlp/v0",
+  "token": "eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJpc3MiOiAiQVBJVzU4blBlUG9na0tFIiwgInN1YiI6ICJ0ZWxlbWV0cnktc3RhZ2luZy1oYXJuZXNzIiwgIm5iZiI6IDE3OTAwMjM2NzksICJleHAiOiAxNzkwMDI3Mjg5LCAib2JzZXJ2YWJpbGl0eSI6IHsid3JpdGUiOiB0cnVlfX0.uhmqHmAucdr5_VgLKIA_-e1j-N0ivKMVwTzhD98Hy_c"
+}

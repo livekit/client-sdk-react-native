@@ -33,6 +33,7 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['node_modules/', 'lib/', 'docs/', 'src/polyfills/', '**/.yalc/'],
+    // telemetry-poc is a stand-alone React Native app with its own config; see its README.
+    ignores: ['node_modules/', 'lib/', 'docs/', 'src/polyfills/', '**/.yalc/', 'telemetry-poc/'],
   },
 ]);
