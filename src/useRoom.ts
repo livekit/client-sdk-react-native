@@ -8,7 +8,7 @@ import {
   RoomEvent,
   Track,
 } from 'livekit-client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface RoomState {
   room?: Room;
@@ -29,14 +29,18 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [audioTracks, setAudioTracks] = useState<AudioTrack[]>([]);
 
-  const sortFunc = options?.sortParticipants ?? sortParticipants;
+  // Keep the latest sort function in a ref so that passing a new function on
+  // every render does not re-run the effect below, whose cleanup disconnects
+  // the room.
+  const sortFuncRef = useRef(options?.sortParticipants ?? sortParticipants);
+  sortFuncRef.current = options?.sortParticipants ?? sortParticipants;
 
   useEffect(() => {
     const onParticipantsChanged = () => {
       const remotes = Array.from(room.remoteParticipants.values());
       const newParticipants: Participant[] = [room.localParticipant];
       newParticipants.push(...remotes);
-      sortFunc(newParticipants, room.localParticipant);
+      sortFuncRef.current(newParticipants, room.localParticipant);
       setParticipants(newParticipants);
     };
     const onSubscribedTrackChanged = (track?: RemoteTrack) => {
@@ -92,7 +96,7 @@ export function useRoom(room: Room, options?: RoomOptions): RoomState {
     return () => {
       room.disconnect();
     };
-  }, [room, sortFunc]);
+  }, [room]);
 
   return {
     error,
