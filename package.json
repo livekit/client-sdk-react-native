@@ -106,7 +106,7 @@
     "prepare": "bob build",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --verbose",
-    "ci:version": "changeset version && yarn build-docs",
+    "ci:version": "changeset version && node scripts/write-version.js && yarn build-docs",
     "ci:publish": "changeset publish",
     "bootstrap": "yarn example && yarn && yarn pods"
   },
@@ -148,6 +148,7 @@
     ]
   },
   "resolutions": {
-    "react-native-monorepo-config@^0.3.1": "patch:react-native-monorepo-config@npm%3A0.3.1#./.yarn/patches/react-native-monorepo-config-npm-0.3.1-2343b725c3.patch"
+    "react-native-monorepo-config@^0.3.1": "patch:react-native-monorepo-config@npm%3A0.3.1#./.yarn/patches/react-native-monorepo-config-npm-0.3.1-2343b725c3.patch",
+    "jest-environment-node": "30.4.1"
   }
 }
