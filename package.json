@@ -120,6 +120,7 @@
   "packageManager": "yarn@4.11.0",
   "jest": {
     "preset": "react-native",
+    "testEnvironment": "node",
     "modulePathIgnorePatterns": [
       "<rootDir>/ci",
       "<rootDir>/example",
