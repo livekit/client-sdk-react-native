@@ -45,7 +45,7 @@ export function useTrackVolume(
         mediaStreamTrackId
       );
       addListener(listener, 'LK_VOLUME_PROCESSED', (event: any) => {
-        if (event.volume && reactTag && event.id === reactTag) {
+        if (event.volume != null && reactTag && event.id === reactTag) {
           setVolume(event.volume);
         }
       });
