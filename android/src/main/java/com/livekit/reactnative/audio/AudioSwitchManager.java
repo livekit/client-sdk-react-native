@@ -3,69 +3,69 @@ package com.livekit.reactnative.audio;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.twilio.audioswitch.AbstractAudioSwitch;
 import com.twilio.audioswitch.AudioDevice;
 import com.twilio.audioswitch.AudioSwitch;
+import com.twilio.audioswitch.CommDeviceAudioSwitch;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Consumer;
 
 import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
 
 public class AudioSwitchManager {
+    private static final String TAG = "AudioSwitchManager";
+
     @NonNull
     private final Context context;
-    @NonNull
-    private final AudioManager audioManager;
 
     public boolean loggingEnabled;
-    @NonNull
-    public Function2<
-            ? super List<? extends AudioDevice>,
-            ? super AudioDevice,
-            Unit> audioDeviceChangeListener = (devices, currentDevice) -> null;
 
     @NonNull
-    public AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = (i -> {
-    });
+    private volatile List<Class<? extends AudioDevice>> preferredDeviceList;
 
-    @NonNull
-    public List<Class<? extends AudioDevice>> preferredDeviceList;
-
-    // AudioSwitch is not threadsafe, so all calls should be done on the main thread.
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
+    // Volatile and nulled synchronously in stop() (rather than only inside the posted
+    // teardown runnable) so that a subsequent start() reliably observes the teardown.
     @Nullable
-    private AudioSwitch audioSwitch;
+    private volatile AbstractAudioSwitch audioSwitch;
+
+    // AudioSwitch is not threadsafe, so all calls should be done through a single thread.
+    @Nullable
+    private volatile Handler handler;
+    @Nullable
+    private HandlerThread thread;
 
     /**
      * When true, AudioSwitchHandler will request audio focus on start and abandon on stop.
      *
      * Defaults to true.
      */
-    private boolean manageAudioFocus = true;
+    private volatile boolean manageAudioFocus = true;
 
     /**
      * The audio focus mode to use while started.
      *
      * Defaults to [AudioManager.AUDIOFOCUS_GAIN].
      */
-    private int focusMode = AudioManager.AUDIOFOCUS_GAIN;
+    private volatile int focusMode = AudioManager.AUDIOFOCUS_GAIN;
 
     /**
      * The audio mode to use while started.
      *
      * Defaults to AudioManager.MODE_IN_COMMUNICATION.
      */
-    private int audioMode = AudioManager.MODE_IN_COMMUNICATION;
+    private volatile int audioMode = AudioManager.MODE_IN_COMMUNICATION;
 
     /**
      * The audio stream type to use when requesting audio focus on pre-O devices.
@@ -77,7 +77,7 @@ public class AudioSwitchManager {
      *
      * Note: Manual audio routing may not work appropriately when using non-default values.
      */
-    private int audioStreamType = AudioManager.STREAM_VOICE_CALL;
+    private volatile int audioStreamType = AudioManager.STREAM_VOICE_CALL;
 
     /**
      * The audio attribute usage type to use when requesting audio focus on devices O and beyond.
@@ -89,7 +89,7 @@ public class AudioSwitchManager {
      *
      * Note: Manual audio routing may not work appropriately when using non-default values.
      */
-    private int audioAttributeUsageType = AudioAttributes.USAGE_VOICE_COMMUNICATION;
+    private volatile int audioAttributeUsageType = AudioAttributes.USAGE_VOICE_COMMUNICATION;
 
     /**
      * The audio attribute content type to use when requesting audio focus on devices O and beyond.
@@ -101,7 +101,7 @@ public class AudioSwitchManager {
      *
      * Note: Manual audio routing may not work appropriately when using non-default values.
      */
-    private int audioAttributeContentType = AudioAttributes.CONTENT_TYPE_SPEECH;
+    private volatile int audioAttributeContentType = AudioAttributes.CONTENT_TYPE_SPEECH;
 
     /**
      * On certain Android devices, audio routing does not function properly and bluetooth microphones will not work
@@ -111,59 +111,110 @@ public class AudioSwitchManager {
      *
      * If this set to true, AudioSwitchManager will attempt to do audio routing, though behavior is undefined.
      */
-    private boolean forceHandleAudioRouting = false;
+    private volatile boolean forceHandleAudioRouting = false;
 
     public AudioSwitchManager(@NonNull Context context) {
         this.context = context;
-        this.audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-        preferredDeviceList = new ArrayList<>();
-        preferredDeviceList.add(AudioDevice.BluetoothHeadset.class);
-        preferredDeviceList.add(AudioDevice.WiredHeadset.class);
-        preferredDeviceList.add(AudioDevice.Speakerphone.class);
-        preferredDeviceList.add(AudioDevice.Earpiece.class);
+        List<Class<? extends AudioDevice>> defaultList = new ArrayList<>();
+        defaultList.add(AudioDevice.BluetoothHeadset.class);
+        defaultList.add(AudioDevice.WiredHeadset.class);
+        defaultList.add(AudioDevice.Speakerphone.class);
+        defaultList.add(AudioDevice.Earpiece.class);
+        preferredDeviceList = defaultList;
     }
 
-    public void start() {
+    public synchronized void start() {
+        if (handler != null || thread != null) {
+            Log.i(TAG, "AudioSwitchManager called start multiple times?");
+        }
+
+        HandlerThread currentThread = thread;
+        if (currentThread == null) {
+            currentThread = new HandlerThread("AudioSwitchManagerThread");
+            currentThread.start();
+            thread = currentThread;
+        }
+        Handler currentHandler = handler;
+        if (currentHandler == null) {
+            currentHandler = new Handler(currentThread.getLooper());
+            handler = currentHandler;
+        }
+
         if (audioSwitch == null) {
-            handler.removeCallbacksAndMessages(null);
-            handler.postAtFrontOfQueue(() -> {
-                audioSwitch = new AudioSwitch(
-                        context,
-                        loggingEnabled,
-                        audioFocusChangeListener,
-                        preferredDeviceList
-                );
-                audioSwitch.setManageAudioFocus(manageAudioFocus);
-                audioSwitch.setFocusMode(focusMode);
-                audioSwitch.setAudioMode(audioMode);
-                audioSwitch.setAudioStreamType(audioStreamType);
-                audioSwitch.setAudioAttributeContentType(audioAttributeContentType);
-                audioSwitch.setAudioAttributeUsageType(audioAttributeUsageType);
-                audioSwitch.setForceHandleAudioRouting(forceHandleAudioRouting);
-                audioSwitch.start(audioDeviceChangeListener);
-                audioSwitch.activate();
+            final Handler startHandler = currentHandler;
+            startHandler.removeCallbacksAndMessages(null);
+            startHandler.postAtFrontOfQueue(() -> {
+                AbstractAudioSwitch newAudioSwitch;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    newAudioSwitch = new CommDeviceAudioSwitch(
+                            context,
+                            loggingEnabled,
+                            focusChange -> {
+                            },
+                            preferredDeviceList
+                    );
+                } else {
+                    newAudioSwitch = new AudioSwitch(
+                            context,
+                            loggingEnabled,
+                            focusChange -> {
+                            },
+                            preferredDeviceList
+                    );
+                }
+                newAudioSwitch.setManageAudioFocus(manageAudioFocus);
+                newAudioSwitch.setFocusMode(focusMode);
+                newAudioSwitch.setAudioMode(audioMode);
+                newAudioSwitch.setAudioStreamType(audioStreamType);
+                newAudioSwitch.setAudioAttributeContentType(audioAttributeContentType);
+                newAudioSwitch.setAudioAttributeUsageType(audioAttributeUsageType);
+                newAudioSwitch.setForceHandleAudioRouting(forceHandleAudioRouting);
+
+                // stop() may have run while this switch was being created; its posted teardown
+                // saw no switch to stop. Publish under the lock only if this start is still current,
+                // otherwise drop the switch (nothing is registered until start() below).
+                // Once published, a later stop() posts its teardown behind this runnable.
+                synchronized (AudioSwitchManager.this) {
+                    if (handler != startHandler) {
+                        return;
+                    }
+                    audioSwitch = newAudioSwitch;
+                }
+                newAudioSwitch.start((devices, currentDevice) -> Unit.INSTANCE);
+                newAudioSwitch.activate();
             });
         }
     }
 
-    public void stop() {
-        handler.removeCallbacksAndMessages(null);
-        handler.postAtFrontOfQueue(() -> {
-            if (audioSwitch != null) {
-                audioSwitch.stop();
-            }
-            audioSwitch = null;
-        });
-    }
+    public synchronized void stop() {
+        // Null audioSwitch synchronously (under the lock) so a subsequent start() reliably
+        // observes the teardown and re-creates the switch. The switch's stop() is still posted,
+        // since AbstractAudioSwitch is not threadsafe.
+        AbstractAudioSwitch switchToStop = audioSwitch;
+        audioSwitch = null;
 
-    public void setMicrophoneMute(boolean mute) {
-        audioManager.setMicrophoneMute(mute);
+        Handler currentHandler = handler;
+        if (currentHandler != null) {
+            currentHandler.removeCallbacksAndMessages(null);
+            currentHandler.postAtFrontOfQueue(() -> {
+                if (switchToStop != null) {
+                    switchToStop.stop();
+                }
+            });
+        }
+        HandlerThread currentThread = thread;
+        if (currentThread != null) {
+            currentThread.quitSafely();
+        }
+
+        handler = null;
+        thread = null;
     }
 
     @Nullable
     public AudioDevice selectedAudioDevice() {
-        AudioSwitch audioSwitchTemp = audioSwitch;
+        AbstractAudioSwitch audioSwitchTemp = audioSwitch;
         if (audioSwitchTemp != null) {
             return audioSwitchTemp.getSelectedAudioDevice();
         } else {
@@ -173,7 +224,7 @@ public class AudioSwitchManager {
 
     @NonNull
     public List<AudioDevice> availableAudioDevices() {
-        AudioSwitch audioSwitchTemp = audioSwitch;
+        AbstractAudioSwitch audioSwitchTemp = audioSwitch;
         if (audioSwitchTemp != null) {
             return audioSwitchTemp.getAvailableAudioDevices();
         } else {
@@ -182,31 +233,14 @@ public class AudioSwitchManager {
     }
 
     public void selectAudioOutput(@NonNull Class<? extends AudioDevice> audioDeviceClass) {
-        handler.post(() -> {
-            if (audioSwitch != null) {
-                List<AudioDevice> devices = availableAudioDevices();
-                AudioDevice audioDevice = null;
-
-                for (AudioDevice device : devices) {
-                    if (device.getClass().equals(audioDeviceClass)) {
-                        audioDevice = device;
-                        break;
-                    }
-                }
-
-                if (audioDevice != null) {
-                    audioSwitch.selectDevice(audioDevice);
+        runOnAudioSwitch(sw -> {
+            for (AudioDevice device : sw.getAvailableAudioDevices()) {
+                if (device.getClass().equals(audioDeviceClass)) {
+                    sw.selectDevice(device);
+                    return;
                 }
             }
         });
-    }
-
-    public void enableSpeakerphone(boolean enable) {
-        if (enable) {
-            audioManager.setSpeakerphoneOn(true);
-        } else {
-            audioManager.setSpeakerphoneOn(false);
-        }
     }
 
     public void selectAudioOutput(@Nullable AudioDeviceKind kind) {
@@ -215,52 +249,76 @@ public class AudioSwitchManager {
         }
     }
 
+    @NonNull
+    public List<Class<? extends AudioDevice>> getPreferredDeviceList() {
+        return preferredDeviceList;
+    }
+
+    /**
+     * The preferred priority of audio devices to use. The first available audio device will be used.
+     *
+     * Changes to this value after [start] has been called will still be applied
+     * to the underlying audio switch.
+     */
+    public void setPreferredDeviceList(@NonNull List<Class<? extends AudioDevice>> preferredDeviceList) {
+        this.preferredDeviceList = preferredDeviceList;
+        runOnAudioSwitch(sw -> sw.setPreferredDeviceList(preferredDeviceList));
+    }
+
     public void setManageAudioFocus(boolean manage) {
         this.manageAudioFocus = manage;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setManageAudioFocus(this.manageAudioFocus);
-        }
+        runOnAudioSwitch(sw -> sw.setManageAudioFocus(manage));
     }
 
     public void setFocusMode(int focusMode) {
         this.focusMode = focusMode;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setFocusMode(this.focusMode);
-        }
+        runOnAudioSwitch(sw -> sw.setFocusMode(focusMode));
     }
 
     public void setAudioMode(int audioMode) {
         this.audioMode = audioMode;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setAudioMode(this.audioMode);
-        }
+        runOnAudioSwitch(sw -> sw.setAudioMode(audioMode));
     }
 
     public void setAudioStreamType(int streamType) {
         this.audioStreamType = streamType;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setAudioStreamType(this.audioStreamType);
-        }
+        runOnAudioSwitch(sw -> sw.setAudioStreamType(streamType));
     }
 
     public void setAudioAttributesUsageType(int usageType) {
         this.audioAttributeUsageType = usageType;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setAudioAttributeUsageType(this.audioAttributeUsageType);
-        }
+        runOnAudioSwitch(sw -> sw.setAudioAttributeUsageType(usageType));
     }
 
     public void setAudioAttributesContentType(int contentType) {
         this.audioAttributeContentType = contentType;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setAudioAttributeContentType(this.audioAttributeContentType);
-        }
+        runOnAudioSwitch(sw -> sw.setAudioAttributeContentType(contentType));
     }
 
     public void setForceHandleAudioRouting(boolean force) {
         this.forceHandleAudioRouting = force;
-        if (audioSwitch != null) {
-            Objects.requireNonNull(audioSwitch).setForceHandleAudioRouting(this.forceHandleAudioRouting);
+        runOnAudioSwitch(sw -> sw.setForceHandleAudioRouting(force));
+    }
+
+    /**
+     * Runs the action against the current audio switch on the audio switch thread.
+     * No-op if not started.
+     */
+    private void runOnAudioSwitch(@NonNull Consumer<AbstractAudioSwitch> action) {
+        Handler currentHandler = handler;
+        if (currentHandler == null) {
+            return;
+        }
+        Runnable runnable = () -> {
+            AbstractAudioSwitch currentSwitch = audioSwitch;
+            if (currentSwitch != null) {
+                action.accept(currentSwitch);
+            }
+        };
+        if (Looper.myLooper() == currentHandler.getLooper()) {
+            runnable.run();
+        } else {
+            currentHandler.post(runnable);
         }
     }
 }
