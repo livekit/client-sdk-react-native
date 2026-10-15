@@ -38,9 +38,9 @@ PODS:
     - SocketRocket
     - Yoga
   - livekit-react-native-webrtc (144.2.0):
-    - LiveKitWebRTC (= 150.7871.02)
+    - LiveKitWebRTC (= 150.7871.03)
     - React-Core
-  - LiveKitWebRTC (150.7871.02)
+  - LiveKitWebRTC (150.7871.03)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2792,9 +2792,9 @@ SPEC CHECKSUMS:
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 273e30e7fb618279934b0b95ffab60ecedb7acf5
   livekit-react-native: 7a050816c891b58f073d4f7bda57ed7fe536a168
-  livekit-react-native-webrtc: 5a5d397653822fcec6199c31dd48faa863b0b614
-  LiveKitWebRTC: 31c0be28600e09057cb8414e12dec36c530773cb
-  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
+  livekit-react-native-webrtc: 4674d750f2e52fb357ea5bbc12a2b8d07964cb38
+  LiveKitWebRTC: 3dc23b085876a52d67b8dad78a9f7cfaba2bc0f7
+  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: f17e2ebc07876ca9ab8eb6e4b0a4e4647497ae3a
   RCTRequired: e2c574c1b45231f7efb0834936bd609d75072b63
   RCTTypeSafety: c693294e3993056955c3010eb1ebc574f1fcded6
@@ -2866,6 +2866,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 689c8e04277f3ad631e60fe2a08e41d411daf8eb
 
-PODFILE CHECKSUM: 062e4aeb9a5d9962b035d1651584402d75e253b0
+PODFILE CHECKSUM: 893f25f2ed3e362f3ce16f22689b673a1e41ffab
 
 COCOAPODS: 1.16.2
