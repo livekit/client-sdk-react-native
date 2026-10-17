@@ -7,6 +7,7 @@ struct LKEvents {
     static let kEventVolumeProcessed = "LK_VOLUME_PROCESSED";
     static let kEventMultibandProcessed = "LK_MULTIBAND_PROCESSED";
     static let kEventAudioData = "LK_AUDIO_DATA";
+    static let kEventAudioRecordingState = "LK_AUDIO_RECORDING_STATE";
 }
 
 @objc(LivekitReactNativeModule)
@@ -107,6 +108,90 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             resolve(nil)
         } catch {
             reject("stopAudioSession", "Error deactivating audio session: \(error.localizedDescription)", error)
+        }
+    }
+
+    private static let kModuleErrorDomain = "LivekitReactNativeModule"
+
+    private func syncAudioDeviceModule() -> Bool {
+        guard let webRTCModule = self.bridge.module(for: WebRTCModule.self) as? WebRTCModule else {
+            return false
+        }
+
+        LKAudioProcessingManager.sharedInstance().audioDeviceModule =
+            webRTCModule.peerConnectionFactory.audioDeviceModule
+        return true
+    }
+
+    private func sendRecordingStateEvent(_ stage: String, error: Error? = nil) {
+        var body: [String: Any] = [
+            "stage": stage,
+            "timestampMs": Int(Date().timeIntervalSince1970 * 1000),
+        ]
+        if let error = error {
+            body["error"] = error.localizedDescription
+        }
+        self.sendEvent(withName: LKEvents.kEventAudioRecordingState, body: body)
+    }
+
+    private func bridgeUnavailableError(context: String) -> NSError {
+        NSError(
+            domain: Self.kModuleErrorDomain,
+            code: -1,
+            userInfo: [
+                NSLocalizedDescriptionKey:
+                    "WebRTCModule is unavailable while \(context) local recording",
+            ]
+        )
+    }
+
+    @objc(startLocalRecording:withRejecter:)
+    public func startLocalRecording(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        sendRecordingStateEvent("local_recording_start_requested")
+
+        guard syncAudioDeviceModule() else {
+            let err = bridgeUnavailableError(context: "starting")
+            sendRecordingStateEvent("local_recording_start_failed", error: err)
+            reject("startLocalRecording", err.localizedDescription, err)
+            return
+        }
+
+        do {
+            try LKAudioProcessingManager.sharedInstance().startLocalRecording()
+            sendRecordingStateEvent("local_recording_started")
+            resolve(nil)
+        } catch {
+            sendRecordingStateEvent("local_recording_start_failed", error: error)
+            reject(
+                "startLocalRecording",
+                "Error starting local recording: \(error.localizedDescription)",
+                error
+            )
+        }
+    }
+
+    @objc(stopLocalRecording:withRejecter:)
+    public func stopLocalRecording(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        sendRecordingStateEvent("local_recording_stop_requested")
+
+        guard syncAudioDeviceModule() else {
+            let err = bridgeUnavailableError(context: "stopping")
+            sendRecordingStateEvent("local_recording_stop_failed", error: err)
+            reject("stopLocalRecording", err.localizedDescription, err)
+            return
+        }
+
+        do {
+            try LKAudioProcessingManager.sharedInstance().stopLocalRecording()
+            sendRecordingStateEvent("local_recording_stopped")
+            resolve(nil)
+        } catch {
+            sendRecordingStateEvent("local_recording_stop_failed", error: error)
+            reject(
+                "stopLocalRecording",
+                "Error stopping local recording: \(error.localizedDescription)",
+                error
+            )
         }
     }
 
@@ -261,6 +346,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             LKEvents.kEventVolumeProcessed,
             LKEvents.kEventMultibandProcessed,
             LKEvents.kEventAudioData,
+            LKEvents.kEventAudioRecordingState,
         ]
     }
 }
