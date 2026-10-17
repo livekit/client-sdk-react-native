@@ -1,7 +1,8 @@
-import { setLogLevel as setClientSdkLogLevel } from 'livekit-client';
-import loglevel from 'loglevel';
+import { getLogger, setLogLevel as setClientSdkLogLevel } from 'livekit-client';
 
-export const log = loglevel.getLogger('lk-react-native');
+// Registered through `livekit-client`, so this package's warnings and errors reach client
+// telemetry the way `livekit-client`'s own do, whatever the console level.
+export const log = getLogger('lk-react-native');
 log.setDefaultLevel('WARN');
 
 export type LogLevel = Parameters<typeof setClientSdkLogLevel>[0];
