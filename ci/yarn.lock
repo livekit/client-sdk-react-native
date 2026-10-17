@@ -1943,12 +1943,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@livekit/protocol@npm:1.45.8":
-  version: 1.45.8
-  resolution: "@livekit/protocol@npm:1.45.8"
+"@livekit/protocol@npm:1.50.4":
+  version: 1.50.4
+  resolution: "@livekit/protocol@npm:1.50.4"
   dependencies:
     "@bufbuild/protobuf": "npm:^1.10.0"
-  checksum: 10/53144553718a4fd71b85298201c8548b9a5d814a2f61a7b5d930442444f05a4e27c5f4cf29e0d7221fbda9209684a670ffba8d092d9aaf6b413396e036dd8500
+  checksum: 10/314539aeb0b2e7e638f0458b4992bb30f0885b39b7b25e99ba6650a73c28df3765fabc469122a19b94d373db2d7310671660a0aac80a900b15656db9462fb4d9
   languageName: node
   linkType: hard
 
@@ -3565,7 +3565,7 @@ __metadata:
     eslint: "npm:^8.19.0"
     install-local: "npm:^3.0.1"
     jest: "npm:^29.6.3"
-    livekit-client: "npm:^2.19.0"
+    livekit-client: "npm:^2.20.0"
     prettier: "npm:2.8.8"
     react: "npm:19.1.1"
     react-native: "npm:0.82.1"
@@ -6394,22 +6394,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"livekit-client@npm:^2.19.0":
-  version: 2.19.2
-  resolution: "livekit-client@npm:2.19.2"
+"livekit-client@npm:^2.20.0":
+  version: 2.22.3
+  resolution: "livekit-client@npm:2.22.3"
   dependencies:
     "@livekit/mutex": "npm:1.1.1"
-    "@livekit/protocol": "npm:1.45.8"
+    "@livekit/protocol": "npm:1.50.4"
     events: "npm:^3.3.0"
     jose: "npm:^6.1.0"
     loglevel: "npm:^1.9.2"
+    machina: "npm:^7.0.0"
     sdp-transform: "npm:^2.15.0"
     tslib: "npm:2.8.1"
     typed-emitter: "npm:^2.1.0"
-    webrtc-adapter: "npm:9.0.5"
+    webrtc-adapter: "npm:9.0.6"
   peerDependencies:
     "@types/dom-mediacapture-record": ^1
-  checksum: 10/a28eee26e17e3e586e4a7f1c017b6025289d188cf25d24aad2cf3ae8dd73a0f46471325859d36fad43a5975d0220d430640e96da8c5b5b082837872b09bee7f2
+  checksum: 10/b906339dc47db37c3f29f741f1243595e7a955df4958bc24f7456304e1edecce11653290d44468a791477fc1ec43877b749223f419f36aa54cdb322e25a907e6
   languageName: node
   linkType: hard
 
@@ -6520,6 +6521,13 @@ __metadata:
   dependencies:
     yallist: "npm:^3.0.2"
   checksum: 10/951d2673dcc64a7fb888bf3d13bc2fdf923faca97d89cdb405ba3dfff77e2b26e5798d405e78fcd7094c9e7b8b4dab2ddc5a4f8a11928af24a207b7c738ca3f8
+  languageName: node
+  linkType: hard
+
+"machina@npm:^7.0.0":
+  version: 7.0.1
+  resolution: "machina@npm:7.0.1"
+  checksum: 10/f870eb6a84f71675c0114ecf6e17ebf70e53e7f050d89d5a6581bfb392b5d4ca4258f56947eb236acb934d696c98fe8255e987fd99223778e6b2f58d9fb8cd89
   languageName: node
   linkType: hard
 
@@ -8874,12 +8882,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webrtc-adapter@npm:9.0.5":
-  version: 9.0.5
-  resolution: "webrtc-adapter@npm:9.0.5"
+"webrtc-adapter@npm:9.0.6":
+  version: 9.0.6
+  resolution: "webrtc-adapter@npm:9.0.6"
   dependencies:
     sdp: "npm:^3.2.0"
-  checksum: 10/23c87b78b689b542ad52723c61c71aead3e07d8ddb4479daafa3fd9490ae3a199859149bb9fb4a16c7e9d13a9e0527e684e781791a221391c21781be2fb5c2e9
+  checksum: 10/f9bbaf85122205a507e63e3bfb033029ff27440f1f17a82c9f476082cf180edc90756ba7a87668dcd5e5122a70110313da2b226b9c274a018e4dd3c1c65667a2
   languageName: node
   linkType: hard
 

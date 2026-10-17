@@ -6,6 +6,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.livekit.reactnative.audio.events.Events
 import livekit.org.webrtc.AudioTrackSink
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import kotlin.math.round
 import kotlin.math.sqrt
 
@@ -34,17 +35,20 @@ abstract class BaseVolumeProcessor : AudioTrackSink {
         numberOfFrames: Int,
         absoluteCaptureTimestampMs: Long
     ) {
-        audioData.mark()
-        audioData.position(0)
+        // WebRTC hands us a JNI direct buffer, which Java defaults to big-endian,
+        // while the PCM samples are native (little-endian). Read through a view
+        // in native order so the sink's buffer is left untouched.
+        val samples = audioData.duplicate().order(ByteOrder.nativeOrder())
+        samples.position(0)
         var average = 0L
         val bytesPerSample = bitsPerSample / 8
 
         // RMS average calculation
         for (i in 0 until numberOfFrames) {
             val value = when (bytesPerSample) {
-                1 -> audioData.get().toLong()
-                2 -> audioData.getShort().toLong()
-                4 -> audioData.getInt().toLong()
+                1 -> samples.get().toLong()
+                2 -> samples.getShort().toLong()
+                4 -> samples.getInt().toLong()
                 else -> throw IllegalArgumentException()
             }
 
@@ -60,7 +64,6 @@ abstract class BaseVolumeProcessor : AudioTrackSink {
             4 -> volume / Int.MAX_VALUE
             else -> throw IllegalArgumentException()
         }
-        audioData.reset()
 
         onVolumeCalculated(volumeNormalized)
     }
