@@ -46,6 +46,10 @@ public class AudioSwitchManager {
     @Nullable
     private HandlerThread thread;
 
+    // Bumped by every start() and stop(), guarded by this. A switch created on the audio thread
+    // is only published if no other start() or stop() has run since its creation was queued.
+    private int generation;
+
     /**
      * When true, AudioSwitchHandler will request audio focus on start and abandon on stop.
      *
@@ -142,9 +146,9 @@ public class AudioSwitchManager {
         }
 
         if (audioSwitch == null) {
-            final Handler startHandler = currentHandler;
-            startHandler.removeCallbacksAndMessages(null);
-            startHandler.postAtFrontOfQueue(() -> {
+            final int startGeneration = ++generation;
+            currentHandler.removeCallbacksAndMessages(null);
+            currentHandler.postAtFrontOfQueue(() -> {
                 AbstractAudioSwitch newAudioSwitch;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     newAudioSwitch = new CommDeviceAudioSwitch(
@@ -171,12 +175,14 @@ public class AudioSwitchManager {
                 newAudioSwitch.setAudioAttributeUsageType(audioAttributeUsageType);
                 newAudioSwitch.setForceHandleAudioRouting(forceHandleAudioRouting);
 
-                // stop() may have run while this switch was being created; its posted teardown
-                // saw no switch to stop. Publish under the lock only if this start is still current,
-                // otherwise drop the switch (nothing is registered until start() below).
+                // stop() or another start() may have run while this switch was being created.
+                // A stop() found no switch to tear down, and a second start() queued its own
+                // creation, which would otherwise overwrite this switch and leave it active.
+                // Publish under the lock only if this start is still current, otherwise drop the
+                // switch (nothing is registered until start() below).
                 // Once published, a later stop() posts its teardown behind this runnable.
                 synchronized (AudioSwitchManager.this) {
-                    if (handler != startHandler) {
+                    if (generation != startGeneration) {
                         return;
                     }
                     audioSwitch = newAudioSwitch;
@@ -193,6 +199,7 @@ public class AudioSwitchManager {
         // since AbstractAudioSwitch is not threadsafe.
         AbstractAudioSwitch switchToStop = audioSwitch;
         audioSwitch = null;
+        generation++;
 
         Handler currentHandler = handler;
         if (currentHandler != null) {
