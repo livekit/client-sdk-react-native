@@ -1,5 +1,96 @@
 # @livekit/react-native
 
+## 3.1.0
+
+### Minor Changes
+
+- Update @livekit/react-native-webrtc to 150.1.0. - [#461](https://github.com/livekit/client-sdk-react-native/pull/461) ([@cloudwebrtc](https://github.com/cloudwebrtc))
+
+  iOS: the `LiveKitWebRTC` pod is published to the [livekit/podspecs](https://github.com/livekit/podspecs) spec repo and the CocoaPods trunk. The CocoaPods trunk stops accepting new pods on December 2, 2026, so later `LiveKitWebRTC` versions will only be available from livekit/podspecs. Add both sources to the top of your `ios/Podfile`:
+
+  ```ruby
+  source 'https://github.com/livekit/podspecs.git'
+  source 'https://cdn.cocoapods.org/'
+  ```
+
+  Keep the `cdn.cocoapods.org` line: once a `Podfile` lists any `source`, CocoaPods stops using trunk by default, and your other pods still come from there.
+
+  Expo users don't need to edit the `Podfile` by hand: version 1.1.0 and later of the [Expo plugin](https://github.com/livekit/client-sdk-react-native-expo-plugin) adds these sources during prebuild.
+
+  If `pod install` then reports that it could not find compatible versions for `LiveKitWebRTC`, run `cd ios && pod update LiveKitWebRTC`.
+
+### Patch Changes
+
+- android: Fix build failure on Android Gradle Plugin 9+ for Expo 58+ - [#454](https://github.com/livekit/client-sdk-react-native/pull/454) ([@gabrieldonadel](https://github.com/gabrieldonadel))
+
+- android: Fix useTrackVolume reading audio samples in the wrong byte order - [#466](https://github.com/livekit/client-sdk-react-native/pull/466) ([@darrenabridge](https://github.com/darrenabridge))
+
+- Require `livekit-client` ^2.20.0. Earlier 2.19.x releases pre-allocate media sections in single peer connection mode, which React Native's libwebrtc doesn't support, causing remote tracks to never be subscribed or render black (livekit/client-sdk-js#1977, livekit/client-sdk-js#2113). - [#463](https://github.com/livekit/client-sdk-react-native/pull/463) ([@davidliu](https://github.com/davidliu))
+
+- Fix `useTrackVolume` staying at the last non-zero value when the audio track goes silent - [#473](https://github.com/livekit/client-sdk-react-native/pull/473) ([@RaphaelFakhri](https://github.com/RaphaelFakhri))
+
+- Fix `useRoom` disconnecting the room on every render when `sortParticipants` is passed as an inline function - [#472](https://github.com/livekit/client-sdk-react-native/pull/472) ([@cpruijsen](https://github.com/cpruijsen))
+
+## 3.0.0
+
+### Major Changes
+
+- Move to the LiveKit prefixed WebRTC builds: `io.github.webrtc-sdk:android-prefixed` on Android and the `LiveKitWebRTC` pod on iOS. This prevents collisions against any other WebRTC implementations. - [#455](https://github.com/livekit/client-sdk-react-native/pull/455) ([@davidliu](https://github.com/davidliu))
+
+  Apps that only use the JavaScript API need no changes.
+
+  Native integrations must migrate to the prefixed symbols:
+  - Android: `org.webrtc.*` becomes `livekit.org.webrtc.*`.
+    Custom `-keep class org.webrtc.**` ProGuard rules must be updated to `livekit.org.webrtc.**`.
+  - iOS: types gain an `LK` prefix (`RTCAudioRenderer` becomes `LKRTCAudioRenderer`, `RTCAudioBuffer` becomes `LKRTCAudioBuffer`, and so on).
+
+### Minor Changes
+
+- iOS: align the default `playAndRecord` presets with the LiveKit Swift SDK. - [#455](https://github.com/livekit/client-sdk-react-native/pull/455) ([@davidliu](https://github.com/davidliu))
+
+  The duplex (recording) presets now request `mixWithOthers`, `allowBluetooth`,
+  `allowBluetoothA2DP` and `allowAirPlay`, matching `playAndRecordOptions` in the
+  Swift SDK. Previously only `allowBluetooth` and `mixWithOthers` were requested,
+  so A2DP output devices and AirPlay routes were unavailable during a call on this
+  platform but available on others.
+
+  When `preferSpeakerOutput` is set, `defaultToSpeaker` is now requested as well.
+  The `videoChat` mode implies a speaker route, but iOS may rewrite the mode when
+  Voice Processing I/O is instantiated - the Swift SDK observed it switching to
+  `voiceChat`, which routes to the receiver. Requesting the option explicitly
+  keeps the speaker route across that rewrite.
+
+  This affects the defaults used by `setupIOSAudioManagement` and the deprecated
+  `getDefaultAppleAudioConfigurationForMode`. A custom `IOSAudioSessionPolicy` or
+  `AppleAudioConfiguration` is unaffected - those supply their own options.
+
+- iOS: pick the audio session mode based on Apple Voice Processing I/O state. - [#455](https://github.com/livekit/client-sdk-react-native/pull/455) ([@davidliu](https://github.com/davidliu))
+
+  iOS applies a reduced, call-tuned speaker gain while capture is active under the
+  `voiceChat`/`videoChat` session modes. Apple Voice Processing I/O compensates
+  with its own loudness stage, so with VPIO off remote audio played back
+  noticeably quieter.
+
+  `LiveKitWebRTC` 144.7559.15 reports the resolved VPIO state to the audio device
+  module's `willEnableEngine` hook. The default recording configuration now uses
+  that: with VPIO running it keeps `voiceChat`/`videoChat` as before, and with VPIO
+  off (for example after `AudioDeviceModule.setVoiceProcessingEnabled(false)`) it
+  switches to the `default` mode, which keeps media gain. That mode routes to the
+  receiver, so `preferSpeakerOutput` is expressed through the `defaultToSpeaker`
+  category option instead of the implicit routing the chat modes provide. This
+  matches what the LiveKit Swift SDK already does.
+
+  `IOSAudioSessionPolicy` gains an optional `recordingWithoutVoiceProcessing`
+  configuration for the VPIO-off case. Policies that omit it keep using their
+  `recording` configuration for both, so existing setups are unaffected.
+  `AudioEngineConfigurationState`, passed to the deprecated
+  `setupIOSAudioManagement` callback form, gains a matching
+  `isVoiceProcessingEnabled` field.
+
+  Requires `@livekit/react-native-webrtc` with the five-argument `willEnableEngine`
+  delegate method. Older versions crash with an unrecognized selector when the
+  audio engine first enables.
+
 ## 2.12.0
 
 ### Minor Changes

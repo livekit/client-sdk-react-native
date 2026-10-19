@@ -33,6 +33,6 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['node_modules/', 'lib/', 'docs/', 'src/polyfills/'],
+    ignores: ['node_modules/', 'lib/', 'docs/', 'src/polyfills/', '**/.yalc/'],
   },
 ]);

@@ -1,10 +1,10 @@
 package com.livekit.reactnative.video
 
 import com.oney.WebRTCModule.EglUtils
-import org.webrtc.VideoCodecInfo
-import org.webrtc.VideoDecoder
-import org.webrtc.VideoDecoderFactory
-import org.webrtc.WrappedVideoDecoderFactory
+import livekit.org.webrtc.VideoCodecInfo
+import livekit.org.webrtc.VideoDecoder
+import livekit.org.webrtc.VideoDecoderFactory
+import livekit.org.webrtc.WrappedVideoDecoderFactory
 
 class WrappedVideoDecoderFactoryProxy : VideoDecoderFactory {
 

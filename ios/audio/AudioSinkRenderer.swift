@@ -31,7 +31,7 @@ public class AudioSinkRenderer: BaseAudioSinkRenderer {
     }
 }
 
-public class BaseAudioSinkRenderer: NSObject, RTCAudioRenderer {
+public class BaseAudioSinkRenderer: NSObject, LKRTCAudioRenderer {
     
     public override init() {
         super.init()

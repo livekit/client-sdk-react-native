@@ -5,7 +5,7 @@ import {
   getEventAttributeValue,
   setEventAttributeValue,
 } from '@livekit/react-native-webrtc';
-import { addListener } from '../events/EventEmitter';
+import { addListener, removeListener } from '../events/EventEmitter';
 import { toByteArray } from 'base64-js';
 import LiveKitModule from '../LKNativeModule';
 import { log } from '../logger';
@@ -70,6 +70,7 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
   }
 
   unregisterListener() {
+    removeListener(this);
     if (this._reactTag) {
       let audioTracks = this.stream.getAudioTracks();
       if (audioTracks.length !== 1) {
@@ -85,6 +86,7 @@ export class MediaRecorder extends EventTarget<MediaRecorderEventMap> {
         peerConnectionId,
         mediaStreamTrackId
       );
+      this._reactTag = undefined;
     }
   }
 

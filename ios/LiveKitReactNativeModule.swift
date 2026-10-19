@@ -27,7 +27,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
     @objc
     public override init() {
         super.init()
-        let config = RTCAudioSessionConfiguration()
+        let config = LKRTCAudioSessionConfiguration()
         config.category = AVAudioSession.Category.playAndRecord.rawValue
         // Gated on compiler version (not iOS deploy target): .allowBluetoothHFP
         // is only declared in the Xcode 26 / Swift 6.2 SDK, which replaces the
@@ -39,7 +39,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
         #endif
         config.mode = AVAudioSession.Mode.videoChat.rawValue
 
-        RTCAudioSessionConfiguration.setWebRTC(config)
+        LKRTCAudioSessionConfiguration.setWebRTC(config)
     }
 
     @objc
@@ -49,8 +49,8 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
     @objc
     public static func setup() {
-        let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
-        let simulcastVideoEncoderFactory = RTCVideoEncoderFactorySimulcast(primary: videoEncoderFactory, fallback: videoEncoderFactory)
+        let videoEncoderFactory = LKRTCDefaultVideoEncoderFactory()
+        let simulcastVideoEncoderFactory = LKRTCVideoEncoderFactorySimulcast(primary: videoEncoderFactory, fallback: videoEncoderFactory)
         let options = WebRTCModuleOptions.sharedInstance()
         options.videoEncoderFactory = simulcastVideoEncoderFactory
         options.audioProcessingModule = LKAudioProcessingManager.sharedInstance().audioProcessingModule
@@ -65,7 +65,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
         let defaultOutput = iOSConfig["defaultOutput"] as? String ?? "speaker"
 
-        let rtcConfig = RTCAudioSessionConfiguration()
+        let rtcConfig = LKRTCAudioSessionConfiguration()
         rtcConfig.category = AVAudioSession.Category.playAndRecord.rawValue
 
         if (defaultOutput == "earpiece") {
@@ -75,12 +75,12 @@ public class LivekitReactNativeModule: RCTEventEmitter {
             rtcConfig.categoryOptions = [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP, .defaultToSpeaker]
             rtcConfig.mode = AVAudioSession.Mode.videoChat.rawValue
         }
-        RTCAudioSessionConfiguration.setWebRTC(rtcConfig)
+        LKRTCAudioSessionConfiguration.setWebRTC(rtcConfig)
     }
 
     @objc(startAudioSession:withRejecter:)
     public func startAudioSession(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        let session = RTCAudioSession.sharedInstance()
+        let session = LKRTCAudioSession.sharedInstance()
         session.lockForConfiguration()
         defer {
             session.unlockForConfiguration()
@@ -96,7 +96,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
     @objc(stopAudioSession:withRejecter:)
     public func stopAudioSession(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        let session = RTCAudioSession.sharedInstance()
+        let session = LKRTCAudioSession.sharedInstance()
         session.lockForConfiguration()
         defer {
             session.unlockForConfiguration()
@@ -149,8 +149,8 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
     @objc(setAppleAudioConfiguration:withResolver:withRejecter:)
     public func setAppleAudioConfiguration(_ configuration: NSDictionary, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        let session = RTCAudioSession.sharedInstance()
-        let config = RTCAudioSessionConfiguration.webRTC()
+        let session = LKRTCAudioSession.sharedInstance()
+        let config = LKRTCAudioSessionConfiguration.webRTC()
 
         let appleAudioCategory = configuration["audioCategory"] as? String
         let appleAudioCategoryOptions = configuration["audioCategoryOptions"] as? [String]

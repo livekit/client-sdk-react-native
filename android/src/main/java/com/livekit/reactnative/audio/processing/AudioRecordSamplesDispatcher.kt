@@ -18,8 +18,8 @@ package com.livekit.reactnative.audio.processing
 
 import android.media.AudioFormat
 import android.os.SystemClock
-import org.webrtc.AudioTrackSink
-import org.webrtc.audio.JavaAudioDeviceModule
+import livekit.org.webrtc.AudioTrackSink
+import livekit.org.webrtc.audio.JavaAudioDeviceModule
 import java.nio.ByteBuffer
 import java.util.Collections
 

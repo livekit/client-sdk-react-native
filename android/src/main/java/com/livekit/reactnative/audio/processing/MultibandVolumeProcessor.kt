@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
-import org.webrtc.AudioTrackSink
+import livekit.org.webrtc.AudioTrackSink
 import java.nio.ByteBuffer
 import kotlin.math.pow
 import kotlin.math.round
