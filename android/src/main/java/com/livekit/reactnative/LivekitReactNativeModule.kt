@@ -230,7 +230,7 @@ class LivekitReactNativeModule(reactContext: ReactApplicationContext) : ReactCon
     }
 
     override fun invalidate() {
-        audioManager.stop()
+        audioManager.release()
         LiveKitReactNative.invalidate(reactApplicationContext)
     }
 }

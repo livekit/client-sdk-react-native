@@ -41,6 +41,8 @@ public class AudioSwitchManager {
     private volatile AbstractAudioSwitch audioSwitch;
 
     // AudioSwitch is not threadsafe, so all calls should be done through a single thread.
+    // The thread is kept until release() so that a session's teardown always runs before
+    // the next session's switch is created.
     @Nullable
     private volatile Handler handler;
     @Nullable
@@ -129,7 +131,7 @@ public class AudioSwitchManager {
     }
 
     public synchronized void start() {
-        if (handler != null || thread != null) {
+        if (audioSwitch != null) {
             Log.i(TAG, "AudioSwitchManager called start multiple times?");
         }
 
@@ -147,8 +149,9 @@ public class AudioSwitchManager {
 
         if (audioSwitch == null) {
             final int startGeneration = ++generation;
-            currentHandler.removeCallbacksAndMessages(null);
-            currentHandler.postAtFrontOfQueue(() -> {
+            // Posted in order, not at the front of the queue, so it runs after the teardown
+            // of a previous session that may still be pending.
+            currentHandler.post(() -> {
                 AbstractAudioSwitch newAudioSwitch;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     newAudioSwitch = new CommDeviceAudioSwitch(
@@ -196,25 +199,29 @@ public class AudioSwitchManager {
     public synchronized void stop() {
         // Null audioSwitch synchronously (under the lock) so a subsequent start() reliably
         // observes the teardown and re-creates the switch. The switch's stop() is still posted,
-        // since AbstractAudioSwitch is not threadsafe.
+        // since AbstractAudioSwitch is not threadsafe. It is queued on the same thread as the
+        // next start()'s creation, so the old switch never restores audio state over the new one.
         AbstractAudioSwitch switchToStop = audioSwitch;
         audioSwitch = null;
         generation++;
 
         Handler currentHandler = handler;
-        if (currentHandler != null) {
-            currentHandler.removeCallbacksAndMessages(null);
-            currentHandler.postAtFrontOfQueue(() -> {
-                if (switchToStop != null) {
-                    switchToStop.stop();
-                }
-            });
+        if (currentHandler != null && switchToStop != null) {
+            currentHandler.post(switchToStop::stop);
         }
+    }
+
+    /**
+     * Stops the audio session and shuts down the audio switch thread.
+     */
+    public synchronized void release() {
+        stop();
+
+        // quitSafely() still runs the teardown that stop() just posted.
         HandlerThread currentThread = thread;
         if (currentThread != null) {
             currentThread.quitSafely();
         }
-
         handler = null;
         thread = null;
     }
