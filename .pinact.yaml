@@ -1,0 +1,8 @@
+version: 3
+
+ignore_actions:
+  # changesets/action v2 requires @changesets/cli v3 and renames the
+  # `version`/`publish` inputs. Hold v1.9.0 until the repo migrates to
+  # Changesets v3; remove this entry as part of that migration.
+  - name: changesets/action
+    ref: a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d
