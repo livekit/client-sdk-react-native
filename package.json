@@ -1,6 +1,6 @@
 {
   "name": "@livekit/react-native",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "LiveKit for React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -74,7 +74,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.35.0",
     "@livekit/changesets-changelog-github": "^0.0.4",
-    "@livekit/react-native-webrtc": "^144.2.0",
+    "@livekit/react-native-webrtc": "^150.1.0",
     "@react-native/babel-preset": "0.83.0",
     "@react-native/eslint-config": "0.83.0",
     "@types/fastestsmallesttextencoderdecoder": "^1.0.0",
@@ -83,7 +83,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.4.2",
-    "livekit-client": "^2.19.0",
+    "livekit-client": "^2.20.0",
     "pod-install": "^1.0.19",
     "prettier": "^3.8.3",
     "react": "19.2.0",
@@ -93,8 +93,8 @@
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
-    "@livekit/react-native-webrtc": "^144.2.0",
-    "livekit-client": "^2.19.0",
+    "@livekit/react-native-webrtc": "^150.1.0",
+    "livekit-client": "^2.20.0",
     "react": "*",
     "react-native": "*"
   },
@@ -120,6 +120,7 @@
   "packageManager": "yarn@4.11.0",
   "jest": {
     "preset": "react-native",
+    "testEnvironment": "node",
     "modulePathIgnorePatterns": [
       "<rootDir>/ci",
       "<rootDir>/example",
