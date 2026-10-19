@@ -37,6 +37,22 @@ This library depends on `@livekit/react-native-webrtc`, which has additional ins
 - [iOS Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/iOSInstallation.md)
 - [Android Installation Guide](https://github.com/livekit/react-native-webrtc/blob/master/Documentation/AndroidInstallation.md)
 
+### iOS Podfile
+
+This package depends on the `LiveKitWebRTC` pod, which is published to the
+[livekit/podspecs](https://github.com/livekit/podspecs) spec repo and the CocoaPods trunk. The CocoaPods trunk stops accepting new pods on December 2, 2026, so later `LiveKitWebRTC` versions will only be available from livekit/podspecs. Add both sources to the top of your `ios/Podfile`:
+
+```ruby
+source 'https://github.com/livekit/podspecs.git'
+source 'https://cdn.cocoapods.org/'
+```
+
+Keep the `cdn.cocoapods.org` line: once a `Podfile` lists any `source`, CocoaPods stops using
+trunk by default, and your other pods still come from there.
+
+Expo users don't need to edit the `Podfile` by hand: version 1.1.0 and later of the
+[Expo plugin](https://github.com/livekit/client-sdk-react-native-expo-plugin) adds these sources during prebuild.
+
 ---
 
 Once the `@livekit/react-native-webrtc` dependency is installed, one last step is needed to finish the installation:
@@ -353,19 +369,26 @@ If your app manages `AVAudioSession` directly, disable the automatic setup:
 registerGlobals({ autoConfigureAudioSession: false });
 ```
 
-For custom automatic behavior, disable the default setup and call
-`setupIOSAudioManagement` once during app startup:
+For custom categories/modes, disable the default setup and pass a static
+policy to `setupIOSAudioManagement` once during app startup:
 
 ```js
 import { registerGlobals, setupIOSAudioManagement } from '@livekit/react-native';
 
 registerGlobals({ autoConfigureAudioSession: false });
 
-const cleanup = setupIOSAudioManagement(true, (state) => ({
-  audioCategory: state.isRecordingEnabled ? 'playAndRecord' : 'playback',
-  audioCategoryOptions: ['mixWithOthers'],
-  audioMode: state.preferSpeakerOutput ? 'videoChat' : 'voiceChat',
-}));
+const cleanup = setupIOSAudioManagement(true, {
+  recording: {
+    audioCategory: 'playAndRecord',
+    audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+    audioMode: 'videoChat',
+  },
+  playout: {
+    audioCategory: 'playback',
+    audioCategoryOptions: ['mixWithOthers'],
+    audioMode: 'spokenAudio',
+  },
+});
 ```
 
 The older `useIOSAudioManagement(room, ...)` hook is still exported for
@@ -488,6 +511,20 @@ To fix this, you can either:
 
 - use another package manager, like npm
 - use [yarn-deduplicate](https://www.npmjs.com/package/yarn-deduplicate) to deduplicate dependencies
+
+#### CocoaPods could not find compatible versions for pod "LiveKitWebRTC"
+
+This usually happens after upgrading `@livekit/react-native-webrtc`. The error may also say the
+matching specs "required a higher minimum deployment target", which is misleading.
+
+Make sure both [Podfile sources](#ios-podfile) are in your `ios/Podfile`, then run:
+
+```sh
+cd ios && pod update LiveKitWebRTC
+```
+
+You may also see a `Found multiple specifications for LiveKitWebRTC` warning. It is harmless:
+some versions are published to both livekit/podspecs and CocoaPods trunk, and the two are identical.
 
 ## Contributing
 

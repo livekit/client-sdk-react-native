@@ -3,8 +3,8 @@ package com.livekit.reactnative.audio.processing
 import com.facebook.react.bridge.ReactContext
 import com.livekit.reactnative.LiveKitReactNative
 import com.oney.WebRTCModule.WebRTCModule
-import org.webrtc.AudioTrack
-import org.webrtc.AudioTrackSink
+import livekit.org.webrtc.AudioTrack
+import livekit.org.webrtc.AudioTrackSink
 import java.util.Collections
 import java.util.UUID
 

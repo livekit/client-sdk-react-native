@@ -11,10 +11,16 @@ import com.livekit.reactnative.audio.processing.CustomAudioProcessingController
 import com.livekit.reactnative.video.CustomVideoDecoderFactory
 import com.livekit.reactnative.video.CustomVideoEncoderFactory
 import com.oney.WebRTCModule.WebRTCModuleOptions
-import org.webrtc.audio.JavaAudioDeviceModule
+import livekit.org.webrtc.audio.JavaAudioDeviceModule
 import java.util.concurrent.Callable
 
 object LiveKitReactNative {
+
+    // WARP: fold the DTLS handshake into the ICE handshake. Field trials are read
+    // when the PeerConnectionFactory is created, so this can only be set here, not
+    // from JS. The format is "Key/Value/" repeated, so this concatenates onto
+    // whatever the app already set.
+    private const val WARP_FIELD_TRIALS = "WebRTC-IceHandshakeDtls/Enabled/"
 
 
     private var audioType: AudioType = AudioType.CommunicationAudioType()
@@ -62,6 +68,7 @@ object LiveKitReactNative {
 
         this.audioType = audioType
         val options = WebRTCModuleOptions.getInstance()
+        options.fieldTrials = (options.fieldTrials ?: "") + WARP_FIELD_TRIALS
         options.videoEncoderFactory = CustomVideoEncoderFactory(null, true, true)
         options.videoDecoderFactory = CustomVideoDecoderFactory()
         options.enableMediaProjectionService = true

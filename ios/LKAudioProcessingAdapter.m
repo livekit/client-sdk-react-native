@@ -1,9 +1,9 @@
 #import "LKAudioProcessingAdapter.h"
-#import <WebRTC/RTCAudioRenderer.h>
+#import <LiveKitWebRTC/RTCAudioRenderer.h>
 #import <os/lock.h>
 
 @implementation LKAudioProcessingAdapter {
-  NSMutableArray<id<RTCAudioRenderer>>* _renderers;
+  NSMutableArray<id<LKRTCAudioRenderer>>* _renderers;
   NSMutableArray<id<LKExternalAudioProcessingDelegate>>* _processors;
   os_unfair_lock _lock;
   BOOL _isAudioProcessingInitialized;
@@ -16,7 +16,7 @@
   if (self) {
     _isAudioProcessingInitialized = NO;
     _lock = OS_UNFAIR_LOCK_INIT;
-    _renderers = [[NSMutableArray<id<RTCAudioRenderer>> alloc] init];
+    _renderers = [[NSMutableArray<id<LKRTCAudioRenderer>> alloc] init];
     _processors = [[NSMutableArray<id<LKExternalAudioProcessingDelegate>> alloc] init];
   }
   return self;
@@ -41,13 +41,13 @@
   os_unfair_lock_unlock(&_lock);
 }
 
-- (void)addAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer {
+- (void)addAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer {
   os_unfair_lock_lock(&_lock);
   [_renderers addObject:renderer];
   os_unfair_lock_unlock(&_lock);
 }
 
-- (void)removeAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer {
+- (void)removeAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer {
   os_unfair_lock_lock(&_lock);
   _renderers = [[_renderers
       filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject,
@@ -69,7 +69,7 @@
   os_unfair_lock_unlock(&_lock);
 }
 
-- (AVAudioPCMBuffer*)toPCMBuffer:(RTC_OBJC_TYPE(RTCAudioBuffer) *)audioBuffer {
+- (AVAudioPCMBuffer*)toPCMBuffer:(LKRTCAudioBuffer *)audioBuffer {
   AVAudioFormat* format =
       [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16
                                        sampleRate:audioBuffer.frames * 100.0
@@ -93,13 +93,13 @@
   return pcmBuffer;
 }
 
-- (void)audioProcessingProcess:(RTC_OBJC_TYPE(RTCAudioBuffer) *)audioBuffer {
+- (void)audioProcessingProcess:(LKRTCAudioBuffer *)audioBuffer {
   os_unfair_lock_lock(&_lock);
   for (id<LKExternalAudioProcessingDelegate> processor in _processors) {
     [processor audioProcessingProcess:audioBuffer];
   }
 
-  for (id<RTCAudioRenderer> renderer in _renderers) {
+  for (id<LKRTCAudioRenderer> renderer in _renderers) {
     [renderer renderPCMBuffer:[self toPCMBuffer:audioBuffer]];
   }
   os_unfair_lock_unlock(&_lock);

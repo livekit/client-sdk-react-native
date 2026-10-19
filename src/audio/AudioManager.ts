@@ -1,21 +1,85 @@
 import { Platform } from 'react-native';
-import AudioSession, { type AppleAudioConfiguration } from './AudioSession';
+import AudioSession, {
+  type AppleAudioCategoryOption,
+  type AppleAudioConfiguration,
+} from './AudioSession';
 import { log } from '../logger';
-import { audioDeviceModuleEvents } from '@livekit/react-native-webrtc';
+import {
+  audioDeviceModuleEvents,
+  AudioDeviceModule,
+} from '@livekit/react-native-webrtc';
 
 export type AudioEngineConfigurationState = {
   isPlayoutEnabled: boolean;
   isRecordingEnabled: boolean;
+  /**
+   * Whether Apple Voice Processing I/O is running for this engine state. The
+   * `voiceChat`/`videoChat` modes engage iOS's call-tuned speaker gain, which
+   * only VPIO compensates for, so a configuration derived for recording should
+   * account for this.
+   */
+  isVoiceProcessingEnabled: boolean;
   preferSpeakerOutput: boolean;
 };
 
+/**
+ * Static recording/playout policy for {@link setupIOSAudioManagement}.
+ */
+export type IOSAudioSessionPolicy = {
+  recording: AppleAudioConfiguration;
+  /**
+   * Recording configuration to apply while Apple Voice Processing I/O is off,
+   * for example after `AudioDeviceModule.setVoiceProcessingEnabled(false)`.
+   * A policy whose {@link recording} config uses `voiceChat`/`videoChat` should
+   * set a `default`-mode variant here, otherwise remote audio plays back
+   * noticeably quieter without VPIO to compensate for the call-tuned gain.
+   * Defaults to {@link recording}, so a policy that does not set this behaves
+   * exactly as before.
+   */
+  recordingWithoutVoiceProcessing?: AppleAudioConfiguration;
+  playout: AppleAudioConfiguration;
+  /**
+   * Whether to deactivate the audio session when both playout and recording
+   * are disabled. Defaults to true.
+   */
+  deactivateOnStop?: boolean;
+};
+
+/**
+ * @deprecated Unsafe. Prefer {@link IOSAudioSessionPolicy} or the default
+ *   native path. See {@link setupIOSAudioManagement}.
+ */
+export type OnConfigureNativeAudio = (
+  configurationState: AudioEngineConfigurationState
+) => AppleAudioConfiguration;
+
 const kAudioEngineErrorFailedToConfigureAudioSession = -4100;
-let activeAudioManagementSetup: object | undefined;
+let activeSetupToken: object | undefined;
 
 /**
  * @inline
  */
 type CleanupFn = () => void;
+
+// Wraps a path-specific teardown so each setup supersedes the previous one
+// cleanly: the returned cleanup tears down only while its setup is still the
+// active one, so it runs at most once and a stale cleanup from a superseded
+// setup is a no-op. A new setup defuses the previous cleanup by replacing the
+// token rather than by running its teardown, because each path's body already
+// replaces the other path's mechanism in an order that never leaves the hooks
+// unowned - running the old teardown first would reopen exactly that window.
+function finalizeAudioManagement(
+  token: object,
+  teardown: CleanupFn
+): CleanupFn {
+  return () => {
+    if (activeSetupToken !== token) {
+      return;
+    }
+    activeSetupToken = undefined;
+    teardown();
+  };
+}
 
 /**
  * Sets up automatic iOS audio session management based on audio engine state.
@@ -24,25 +88,151 @@ type CleanupFn = () => void;
  * invokes it for you by default unless `autoConfigureAudioSession: false`
  * is passed.
  *
+ * By default the audio session is configured and activated natively as the
+ * audio engine changes state, with no JavaScript involvement per transition.
+ *
+ * For custom categories/modes, pass a static {@link IOSAudioSessionPolicy}.
+ * That policy is pushed to native once and applied on the audio worker thread.
+ *
+ * Calling this again replaces the previous setup, including switching
+ * between the default and custom paths. Switch while disconnected; a switch
+ * during an active call is unsupported. In particular, switching away from a
+ * custom callback setup mid-call abandons the audio session activation that
+ * the custom handlers took, so the session may stay active after the call ends.
+ *
  * @param preferSpeakerOutput - Whether to prefer speaker output. Defaults to true.
- * @param onConfigureNativeAudio - Optional custom callback for determining audio configuration.
- * @returns A cleanup function that removes the event handlers.
+ * @returns A cleanup function that removes the installed handlers or native
+ *   configuration. A cleanup function from a superseded setup is a no-op.
  */
 export function setupIOSAudioManagement(
+  preferSpeakerOutput?: boolean
+): CleanupFn;
+/**
+ * Sets up automatic iOS audio session management with a static native policy.
+ *
+ * @param preferSpeakerOutput - Unused when a full policy is provided; kept for
+ *   call-site consistency with the default overload.
+ * @param policy - Static recording/playout configuration applied natively.
+ * @see {@link setupIOSAudioManagement} for the default native path and usage notes.
+ */
+export function setupIOSAudioManagement(
+  preferSpeakerOutput: boolean,
+  policy: IOSAudioSessionPolicy
+): CleanupFn;
+/**
+ * @deprecated The `onConfigureNativeAudio` callback is unsafe. It runs inside
+ *   the audio engine's lifecycle callbacks while native code waits for the
+ *   result (bounded at a few seconds). The callback must return quickly and
+ *   must not call APIs that enter the WebRTC engine or a peer connection
+ *   (for example `addTransceiver`, `getUserMedia`, or device enumeration):
+ *   those can block on the same engine operation the callback is holding up.
+ *   Prefer the default native path, or pass an {@link IOSAudioSessionPolicy}.
+ */
+export function setupIOSAudioManagement(
+  preferSpeakerOutput: boolean,
+  onConfigureNativeAudio: OnConfigureNativeAudio
+): CleanupFn;
+export function setupIOSAudioManagement(
   preferSpeakerOutput = true,
-  onConfigureNativeAudio?: (
-    configurationState: AudioEngineConfigurationState
-  ) => AppleAudioConfiguration
+  policyOrCallback?: IOSAudioSessionPolicy | OnConfigureNativeAudio
 ): CleanupFn {
   if (Platform.OS !== 'ios') {
     return () => {};
   }
 
+  // Supersede any previous setup (safe to call repeatedly, and to switch between
+  // default and custom). Claiming the token defuses the previous cleanup without
+  // running it. The path bodies below then replace the other path's mechanism in
+  // an order that keeps the hooks owned throughout the switch.
   const setupToken = {};
-  activeAudioManagementSetup = setupToken;
+  activeSetupToken = setupToken;
+
+  if (typeof policyOrCallback === 'function') {
+    return setupCustomCallbackPath(
+      setupToken,
+      preferSpeakerOutput,
+      policyOrCallback
+    );
+  }
+
+  return setupNativePolicyPath(
+    setupToken,
+    preferSpeakerOutput,
+    policyOrCallback
+  );
+}
+
+function setupNativePolicyPath(
+  setupToken: object,
+  preferSpeakerOutput: boolean,
+  policy?: IOSAudioSessionPolicy
+): CleanupFn {
+  // Configure the AVAudioSession natively so the engine's worker thread never
+  // round-trips to JS in willEnable/didDisable - that round trip is what can
+  // deadlock. The native observer applies `recording` while recording,
+  // `playout` while playout-only, and deactivates on full stop when requested.
+  AudioDeviceModule.setAutomaticAudioSessionConfiguration({
+    recording:
+      policy?.recording ??
+      getDefaultAppleAudioConfigurationForAudioState({
+        isPlayoutEnabled: true,
+        isRecordingEnabled: true,
+        isVoiceProcessingEnabled: true,
+        preferSpeakerOutput,
+      }),
+    // A policy that supplies `recording` but not the no-voice-processing variant
+    // keeps using its own recording config for both, rather than silently picking
+    // up an SDK default it never asked for.
+    recordingWithoutVoiceProcessing:
+      policy?.recordingWithoutVoiceProcessing ??
+      policy?.recording ??
+      getDefaultAppleAudioConfigurationForAudioState({
+        isPlayoutEnabled: true,
+        isRecordingEnabled: true,
+        isVoiceProcessingEnabled: false,
+        preferSpeakerOutput,
+      }),
+    playout:
+      policy?.playout ??
+      getDefaultAppleAudioConfigurationForAudioState({
+        isPlayoutEnabled: true,
+        isRecordingEnabled: false,
+        isVoiceProcessingEnabled: false,
+        preferSpeakerOutput,
+      }),
+    deactivateOnStop: policy?.deactivateOnStop ?? true,
+  });
+
+  // Set native config first, then clear any handlers a prior custom setup left
+  // registered, so native (not a stale JS handler) owns the hooks. In the brief
+  // overlap a still-registered handler wins, so a racing callback is never dropped.
+  audioDeviceModuleEvents.setWillEnableEngineHandler(null);
+  audioDeviceModuleEvents.setDidDisableEngineHandler(null);
+
+  return finalizeAudioManagement(setupToken, () => {
+    AudioDeviceModule.setAutomaticAudioSessionConfiguration(null);
+  });
+}
+
+function setupCustomCallbackPath(
+  setupToken: object,
+  preferSpeakerOutput: boolean,
+  onConfigureNativeAudio: OnConfigureNativeAudio
+): CleanupFn {
+  log.warn(
+    'setupIOSAudioManagement(onConfigureNativeAudio) is deprecated and unsafe. ' +
+      'Prefer the default native path, or pass an IOSAudioSessionPolicy object.'
+  );
+
+  // Custom path: derive + apply the session config in JS via the engine handlers
+  // (still bounded by the native 2s wait). The native default is cleared *after*
+  // the handlers are registered (below) so the JS handler, which takes precedence,
+  // owns the hooks throughout the switch.
+
   let audioEngineState: AudioEngineConfigurationState = {
     isPlayoutEnabled: false,
     isRecordingEnabled: false,
+    isVoiceProcessingEnabled: false,
     preferSpeakerOutput,
   };
 
@@ -58,9 +248,7 @@ export function setupIOSAudioManagement(
       log.info('AudioSession deactivating...');
       await AudioSession.stopAudioSession();
     } else if (newState.isRecordingEnabled || newState.isPlayoutEnabled) {
-      const config = onConfigureNativeAudio
-        ? onConfigureNativeAudio(newState)
-        : getDefaultAppleAudioConfigurationForAudioState(newState);
+      const config = onConfigureNativeAudio(newState);
       log.info('AudioSession configuring category:', config.audioCategory);
       await AudioSession.setAppleAudioConfiguration(config);
       if (!oldState.isPlayoutEnabled && !oldState.isRecordingEnabled) {
@@ -73,14 +261,17 @@ export function setupIOSAudioManagement(
   const handleEngineStateUpdate = async ({
     isPlayoutEnabled,
     isRecordingEnabled,
+    isVoiceProcessingEnabled,
   }: {
     isPlayoutEnabled: boolean;
     isRecordingEnabled: boolean;
+    isVoiceProcessingEnabled: boolean;
   }) => {
     const oldState = audioEngineState;
     const newState: AudioEngineConfigurationState = {
       isPlayoutEnabled,
       isRecordingEnabled,
+      isVoiceProcessingEnabled,
       preferSpeakerOutput: audioEngineState.preferSpeakerOutput,
     };
 
@@ -106,26 +297,69 @@ export function setupIOSAudioManagement(
   audioDeviceModuleEvents.setWillEnableEngineHandler(handleEngineStateUpdate);
   audioDeviceModuleEvents.setDidDisableEngineHandler(handleEngineStateUpdate);
 
-  return () => {
-    if (activeAudioManagementSetup !== setupToken) {
-      return;
-    }
-    activeAudioManagementSetup = undefined;
+  // Handlers are live now, so clear the native default - the JS handler takes
+  // precedence, so there is never a window where neither path is active.
+  AudioDeviceModule.setAutomaticAudioSessionConfiguration(null);
+
+  return finalizeAudioManagement(setupToken, () => {
     audioDeviceModuleEvents.setWillEnableEngineHandler(null);
     audioDeviceModuleEvents.setDidDisableEngineHandler(null);
-  };
+  });
 }
+
+// Category options for the duplex (playAndRecord) presets. Mirrors
+// `playAndRecordOptions` / `playAndRecordSpeakerOptions` in the Swift SDK
+// (Sources/LiveKit/Types/AudioSessionConfiguration.swift).
+const playAndRecordOptions: AppleAudioCategoryOption[] = [
+  'mixWithOthers',
+  'allowBluetooth',
+  'allowBluetoothA2DP',
+  'allowAirPlay',
+];
+
+// Explicit speaker preference for the speaker preset. The chat modes imply a
+// speaker route, but iOS may rewrite the mode when Voice Processing I/O is
+// instantiated (the Swift SDK observed it switching videoChat to voiceChat,
+// which routes to the receiver), and `default` mode routes to the receiver
+// without it.
+const playAndRecordSpeakerOptions: AppleAudioCategoryOption[] = [
+  ...playAndRecordOptions,
+  'defaultToSpeaker',
+];
 
 // Kept in sync with `getDefaultAppleAudioConfigurationForMode` in
 // `./AudioManagerLegacy.ts`. If you change the defaults in one place,
-// update the other so the legacy path and the new path stay aligned.
+// update the other so the legacy path and the new path stay aligned. The
+// legacy function has no voice-processing input, so it matches only the
+// voice-processing-enabled results here.
 function getDefaultAppleAudioConfigurationForAudioState(
   configurationState: AudioEngineConfigurationState
 ): AppleAudioConfiguration {
   if (configurationState.isRecordingEnabled) {
+    const audioCategoryOptions = configurationState.preferSpeakerOutput
+      ? [...playAndRecordSpeakerOptions]
+      : [...playAndRecordOptions];
+
+    if (!configurationState.isVoiceProcessingEnabled) {
+      // iOS applies a reduced, call-tuned speaker gain while capture is active
+      // under voiceChat/videoChat. Apple Voice Processing I/O adds a loudness
+      // stage that compensates for it; with VPIO off (WebRTC's own software
+      // processing) nothing does, and remote audio plays back noticeably
+      // quieter. The default mode keeps media gain.
+      //
+      // Mirrors playAndRecordSpeakerMedia / playAndRecordReceiverMedia in the
+      // Swift SDK (Sources/LiveKit/Types/AudioSessionConfiguration.swift).
+      return {
+        audioCategory: 'playAndRecord',
+        audioCategoryOptions,
+        audioMode: 'default',
+      };
+    }
+
+    // Mirrors playAndRecordSpeaker / playAndRecordReceiver in the Swift SDK.
     return {
       audioCategory: 'playAndRecord',
-      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+      audioCategoryOptions,
       audioMode: configurationState.preferSpeakerOutput
         ? 'videoChat'
         : 'voiceChat',

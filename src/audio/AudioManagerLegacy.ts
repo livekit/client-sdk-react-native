@@ -20,12 +20,16 @@ import {
  *   The `room` parameter is ignored — audio session is now managed
  *   via audio engine events, not room track counts.
  *
+ *   The `onConfigureNativeAudio` callback is also deprecated and unsafe: it
+ *   runs under a bounded native wait on the audio worker thread. Prefer the
+ *   default native path, or pass an `IOSAudioSessionPolicy` to
+ *   `setupIOSAudioManagement`.
+ *
  *   Note: the `trackState` passed to `onConfigureNativeAudio` is now
  *   derived from the audio engine's playout/recording state, not from
  *   publication counts. Edge cases can differ. For example, a
  *   published-but-muted local audio track that previously yielded
- *   `localOnly` may now appear as `remoteOnly` or `none`. Callers with
- *   nuanced per-state logic should migrate to `setupIOSAudioManagement`.
+ *   `localOnly` may now appear as `remoteOnly` or `none`.
  */
 export function useIOSAudioManagement(
   _room: Room,
@@ -42,12 +46,26 @@ export function useIOSAudioManagement(
   const callbackRef = useRef(onConfigureNativeAudio);
   callbackRef.current = onConfigureNativeAudio;
 
+  // React to callback *presence*, not identity: `enabled ? cb : undefined`
+  // must be able to flip between the native default path and the JS
+  // callback path. Mid-call path switches remain unsupported (see
+  // setupIOSAudioManagement); this only restores mount/post-mount selection.
+  const hasConfigureCallback = onConfigureNativeAudio != null;
+
   useEffect(() => {
+    // Without a custom callback, use the safe native default path.
+    if (!hasConfigureCallback) {
+      return setupIOSAudioManagement(preferSpeakerOutput);
+    }
+
     const wrapped = (
       state: AudioEngineConfigurationState
     ): AppleAudioConfiguration => {
-      const cb = callbackRef.current;
       const trackState = engineStateToTrackState(state);
+      // Read the ref at call time and fall back if the caller cleared the
+      // callback between renders while this custom path is still armed
+      // (e.g. before the presence-driven effect re-runs).
+      const cb = callbackRef.current;
       return cb
         ? cb(trackState, state.preferSpeakerOutput)
         : getDefaultAppleAudioConfigurationForMode(
@@ -56,8 +74,9 @@ export function useIOSAudioManagement(
           );
     };
 
+    // setupIOSAudioManagement warns that the callback form is deprecated.
     return setupIOSAudioManagement(preferSpeakerOutput, wrapped);
-  }, [preferSpeakerOutput]);
+  }, [preferSpeakerOutput, hasConfigureCallback]);
 }
 
 /**
@@ -66,6 +85,8 @@ export function useIOSAudioManagement(
  * Kept in sync with `getDefaultAppleAudioConfigurationForAudioState` in
  * `./AudioManager.ts`. If you change the defaults in one place, update the
  * other so the legacy path and the new path produce the same configuration.
+ * `AudioTrackState` carries no voice-processing state, so this matches the
+ * voice-processing-enabled results of that function only.
  */
 export function getDefaultAppleAudioConfigurationForMode(
   mode: AudioTrackState,
@@ -80,7 +101,20 @@ export function getDefaultAppleAudioConfigurationForMode(
   } else if (mode === 'localAndRemote' || mode === 'localOnly') {
     return {
       audioCategory: 'playAndRecord',
-      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+      audioCategoryOptions: preferSpeakerOutput
+        ? [
+            'mixWithOthers',
+            'allowBluetooth',
+            'allowBluetoothA2DP',
+            'allowAirPlay',
+            'defaultToSpeaker',
+          ]
+        : [
+            'mixWithOthers',
+            'allowBluetooth',
+            'allowBluetoothA2DP',
+            'allowAirPlay',
+          ],
       audioMode: preferSpeakerOutput ? 'videoChat' : 'voiceChat',
     };
   }

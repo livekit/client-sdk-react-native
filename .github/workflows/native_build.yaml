@@ -13,10 +13,10 @@ jobs:
   android-compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: set up JDK 17
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520 # v5.4.0
         with:
           java-version: '17'
           distribution: 'adopt'
@@ -27,7 +27,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ~/.npm
@@ -54,7 +54,7 @@ jobs:
   ios-compile:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
@@ -62,7 +62,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ~/.npm
@@ -74,7 +74,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Cache gem bundle
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ./ci/vendor
           key: ${{ runner.os }}-gembundle-${{ hashFiles('**/Gemfile.lock') }}
@@ -82,7 +82,7 @@ jobs:
             ${{ runner.os }}-gembundle-
 
       - name: Cache cocoapods
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ./ci/ios/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}

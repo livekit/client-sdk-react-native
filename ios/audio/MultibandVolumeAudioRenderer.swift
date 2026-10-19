@@ -34,7 +34,7 @@ public class MultibandVolumeAudioRenderer: BaseMultibandVolumeAudioRenderer {
     
 }
 
-public class BaseMultibandVolumeAudioRenderer: NSObject, RTCAudioRenderer {
+public class BaseMultibandVolumeAudioRenderer: NSObject, LKRTCAudioRenderer {
     private let frameInterval: Int
     private var skippedFrames = 0
     private let audioProcessor: AudioVisualizeProcessor
