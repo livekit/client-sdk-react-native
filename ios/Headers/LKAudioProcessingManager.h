@@ -1,10 +1,10 @@
 #import <Foundation/Foundation.h>
-#import <WebRTC/WebRTC.h>
+#import <LiveKitWebRTC/LiveKitWebRTC.h>
 #import "LKAudioProcessingAdapter.h"
 
 @interface LKAudioProcessingManager : NSObject
 
-@property(nonatomic, strong) RTCDefaultAudioProcessingModule* _Nonnull audioProcessingModule;
+@property(nonatomic, strong) LKRTCDefaultAudioProcessingModule* _Nonnull audioProcessingModule;
 
 @property(nonatomic, strong) LKAudioProcessingAdapter* _Nonnull capturePostProcessingAdapter;
 
@@ -13,13 +13,13 @@
 + (_Nonnull instancetype)sharedInstance;
 
 
-- (void)addLocalAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer;
+- (void)addLocalAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer;
 
-- (void)removeLocalAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer;
+- (void)removeLocalAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer;
 
-- (void)addRemoteAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer;
+- (void)addRemoteAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer;
 
-- (void)removeRemoteAudioRenderer:(nonnull id<RTCAudioRenderer>)renderer;
+- (void)removeRemoteAudioRenderer:(nonnull id<LKRTCAudioRenderer>)renderer;
 
 - (void)addCapturePostProcessor:(nonnull id<LKExternalAudioProcessingDelegate>)processor;
 

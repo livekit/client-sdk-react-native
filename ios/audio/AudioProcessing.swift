@@ -25,7 +25,7 @@ public struct AudioLevel {
     public let peak: Float
 }
 
-public extension RTCAudioBuffer {
+public extension LKRTCAudioBuffer {
     /// Convert to AVAudioPCMBuffer Int16 format.
     @objc
     func toAVAudioPCMBuffer() -> AVAudioPCMBuffer? {

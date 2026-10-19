@@ -5,6 +5,12 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
+# CocoaPods trunk stops accepting new pods on 2026-12-02, so later LiveKitWebRTC
+# releases will only be published to livekit/podspecs. It is listed first so that
+# versions published to both sources resolve from livekit/podspecs.
+source 'https://github.com/livekit/podspecs.git'
+source 'https://cdn.cocoapods.org/'
+
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 

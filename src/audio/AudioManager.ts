@@ -1,5 +1,8 @@
 import { Platform } from 'react-native';
-import AudioSession, { type AppleAudioConfiguration } from './AudioSession';
+import AudioSession, {
+  type AppleAudioCategoryOption,
+  type AppleAudioConfiguration,
+} from './AudioSession';
 import { log } from '../logger';
 import {
   audioDeviceModuleEvents,
@@ -9,6 +12,13 @@ import {
 export type AudioEngineConfigurationState = {
   isPlayoutEnabled: boolean;
   isRecordingEnabled: boolean;
+  /**
+   * Whether Apple Voice Processing I/O is running for this engine state. The
+   * `voiceChat`/`videoChat` modes engage iOS's call-tuned speaker gain, which
+   * only VPIO compensates for, so a configuration derived for recording should
+   * account for this.
+   */
+  isVoiceProcessingEnabled: boolean;
   preferSpeakerOutput: boolean;
 };
 
@@ -17,6 +27,16 @@ export type AudioEngineConfigurationState = {
  */
 export type IOSAudioSessionPolicy = {
   recording: AppleAudioConfiguration;
+  /**
+   * Recording configuration to apply while Apple Voice Processing I/O is off,
+   * for example after `AudioDeviceModule.setVoiceProcessingEnabled(false)`.
+   * A policy whose {@link recording} config uses `voiceChat`/`videoChat` should
+   * set a `default`-mode variant here, otherwise remote audio plays back
+   * noticeably quieter without VPIO to compensate for the call-tuned gain.
+   * Defaults to {@link recording}, so a policy that does not set this behaves
+   * exactly as before.
+   */
+  recordingWithoutVoiceProcessing?: AppleAudioConfiguration;
   playout: AppleAudioConfiguration;
   /**
    * Whether to deactivate the audio session when both playout and recording
@@ -157,6 +177,19 @@ function setupNativePolicyPath(
       getDefaultAppleAudioConfigurationForAudioState({
         isPlayoutEnabled: true,
         isRecordingEnabled: true,
+        isVoiceProcessingEnabled: true,
+        preferSpeakerOutput,
+      }),
+    // A policy that supplies `recording` but not the no-voice-processing variant
+    // keeps using its own recording config for both, rather than silently picking
+    // up an SDK default it never asked for.
+    recordingWithoutVoiceProcessing:
+      policy?.recordingWithoutVoiceProcessing ??
+      policy?.recording ??
+      getDefaultAppleAudioConfigurationForAudioState({
+        isPlayoutEnabled: true,
+        isRecordingEnabled: true,
+        isVoiceProcessingEnabled: false,
         preferSpeakerOutput,
       }),
     playout:
@@ -164,6 +197,7 @@ function setupNativePolicyPath(
       getDefaultAppleAudioConfigurationForAudioState({
         isPlayoutEnabled: true,
         isRecordingEnabled: false,
+        isVoiceProcessingEnabled: false,
         preferSpeakerOutput,
       }),
     deactivateOnStop: policy?.deactivateOnStop ?? true,
@@ -198,6 +232,7 @@ function setupCustomCallbackPath(
   let audioEngineState: AudioEngineConfigurationState = {
     isPlayoutEnabled: false,
     isRecordingEnabled: false,
+    isVoiceProcessingEnabled: false,
     preferSpeakerOutput,
   };
 
@@ -226,14 +261,17 @@ function setupCustomCallbackPath(
   const handleEngineStateUpdate = async ({
     isPlayoutEnabled,
     isRecordingEnabled,
+    isVoiceProcessingEnabled,
   }: {
     isPlayoutEnabled: boolean;
     isRecordingEnabled: boolean;
+    isVoiceProcessingEnabled: boolean;
   }) => {
     const oldState = audioEngineState;
     const newState: AudioEngineConfigurationState = {
       isPlayoutEnabled,
       isRecordingEnabled,
+      isVoiceProcessingEnabled,
       preferSpeakerOutput: audioEngineState.preferSpeakerOutput,
     };
 
@@ -269,16 +307,59 @@ function setupCustomCallbackPath(
   });
 }
 
+// Category options for the duplex (playAndRecord) presets. Mirrors
+// `playAndRecordOptions` / `playAndRecordSpeakerOptions` in the Swift SDK
+// (Sources/LiveKit/Types/AudioSessionConfiguration.swift).
+const playAndRecordOptions: AppleAudioCategoryOption[] = [
+  'mixWithOthers',
+  'allowBluetooth',
+  'allowBluetoothA2DP',
+  'allowAirPlay',
+];
+
+// Explicit speaker preference for the speaker preset. The chat modes imply a
+// speaker route, but iOS may rewrite the mode when Voice Processing I/O is
+// instantiated (the Swift SDK observed it switching videoChat to voiceChat,
+// which routes to the receiver), and `default` mode routes to the receiver
+// without it.
+const playAndRecordSpeakerOptions: AppleAudioCategoryOption[] = [
+  ...playAndRecordOptions,
+  'defaultToSpeaker',
+];
+
 // Kept in sync with `getDefaultAppleAudioConfigurationForMode` in
 // `./AudioManagerLegacy.ts`. If you change the defaults in one place,
-// update the other so the legacy path and the new path stay aligned.
+// update the other so the legacy path and the new path stay aligned. The
+// legacy function has no voice-processing input, so it matches only the
+// voice-processing-enabled results here.
 function getDefaultAppleAudioConfigurationForAudioState(
   configurationState: AudioEngineConfigurationState
 ): AppleAudioConfiguration {
   if (configurationState.isRecordingEnabled) {
+    const audioCategoryOptions = configurationState.preferSpeakerOutput
+      ? [...playAndRecordSpeakerOptions]
+      : [...playAndRecordOptions];
+
+    if (!configurationState.isVoiceProcessingEnabled) {
+      // iOS applies a reduced, call-tuned speaker gain while capture is active
+      // under voiceChat/videoChat. Apple Voice Processing I/O adds a loudness
+      // stage that compensates for it; with VPIO off (WebRTC's own software
+      // processing) nothing does, and remote audio plays back noticeably
+      // quieter. The default mode keeps media gain.
+      //
+      // Mirrors playAndRecordSpeakerMedia / playAndRecordReceiverMedia in the
+      // Swift SDK (Sources/LiveKit/Types/AudioSessionConfiguration.swift).
+      return {
+        audioCategory: 'playAndRecord',
+        audioCategoryOptions,
+        audioMode: 'default',
+      };
+    }
+
+    // Mirrors playAndRecordSpeaker / playAndRecordReceiver in the Swift SDK.
     return {
       audioCategory: 'playAndRecord',
-      audioCategoryOptions: ['allowBluetooth', 'mixWithOthers'],
+      audioCategoryOptions,
       audioMode: configurationState.preferSpeakerOutput
         ? 'videoChat'
         : 'voiceChat',
