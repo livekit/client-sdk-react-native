@@ -12,6 +12,16 @@ RCT_EXTERN_METHOD(stopAudioSession:(RCTPromiseResolveBlock)resolve
 
 RCT_EXTERN_METHOD(setDefaultAudioTrackVolume:(nonnull NSNumber *) volume)
 
+RCT_EXTERN_METHOD(startDeviceStateUpdates:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(batchStorePut:(nonnull NSString *)id
+                                        body:(nonnull NSString *)body)
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(batchStorePending)
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(batchStoreRead:(nonnull NSString *)id)
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(batchStoreRemove:(nonnull NSString *)id)
+RCT_EXTERN__BLOCKING_SYNCHRONOUS_METHOD(batchStoreClear)
+
 RCT_EXTERN_METHOD(showAudioRoutePicker)
 RCT_EXTERN_METHOD(getAudioOutputsWithResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
