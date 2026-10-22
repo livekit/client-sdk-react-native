@@ -1,5 +1,11 @@
 # @livekit/react-native
 
+## 3.1.1
+
+### Patch Changes
+
+- Fix `MediaRecorder` duplicating audio data after it is stopped and started again - [#478](https://github.com/livekit/client-sdk-react-native/pull/478) ([@RaphaelFakhri](https://github.com/RaphaelFakhri))
+
 ## 3.1.0
 
 ### Minor Changes
