@@ -237,6 +237,23 @@ export default class AudioSession {
   };
 
   /**
+   * Starts local microphone recording on iOS prior to track publish/connect.
+   *
+   * Intended for low-latency preconnect and similar workflows.
+   */
+  static startLocalRecording = async () => {
+    await LiveKitModule.startLocalRecording();
+  };
+
+  /**
+   * Stops local microphone recording that was started explicitly with
+   * {@link startLocalRecording}.
+   */
+  static stopLocalRecording = async () => {
+    await LiveKitModule.stopLocalRecording();
+  };
+
+  /**
    * Set default audio track volume when new tracks are subscribed.
    * Does **not** affect any existing tracks.
    *
