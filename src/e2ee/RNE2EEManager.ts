@@ -117,7 +117,7 @@ export default class RNE2EEManager
     publication: LocalTrackPublication,
     participant: LocalParticipant
   ) {
-    if (!publication.isEncrypted) {
+    if (!participant.isE2EEEnabled) {
       return;
     }
 
