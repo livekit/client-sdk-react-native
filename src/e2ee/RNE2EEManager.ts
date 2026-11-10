@@ -107,9 +107,8 @@ export default class RNE2EEManager
         if (!this.room) {
           throw new TypeError(`expected room to be present on signal connect`);
         }
-        this.setParticipantCryptorEnabled(
-          this.room.localParticipant.isE2EEEnabled,
-          this.room.localParticipant.identity
+        this.setLocalParticipantCryptorEnabled(
+          this.room.localParticipant.isE2EEEnabled
         );
       });
   }
@@ -285,20 +284,27 @@ export default class RNE2EEManager
   setupEngine(_engine: RTCEngine): void {
     // No-op
   }
+
+  /** Sets whether the local participant encrypts. */
+  setLocalParticipantCryptorEnabled(enabled: boolean): void {
+    if (!this.room) {
+      throw TypeError(`couldn't set encryption status, room not set up`);
+    }
+    this.encryptionEnabled = enabled;
+    this.emit(
+      EncryptionEvent.ParticipantEncryptionStatusChanged,
+      enabled,
+      this.room.localParticipant
+    );
+  }
+
+  /** @deprecated use `setLocalParticipantCryptorEnabled` */
   setParticipantCryptorEnabled(
     enabled: boolean,
     participantIdentity: string
   ): void {
-    if (
-      this.encryptionEnabled !== enabled &&
-      participantIdentity === this.room?.localParticipant.identity
-    ) {
-      this.encryptionEnabled = enabled;
-      this.emit(
-        EncryptionEvent.ParticipantEncryptionStatusChanged,
-        enabled,
-        this.room!.localParticipant
-      );
+    if (participantIdentity === this.room?.localParticipant.identity) {
+      this.setLocalParticipantCryptorEnabled(enabled);
     } else {
       const participant =
         this.room?.getParticipantByIdentity(participantIdentity);
