@@ -1,2 +1,2 @@
-#import "WebRTCModule.h"
-#import "WebRTCModule+RTCMediaStream.h"
+#import "LKRNWebRTCModule.h"
+#import "LKRNWebRTCModule+RTCMediaStream.h"

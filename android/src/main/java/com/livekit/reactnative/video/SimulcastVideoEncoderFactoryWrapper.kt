@@ -1,7 +1,7 @@
 package com.livekit.reactnative.video
 
 import android.util.Log
-import com.oney.WebRTCModule.webrtcutils.SoftwareVideoEncoderFactoryProxy
+import io.livekit.reactnative.webrtc.webrtcutils.SoftwareVideoEncoderFactoryProxy
 import livekit.org.webrtc.EglBase
 import livekit.org.webrtc.HardwareVideoEncoderFactory
 import livekit.org.webrtc.SimulcastVideoEncoderFactory

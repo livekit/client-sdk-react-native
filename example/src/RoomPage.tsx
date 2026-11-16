@@ -174,7 +174,7 @@ const RoomView = ({ navigation, e2ee }: RoomViewProps) => {
   const startBroadcast = async () => {
     if (Platform.OS === 'ios') {
       const reactTag = findNodeHandle(screenCaptureRef.current);
-      await NativeModules.ScreenCapturePickerViewManager.show(reactTag);
+      await NativeModules.LKRNScreenCapturePickerViewManager.show(reactTag);
       localParticipant.setScreenShareEnabled(true);
     } else {
       localParticipant.setScreenShareEnabled(true);

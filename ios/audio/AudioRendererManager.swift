@@ -28,7 +28,7 @@ public class AudioRendererManager: NSObject {
     
     @objc
     public func attach(renderer: LKRTCAudioRenderer, pcId: NSNumber, trackId: String) {
-        let webrtcModule = self.bridge.module(for: WebRTCModule.self) as! WebRTCModule
+        let webrtcModule = self.bridge.module(for: LKRNWebRTCModule.self) as! LKRNWebRTCModule
         guard let track = webrtcModule.track(forId: trackId, pcId: pcId) as? LKRTCAudioTrack
         else {
             lklog("couldn't find audio track: pcId: \(pcId), trackId: \(trackId)")
@@ -55,7 +55,7 @@ public class AudioRendererManager: NSObject {
     
     @objc
     public func detach(renderer: LKRTCAudioRenderer, pcId: NSNumber, trackId: String) {
-        let webrtcModule = self.bridge.module(for: WebRTCModule.self) as! WebRTCModule
+        let webrtcModule = self.bridge.module(for: LKRNWebRTCModule.self) as! LKRNWebRTCModule
         guard let track = webrtcModule.track(forId: trackId, pcId: pcId) as? LKRTCAudioTrack
         else {
             lklog("couldn't find audio track: pcId: \(pcId), trackId: \(trackId)")
