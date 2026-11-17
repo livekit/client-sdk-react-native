@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
     LivekitReactNative.setup()
-    let options = WebRTCModuleOptions.sharedInstance()
+    let options = LKRNWebRTCModuleOptions.sharedInstance()
     
     // Optional for debugging WebRTC issues.
     // options.loggingSeverity = .info

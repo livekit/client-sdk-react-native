@@ -51,7 +51,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
     public static func setup() {
         let videoEncoderFactory = LKRTCDefaultVideoEncoderFactory()
         let simulcastVideoEncoderFactory = LKRTCVideoEncoderFactorySimulcast(primary: videoEncoderFactory, fallback: videoEncoderFactory)
-        let options = WebRTCModuleOptions.sharedInstance()
+        let options = LKRNWebRTCModuleOptions.sharedInstance()
         options.videoEncoderFactory = simulcastVideoEncoderFactory
         options.audioProcessingModule = LKAudioProcessingManager.sharedInstance().audioProcessingModule
     }
@@ -250,7 +250,7 @@ public class LivekitReactNativeModule: RCTEventEmitter {
 
     @objc(setDefaultAudioTrackVolume:)
     public func setDefaultAudioTrackVolume(_ volume: NSNumber) -> Any? {
-        let options = WebRTCModuleOptions.sharedInstance()
+        let options = LKRNWebRTCModuleOptions.sharedInstance()
         options.defaultTrackVolume = volume.doubleValue
 
         return nil

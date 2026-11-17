@@ -1,6 +1,6 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
-#import "WebRTCModule.h"
+#import "LKRNWebRTCModule.h"
 
 @interface RCT_EXTERN_MODULE(LivekitReactNativeModule, RCTEventEmitter)
 

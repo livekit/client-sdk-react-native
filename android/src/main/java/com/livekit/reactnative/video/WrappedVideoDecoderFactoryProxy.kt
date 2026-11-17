@@ -1,6 +1,6 @@
 package com.livekit.reactnative.video
 
-import com.oney.WebRTCModule.EglUtils
+import io.livekit.reactnative.webrtc.EglUtils
 import livekit.org.webrtc.VideoCodecInfo
 import livekit.org.webrtc.VideoDecoder
 import livekit.org.webrtc.VideoDecoderFactory

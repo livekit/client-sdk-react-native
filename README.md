@@ -154,7 +154,7 @@ In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/
 
 ```objc
 #import "LivekitReactNative.h"
-#import "WebRTCModuleOptions.h"
+#import "LKRNWebRTCModuleOptions.h"
 
 @implementation AppDelegate
 
@@ -166,7 +166,7 @@ In your [AppDelegate.m](https://github.com/livekit/client-sdk-react-native/blob/
   // Uncomment the following lines if you want to use the camera in the background
   // Requires voip background mode and iOS 18+.
 
-  // WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
+  // LKRNWebRTCModuleOptions *options = [LKRNWebRTCModuleOptions sharedInstance];
   // options.enableMultitaskingCameraAccess = YES;
 
   //...
@@ -197,7 +197,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Uncomment the following lines if you want to use the camera in the background
     // Requires voip background mode and iOS 18+.
 
-    // let options = WebRTCModuleOptions.sharedInstance()
+    // let options = LKRNWebRTCModuleOptions.sharedInstance()
     // options.enableMultitaskingCameraAccess = true
 
     // ...
@@ -469,7 +469,7 @@ const screenCapturePickerView = Platform.OS === 'ios' && (
 const startBroadcast = async () => {
   if (Platform.OS === 'ios') {
     const reactTag = findNodeHandle(screenCaptureRef.current);
-    await NativeModules.ScreenCapturePickerViewManager.show(reactTag);
+    await NativeModules.LKRNScreenCapturePickerViewManager.show(reactTag);
     room.localParticipant.setScreenShareEnabled(true);
   } else {
     room.localParticipant.setScreenShareEnabled(true);

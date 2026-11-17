@@ -17,7 +17,7 @@ import com.livekit.reactnative.audio.processing.AudioSinkManager
 import com.livekit.reactnative.audio.processing.AudioSinkProcessor
 import com.livekit.reactnative.audio.processing.MultibandVolumeProcessor
 import com.livekit.reactnative.audio.processing.VolumeProcessor
-import com.oney.WebRTCModule.WebRTCModuleOptions
+import io.livekit.reactnative.webrtc.WebRTCModuleOptions
 import livekit.org.webrtc.audio.WebRtcAudioTrackHelper
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
