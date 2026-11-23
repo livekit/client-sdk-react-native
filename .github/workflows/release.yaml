@@ -1,0 +1,164 @@
+# After a release PR merges: build, then tag and create the GitHub
+# release, then publish to npm. The step that cannot be undone comes last.
+# The file name stays release.yaml: npm trusted publishing names it.
+name: Release
+
+on:
+  # No `branches` filter: an rc PR from pre-release.yaml targets the branch
+  # the workflow was run on. The condition on the first job decides which
+  # PRs release.
+  pull_request:
+    types: [closed]
+  # A failed job is re-run with "Re-run failed jobs" on the run itself: that
+  # keeps the merge commit. This trigger is for a run that needs a fixed
+  # workflow file from the branch. `verwalter release` resumes from the
+  # current state and skips what is done.
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Commit or tag to build and publish. Set it to the release tag when the tag exists. Empty is the branch head.'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  id-token: write # npm trusted publishing
+
+jobs:
+  # Before the tag: a commit that does not build is never tagged.
+  build:
+    # Only a release PR the tool opened: the branch prefix alone would let
+    # any pushed `release/*` branch trigger a publish.
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/') && github.event.pull_request.user.login == 'verwalter-release[bot]' && contains(github.event.pull_request.body, '<!-- verwalter release -->'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # On a run by hand, `ref` is the released tag: the branch head can
+          # hold newer source than the version that is published. `publish`
+          # fails when the files changed since the tag.
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+      - name: Use Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: yarn.lock
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn typescript && yarn prepare
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.verwalter.outputs.released }}
+      releases: ${{ steps.verwalter.outputs.releases }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The merge commit itself: a push to main right after the merge
+          # must not move the tags.
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+          fetch-depth: 0
+      - id: verwalter
+        uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        with:
+          command: release
+          app-client-id: ${{ secrets.VERWALTER_RELEASE_CLIENT_ID }}
+          app-private-key: ${{ secrets.VERWALTER_RELEASE_APP_KEY }}
+
+  # `npm publish` runs the `prepare` script (bob build) on the installed
+  # workspace. Skips a version npm already has, so a re-run is safe.
+  publish:
+    needs: release
+    if: needs.release.outputs.released == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # One publish at a time, in arrival order. A waiting publish checks out
+    # after the running one ends, so it sees the newer tag and picks the
+    # right npm dist-tag. `queue: max` keeps every waiting run: without it,
+    # a third run cancels the waiting one.
+    concurrency:
+      group: npm-publish
+      cancel-in-progress: false
+      queue: max
+    permissions:
+      contents: write # the tool flips the draft release after the publish
+      id-token: write # npm trusted publishing
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+      outcomes: ${{ steps.publish.outputs.outcomes }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+          fetch-depth: 0 # tags decide what is published
+      # No registry-url: its placeholder token breaks trusted publishing.
+      - name: Use Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24 # npm 11.5.1 or later is required for OIDC trusted publishing
+          cache: yarn
+          cache-dependency-path: yarn.lock
+      - run: corepack enable
+      - run: yarn install --immutable
+      - id: publish
+        uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          command: publish
+          releases: ${{ needs.release.outputs.releases }}
+
+  # After the publish, in its own job: a failure here is red, and the
+  # release jobs stay green. The docs site shows the latest stable version,
+  # so a pre-release does not replace it. `outcomes` carries the version
+  # this run published, also on a re-run by hand, where `releases` is empty.
+  # Only from main: the site holds one version, and a release from another
+  # branch must not replace it.
+  docs:
+    needs: publish
+    if: contains(needs.publish.outputs.published, '@livekit/react-native') && !contains(needs.publish.outputs.outcomes, '-rc.') && (github.event.pull_request.base.ref == 'main' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+      - name: Use Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: yarn.lock
+      - run: corepack enable
+      - run: yarn install --immutable
+      - name: Build docs
+        run: yarn build-docs --treatWarningsAsErrors
+      - name: S3 Upload
+        run: aws s3 cp docs/ s3://livekit-docs/client-sdk-react-native --recursive
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DOCS_DEPLOY_AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DOCS_DEPLOY_AWS_API_SECRET }}
+          AWS_DEFAULT_REGION: 'us-east-1'
+
+  # The end state, asserted: `status --check` fails when the tag is not on
+  # the remote, the GitHub release is missing or still a draft, or npm does
+  # not have the version. A step that was skipped without an error ends here.
+  verify:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # reads only. A draft release is visible only with write access
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+          fetch-depth: 0
+      - uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        with:
+          command: status
+          args: --check

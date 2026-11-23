@@ -25,7 +25,7 @@ The pre-commit hook runs `yarn lint && yarn typescript`. CI additionally compile
 - `android/`, `ios/` — native modules (Kotlin / Swift+ObjC); mostly audio session management, audio processing, and video codec factories. Podspec: `livekit-react-native.podspec`.
 - `example/` — bare RN example app (yarn workspace, not Expo).
 - `ci/` — minimal RN app used only for native compile checks in CI.
-- `docs/` — generated typedoc output; do not edit by hand.
+- `docs/` — typedoc output (`yarn build-docs`), not committed. `release.yaml` uploads it to the docs site.
 
 Expo support lives in a separate repo: [client-sdk-react-native-expo-plugin](https://github.com/livekit/client-sdk-react-native-expo-plugin).
 
@@ -71,4 +71,4 @@ Polyfills and API surface:
 
 ## Releases
 
-Uses [Changesets](https://github.com/changesets/changesets). Every user-facing change needs a changeset (`yarn changeset`); releases are published from `main` by the Release workflow.
+Uses [verwalter](https://github.com/livekit/verwalter) (`verwalter.toml`). Every user-facing change needs a changeset file in `.changeset/` (`verwalter changeset`). Merging the release PR `release/main` publishes. See `RELEASING.md`.

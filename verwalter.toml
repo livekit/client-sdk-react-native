@@ -1,0 +1,7 @@
+#:schema https://raw.githubusercontent.com/livekit/verwalter/main/schemas/v1.json
+
+[packages."@livekit/react-native"]
+path = "."
+versioning.files = ["package.json"]
+release.tag = "{package}@{version}"   # the tags changesets/action created
+publish.registry = "npm"

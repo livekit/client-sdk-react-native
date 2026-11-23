@@ -65,15 +65,21 @@ Our pre-commit hooks verify that the linter and tests pass when committing.
 
 ### Publishing to npm
 
-We use [Changesets](https://github.com/changesets/changesets) to manage versioning and releases.
+We use [verwalter](https://github.com/livekit/verwalter) to manage versioning and releases.
 
-If your pull request includes user-facing changes, add a changeset describing the change:
+If your pull request includes user-facing changes, add a changeset file in `.changeset/`, for example `.changeset/fix-audio-routing.md`:
 
-```sh
-yarn changeset
+```md
+---
+'@livekit/react-native': patch
+---
+
+Fix audio routing to the speaker on iOS.
 ```
 
-When changesets are merged to `main`, the [Release workflow](.github/workflows/changeset.yaml) opens a "Version Packages" pull request. Merging that PR bumps the version, publishes to npm, and creates a GitHub release.
+Use `patch` for a fix, `minor` for an addition and `major` for a breaking change. With verwalter installed, `verwalter changeset` writes the file for you. If a pull request has no changeset, the changeset check comments with a link to a prefilled file.
+
+When changesets are merged to `main`, the release PR `release/main` is opened or updated. Merging it bumps the version, tags, creates a GitHub release and publishes to npm. See [RELEASING.md](RELEASING.md).
 
 ### Scripts
 
