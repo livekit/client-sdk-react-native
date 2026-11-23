@@ -1,0 +1,25 @@
+# On demand: open an rc PR from the branch the workflow is run on. Merging
+# it tags 3.3.0-rc.1 and publishes under the `next` dist-tag. Changesets
+# stay pending for the final release.
+name: Pre-release PR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the tags number the rc
+      - uses: livekit/verwalter@9da894a1e4f7d298095a961be60c818afd47905b # v0.32.0-rc.1
+        with:
+          command: pre-release
+          args: --target ${{ github.ref_name }}
+          app-client-id: ${{ secrets.VERWALTER_RELEASE_CLIENT_ID }}
+          app-private-key: ${{ secrets.VERWALTER_RELEASE_APP_KEY }}

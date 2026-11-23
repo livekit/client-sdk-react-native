@@ -1,0 +1,37 @@
+# Fails a PR that changes the package without a changeset, with a comment
+# that links to a prefilled changeset file. The `internal` label skips it.
+# On the release PR, it also runs `npm publish --dry-run`
+# (`[check].publish_dry_run`), so a version that npm rejects does not reach
+# main. The release PR is opened with the App token, so this workflow runs
+# on it.
+name: Changeset check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the dry run needs the tags
+      # The dry run runs the `prepare` script (bob build), which needs the
+      # installed workspace. Only the release PR runs the dry run.
+      - if: startsWith(github.head_ref, 'release/')
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: yarn.lock
+      - if: startsWith(github.head_ref, 'release/')
+        run: corepack enable && yarn install --immutable
+      - uses: livekit/verwalter@9da894a1e4f7d298095a961be60c818afd47905b # v0.32.0-rc.1
+        with:
+          command: check

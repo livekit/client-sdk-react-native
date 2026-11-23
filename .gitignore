@@ -86,3 +86,5 @@ lib/
 !**/.yarn/releases
 !**/.yarn/sdks
 !**/.yarn/versions
+# typedoc output, uploaded to S3 by release.yaml
+docs/
