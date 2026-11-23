@@ -1,5 +1,11 @@
 # @livekit/react-native
 
+## 3.2.1
+
+### Patch Changes
+
+- Add `setLocalParticipantCryptorEnabled` to `RNE2EEManager`, deprecate `setParticipantCryptorEnabled`, and set up the sender cryptor from the local E2EE setting - [#485](https://github.com/livekit/client-sdk-react-native/pull/485) ([@lukasIO](https://github.com/lukasIO))
+
 ## 3.2.0
 
 ### Minor Changes
