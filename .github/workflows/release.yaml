@@ -114,13 +114,17 @@ jobs:
 
   # After the publish, in its own job: a failure here is red, and the
   # release jobs stay green. The docs site shows the latest stable version,
-  # so a pre-release does not replace it. `outcomes` carries the version
-  # this run published, also on a re-run by hand, where `releases` is empty.
+  # so a pre-release (a version with `-`) does not replace it. `outcomes`
+  # carries the version also on a re-run by hand, where `releases` is empty.
+  # `exists` counts too: a repair run finds the version on npm, and the docs
+  # of that version still need their upload.
   # Only from main: the site holds one version, and a release from another
   # branch must not replace it.
+  # ponytail: a run by hand with an older tag uploads older docs. Skip when a
+  # newer final tag exists, if that ever happens.
   docs:
     needs: publish
-    if: contains(needs.publish.outputs.published, '@livekit/react-native') && !contains(needs.publish.outputs.outcomes, '-rc.') && (github.event.pull_request.base.ref == 'main' || github.ref == 'refs/heads/main')
+    if: (contains(fromJSON(needs.publish.outputs.outcomes).*.status, 'published') || contains(fromJSON(needs.publish.outputs.outcomes).*.status, 'exists')) && !contains(join(fromJSON(needs.publish.outputs.outcomes).*.version), '-') && (github.event.pull_request.base.ref == 'main' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     permissions:
       contents: read
