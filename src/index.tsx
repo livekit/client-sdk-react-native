@@ -81,13 +81,27 @@ export function registerGlobals(options?: RegisterGlobalsOptions) {
 function shimSctpSnap() {
   // The SCTP half of WARP. livekit-client owns the RTCConfiguration it hands to
   // `new RTCPeerConnection`, so there's no way to reach it from here. Default the
-  // flag on in the global constructor instead; an explicit `enableSctpSnap` in
-  // the app's rtcConfig still wins.
+  // flag on in the global constructor and retain it through ICE updates. An
+  // explicit `enableSctpSnap` in the app's rtcConfig still wins.
   class SctpSnapPeerConnection extends RTCPeerConnection {
+    private readonly initialSctpSnap: boolean;
+
     constructor(
       configuration?: ConstructorParameters<typeof RTCPeerConnection>[0]
     ) {
-      super({ enableSctpSnap: true, ...configuration });
+      const rtcConfig = { enableSctpSnap: true, ...configuration };
+      super(rtcConfig);
+      this.initialSctpSnap = rtcConfig.enableSctpSnap ?? false;
+    }
+
+    setConfiguration(
+      configuration: ConstructorParameters<typeof RTCPeerConnection>[0]
+    ) {
+      // Preserve the immutable value when livekit-client updates ICE servers.
+      super.setConfiguration({
+        enableSctpSnap: this.initialSctpSnap,
+        ...configuration,
+      });
     }
   }
 
