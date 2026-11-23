@@ -285,7 +285,7 @@ export default class RNE2EEManager
     // No-op
   }
 
-  /** Sets whether the local participant encrypts. */
+  /** @internal Sets whether the local participant encrypts. */
   setLocalParticipantCryptorEnabled(enabled: boolean): void {
     if (!this.room) {
       throw TypeError(`couldn't set encryption status, room not set up`);
