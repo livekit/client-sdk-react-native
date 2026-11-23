@@ -13,12 +13,12 @@ This file holds what is specific to this repository.
 
 ## Workflows
 
-| File                   | Starts when               | Does                                                                          |
-| ---------------------- | ------------------------- | ----------------------------------------------------------------------------- |
-| `changeset-check.yaml` | A PR is opened or updated | Fails a PR that changes the package without a changeset.                      |
-| `release-pr.yaml`      | A push to `main`          | Keeps the release PR `release/main` current.                                  |
-| `release.yaml`         | The release PR merges     | Builds, tags, creates the GitHub release, publishes to npm, uploads the docs. |
-| `pre-release.yaml`     | Run by hand               | Opens an rc PR against the branch it runs on.                                 |
+| File                   | Starts when               | Does                                                                                                              |
+| ---------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `changeset-check.yaml` | A PR is opened or updated | Fails a PR that changes the package without a changeset. Fails the release PR when `npm publish --dry-run` fails. |
+| `release-pr.yaml`      | A push to `main`          | Keeps the release PR `release/main` current.                                                                      |
+| `release.yaml`         | The release PR merges     | Builds, tags, creates the GitHub release, publishes to npm, uploads the docs.                                     |
+| `pre-release.yaml`     | Run by hand               | Opens an rc PR against the branch it runs on.                                                                     |
 
 Do not rename `release.yaml`: npm trusted publishing names the file.
 

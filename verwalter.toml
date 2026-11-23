@@ -5,3 +5,6 @@ path = "."
 versioning.files = ["package.json"]
 release.tag = "{package}@{version}"   # the tags changesets/action created
 publish.registry = "npm"
+
+[check]
+publish_dry_run = true   # the release PR runs `npm publish --dry-run`
